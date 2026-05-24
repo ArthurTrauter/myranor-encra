@@ -1,5 +1,6 @@
 {
   "name": "myranor-encra",
+  "description": "ENcounter + CReature Assistant",
   "private": true,
   "version": "0.0.0",
   "type": "module",
