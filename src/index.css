@@ -1,0 +1,34 @@
+@import "tailwindcss";
+
+@theme {
+  --font-sans: 'Outfit', 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
+  
+  /* Custom theme colors */
+  --color-rpg-gold: #f59e0b;
+  --color-rpg-gold-dark: #d97706;
+  --color-rpg-bronze: #854d0e;
+  --color-rpg-dark-bg: #090d16;
+  --color-rpg-card-bg: #131b2e;
+  --color-rpg-border: #24324d;
+}
+
+@layer base {
+  body {
+    background-color: var(--color-rpg-dark-bg);
+    color: #f1f5f9;
+  }
+}
+
+/* Custom helper animations */
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.animate-spin-slow {
+  animation: spin 3s linear infinite;
+}

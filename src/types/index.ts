@@ -1,0 +1,84 @@
+export type EncounterElementType = 'enemy' | 'social' | 'trap' | 'hazard';
+
+export interface BaseElement {
+  id: string;
+  name: string;
+  type: EncounterElementType;
+  description: string;
+  notes?: string;
+  created_at: string;
+  updated_at: string;
+  user_id?: string;
+}
+
+export interface Attribute {
+  name: string; // e.g., MU, KL, IN, CH, FF, GE, KO, KK
+  value: number;
+}
+
+export interface Skill {
+  name: string;
+  value: number;
+}
+
+export interface Attack {
+  name: string;
+  tp: string; // Trefferpunkte (damage), e.g., 2D6+4
+  at: number; // Attack value
+  pa: number; // Parade value
+  range?: string;
+}
+
+export interface EnemyNPC extends BaseElement {
+  type: 'enemy';
+  level: string; // e.g., "Leicht", "Mittel", "Schwer", "Boss"
+  hp_max: number; // Lebenspunkte
+  hp_current: number;
+  vp: number; // Rüstungsschutz / Verteidigungspunkte
+  ini: number; // Initiative
+  attributes: Attribute[];
+  skills: Skill[];
+  attacks: Attack[];
+  abilities: string[]; // Special rules / actions
+}
+
+export interface SocialNPC extends BaseElement {
+  type: 'social';
+  role: string; // e.g., "Händler", "Adliger", "Gildenmeister"
+  faction: string; // e.g., "House of X", "Gilde der Freischaffenden"
+  motivation: string;
+  secrets: string;
+  key_skills: Skill[];
+  relationships: {
+    targetName: string;
+    status: 'befreundet' | 'neutral' | 'feindselig' | 'unbekannt';
+  }[];
+}
+
+export interface Trap extends BaseElement {
+  type: 'trap';
+  trigger: string; // e.g., "Druckplatte", "Stolperdraht"
+  detection_dc: number; // Perception difficulty
+  disarm_dc: number; // Disarm difficulty
+  damage: string; // Damage / Effect, e.g., 3D6 TP + Gift
+  cooldown: string; // e.g., "Einmalig", "Automatisch aufladend"
+}
+
+export interface Hazard extends BaseElement {
+  type: 'hazard';
+  hazard_type: string; // e.g., "Elementar", "Magisch", "Klimatisch", "Gelände"
+  severity: string; // e.g., "Gering", "Moderat", "Tödlich"
+  effects: string; // Gameplay mechanics
+  avoidance: string; // How to avoid / resist
+  duration: string; // e.g., "Permanent", "1W20 KR", "Bis Sonnenuntergang"
+}
+
+export type EncounterElement = EnemyNPC | SocialNPC | Trap | Hazard;
+
+export interface EncounterContextType {
+  elements: EncounterElement[];
+  loadingElements: boolean;
+  addElement: (element: Omit<EncounterElement, 'id' | 'created_at' | 'updated_at'>) => Promise<EncounterElement | null>;
+  updateElement: (id: string, updates: Partial<EncounterElement>) => Promise<void>;
+  deleteElement: (id: string) => Promise<void>;
+}

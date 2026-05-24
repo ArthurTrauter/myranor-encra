@@ -1,0 +1,88 @@
+[
+  {
+    "id": "amaunir-ranger",
+    "name": "Amaunirischer Waldläufer",
+    "type": "enemy",
+    "description": "Ein flinker katzenartiger Jäger aus den Wäldern Myranors, bewaffnet mit einem Kurzbogen.",
+    "level": "Mittel",
+    "hp_max": 35,
+    "hp_current": 35,
+    "vp": 3,
+    "ini": 14,
+    "notes": "Nutzt Deckung und weicht Nahkämpfen aus.",
+    "attributes": [
+      { "name": "MU", "value": 13 },
+      { "name": "KL", "value": 11 },
+      { "name": "IN", "value": 14 },
+      { "name": "CH", "value": 10 },
+      { "name": "FF", "value": 14 },
+      { "name": "GE", "value": 15 },
+      { "name": "KO", "value": 12 },
+      { "name": "KK", "value": 11 }
+    ],
+    "skills": [
+      { "name": "Fährtensuchen", "value": 12 },
+      { "name": "Sich Verstecken", "value": 14 },
+      { "name": "Bogenkampf", "value": 13 }
+    ],
+    "attacks": [
+      { "name": "Jagdbogen", "tp": "1D6+3", "at": 13, "pa": 0, "range": "10/25/50" },
+      { "name": "Jagdmesser", "tp": "1D6+1", "at": 11, "pa": 8 }
+    ],
+    "abilities": [
+      { "name": "Katzensprung", "description": "Kann sich als freie Aktion 3 Schritt weit bewegen, ohne Gelegenheitsangriffe auszulösen." }
+    ],
+    "created_at": "2026-05-24T11:45:00Z",
+    "updated_at": "2026-05-24T11:45:00Z"
+  },
+  {
+    "id": "merchant-balan-cantara",
+    "name": "Jadira von Cantara",
+    "type": "social",
+    "description": "Eine einflussreiche Händlerin im Hafenviertel von Balan Cantara. Sie handelt mit Gewürzen und magischen Relikten.",
+    "role": "Händlerin & Informantin",
+    "faction": "Gilde des Blauen Seidenwegs",
+    "motivation": "Möchte die Monopolstellung ihrer Gilde gegen imperiale Zölle sichern.",
+    "secrets": "Schmuggelt heimlich verbotene Quellensteine durch die Hafenbehörde.",
+    "notes": "Kann bestochen werden, reagiert allergisch auf imperiale Arroganz.",
+    "key_skills": [
+      { "name": "Feilschen", "value": 15 },
+      { "name": "Menschenkenntnis", "value": 13 },
+      { "name": "Gassenwissen", "value": 11 }
+    ],
+    "relationships": [
+      { "targetName": "Hafenmeister Sarris", "status": "neutral" },
+      { "targetName": "Die Optimaten", "status": "feindselig" }
+    ],
+    "created_at": "2026-05-24T11:45:00Z",
+    "updated_at": "2026-05-24T11:45:00Z"
+  },
+  {
+    "id": "poison-dart-trap",
+    "name": "Vergiftete Pfeilfalle",
+    "type": "trap",
+    "description": "Eine mechanische Falle, die in Wänden von Ruinen verborgen ist. Sie wird durch eine dünne Stolperschnur ausgelöst.",
+    "trigger": "Stolperschnur (Bodenhöhe)",
+    "detection_dc": 14,
+    "disarm_dc": 12,
+    "damage": "1D6 TP + Kelmon-Gift (Halbierung der GE für 1 Stunde, KO-Probe +4)",
+    "cooldown": "Einmalig (Muss manuell nachgeladen werden)",
+    "notes": "Pfeile fliegen in Kniehöhe; kriechende Charaktere werden unweigerlich am Kopf getroffen (+2 TP).",
+    "created_at": "2026-05-24T11:45:00Z",
+    "updated_at": "2026-05-24T11:45:00Z"
+  },
+  {
+    "id": "sulfuric-steam",
+    "name": "Schwefeldämpfe",
+    "type": "hazard",
+    "description": "Heißer, beißender Schwefeldampf, der periodisch aus Felsspalten austritt.",
+    "hazard_type": "Gelände & Umwelt",
+    "severity": "Moderat",
+    "effects": "Jede Kampfrunde (KR) im Dampf verursacht 1D3 SP (Drosselschaden) und erzeugt den Status 'Blind' für 1 KR.",
+    "avoidance": "KO-Probe erschwert um 2 oder Tragen einer Atemmaske.",
+    "duration": "Permanent (Austritt alle 3 KR für 1 KR)",
+    "notes": "Dampf ist brennbar; offenes Feuer verursacht eine Explosion (3D6 TP in 3 Schritt Radius).",
+    "created_at": "2026-05-24T11:45:00Z",
+    "updated_at": "2026-05-24T11:45:00Z"
+  }
+]
