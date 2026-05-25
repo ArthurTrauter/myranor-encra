@@ -1112,7 +1112,7 @@ export const App: React.FC = () => {
             <h1 className="text-xl font-black tracking-wider text-transparent bg-clip-text bg-gradient-to-r from-amber-200 via-amber-400 to-yellow-500 font-display uppercase">
               Myranor Encra
             </h1>
-            <p className="text-[10px] text-slate-400 uppercase tracking-widest font-semibold">ENCRA ENcounter + CReature Assistant</p>
+            <p className="text-[0.6875rem] text-slate-400 uppercase tracking-widest font-semibold">ENCRA ENcounter + CReature Assistant</p>
           </div>
         </div>
 
@@ -1249,7 +1249,7 @@ export const App: React.FC = () => {
 
                     <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 items-end">
                       <div>
-                        <label className="block text-[9px] font-extrabold uppercase tracking-wider text-slate-400 mb-1">Vorlage wählen</label>
+                        <label className="block text-[0.625rem] font-extrabold uppercase tracking-wider text-slate-400 mb-1">Vorlage wählen</label>
                         <select
                           value={selectedTemplateId}
                           onChange={e => handleTemplateChange(e.target.value)}
@@ -1286,7 +1286,7 @@ export const App: React.FC = () => {
                         const t = templates.find((tmp: any) => tmp.id === selectedTemplateId) as any;
                         return t && t.is_multi_variant ? (
                           <div>
-                            <label className="block text-[9px] font-extrabold uppercase tracking-wider text-slate-400 mb-1">Kategorie / Variante</label>
+                            <label className="block text-[0.625rem] font-extrabold uppercase tracking-wider text-slate-400 mb-1">Kategorie / Variante</label>
                             <select
                               value={selectedVariant}
                               onChange={e => setSelectedVariant(e.target.value)}
@@ -1330,7 +1330,7 @@ export const App: React.FC = () => {
                             <div key={t.id} className="flex items-center justify-between p-3 rounded-xl bg-slate-900/40 border border-slate-800 text-xs hover:border-slate-700/80 transition-all">
                               <div className="space-y-0.5">
                                 <p className="font-bold text-slate-200">{t.name}</p>
-                                <p className="text-[10px] text-slate-400 font-medium uppercase tracking-wider">
+                                <p className="text-[0.6875rem] text-slate-400 font-medium uppercase tracking-wider">
                                   {{ enemy: 'Gegner', social: 'Sozialer NPC', trap: 'Falle', hazard: 'Gefahr' }[t.type as EncounterElementType]}
                                 </p>
                               </div>
@@ -1338,14 +1338,14 @@ export const App: React.FC = () => {
                                 <button
                                   type="button"
                                   onClick={() => handleEditTemplate(t)}
-                                  className="text-amber-400 hover:text-amber-300 font-semibold px-2 py-1 rounded hover:bg-amber-500/10 transition-all text-[10px] uppercase tracking-wider border border-amber-500/20"
+                                  className="text-amber-400 hover:text-amber-300 font-semibold px-2 py-1 rounded hover:bg-amber-500/10 transition-all text-[0.6875rem] uppercase tracking-wider border border-amber-500/20"
                                 >
                                   Bearbeiten
                                 </button>
                                 <button
                                   type="button"
                                   onClick={() => deleteTemplate(t.id)}
-                                  className="text-red-400 hover:text-red-300 font-semibold px-2 py-1 rounded hover:bg-red-500/10 transition-all text-[10px] uppercase tracking-wider border border-red-500/20"
+                                  className="text-red-400 hover:text-red-300 font-semibold px-2 py-1 rounded hover:bg-red-500/10 transition-all text-[0.6875rem] uppercase tracking-wider border border-red-500/20"
                                 >
                                   Löschen
                                 </button>
@@ -1366,7 +1366,7 @@ export const App: React.FC = () => {
                     <h4 className="text-xs font-bold text-amber-400 uppercase tracking-wider flex items-center gap-1.5">
                       <span>📖</span> Raw Text importieren
                     </h4>
-                    <p className="text-[11px] text-slate-400">
+                    <p className="text-xs text-slate-400">
                       Kopiere den Text eines Monsters aus dem Bestiarium (inklusive Name in Zeile 1 und Varianten in Zeile 2). Der Parser zerlegt den Text in Stats, Saves, Attribute und Aktionen.
                     </p>
                   </div>
@@ -1448,7 +1448,7 @@ export const App: React.FC = () => {
                           setNewHazardType('');
                           setNewHazardEffects('');
                         }}
-                        className="px-2.5 py-1 rounded bg-amber-500 text-slate-950 font-bold hover:bg-amber-400 transition-all cursor-pointer text-[10px] uppercase tracking-wider"
+                        className="px-2.5 py-1 rounded bg-amber-500 text-slate-950 font-bold hover:bg-amber-400 transition-all cursor-pointer text-[0.6875rem] uppercase tracking-wider"
                       >
                         Bearbeitung beenden (Leeres Formular)
                       </button>
@@ -1460,7 +1460,7 @@ export const App: React.FC = () => {
                           <h4 className="text-xs font-bold text-amber-500 uppercase tracking-widest">
                             Vorlage kopieren / Formular leeren
                           </h4>
-                          <p className="text-[10px] text-slate-400">
+                          <p className="text-[0.6875rem] text-slate-400">
                             Kopiere Werte aus einer Vorlage als Basis für ein neues Element oder setze das Formular zurück.
                           </p>
                         </div>
@@ -1508,7 +1508,7 @@ export const App: React.FC = () => {
                             setParsedMultiVariantData(null);
                             setEditingTemplateVariant(null);
                           }}
-                          className="px-2.5 py-1.5 rounded border border-slate-700 hover:bg-slate-800 text-slate-350 font-bold transition-all cursor-pointer text-[10px] uppercase tracking-wider shrink-0"
+                          className="px-2.5 py-1.5 rounded border border-slate-700 hover:bg-slate-800 text-slate-350 font-bold transition-all cursor-pointer text-[0.6875rem] uppercase tracking-wider shrink-0"
                         >
                           Formular leeren
                         </button>
@@ -1516,7 +1516,7 @@ export const App: React.FC = () => {
 
                       <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 items-end pt-1 border-t border-slate-900">
                         <div>
-                          <label className="block text-[9px] font-extrabold uppercase tracking-wider text-slate-400 mb-1">Vorlage wählen</label>
+                          <label className="block text-[0.625rem] font-extrabold uppercase tracking-wider text-slate-400 mb-1">Vorlage wählen</label>
                           <select
                             value={tempCopyTemplateId}
                             onChange={e => {
@@ -1560,7 +1560,7 @@ export const App: React.FC = () => {
                           const t = templates.find(tmp => tmp.id === tempCopyTemplateId) as any;
                           return t && t.is_multi_variant ? (
                             <div>
-                              <label className="block text-[9px] font-extrabold uppercase tracking-wider text-slate-400 mb-1">Variante wählen</label>
+                              <label className="block text-[0.625rem] font-extrabold uppercase tracking-wider text-slate-400 mb-1">Variante wählen</label>
                               <select
                                 value={tempCopyVariantName}
                                 onChange={e => setTempCopyVariantName(e.target.value)}
@@ -1608,7 +1608,7 @@ export const App: React.FC = () => {
                   {/* General Row: Type & Name */}
                   <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                     <div>
-                      <label className="block text-[10px] font-extrabold uppercase tracking-wider text-slate-400 mb-1.5">RPG-Typ</label>
+                      <label className="block text-[0.6875rem] font-extrabold uppercase tracking-wider text-slate-400 mb-1.5">RPG-Typ</label>
                       <select
                         value={newType}
                         onChange={e => setNewType(e.target.value as EncounterElementType)}
@@ -1621,7 +1621,7 @@ export const App: React.FC = () => {
                       </select>
                     </div>
                     <div className="md:col-span-2">
-                      <label className="block text-[10px] font-extrabold uppercase tracking-wider text-slate-400 mb-1.5">Name</label>
+                      <label className="block text-[0.6875rem] font-extrabold uppercase tracking-wider text-slate-400 mb-1.5">Name</label>
                       <input
                         type="text"
                         required
@@ -1634,7 +1634,7 @@ export const App: React.FC = () => {
                   </div>
 
                   <div>
-                    <label className="block text-[10px] font-extrabold uppercase tracking-wider text-slate-400 mb-1.5">Beschreibung</label>
+                    <label className="block text-[0.6875rem] font-extrabold uppercase tracking-wider text-slate-400 mb-1.5">Beschreibung</label>
                     <textarea
                       value={newDesc}
                       onChange={e => setNewDesc(e.target.value)}
@@ -1654,7 +1654,7 @@ export const App: React.FC = () => {
                             <h4 className="text-xs font-bold text-amber-500 uppercase tracking-widest">
                               Varianten-Verwaltung
                             </h4>
-                            <p className="text-[10px] text-slate-400">
+                            <p className="text-[0.6875rem] text-slate-400">
                               Erstelle verschiedene Varianten für diese Vorlage (z.B. Mittelschwer, Schwer, Boss)
                             </p>
                           </div>
@@ -1712,12 +1712,12 @@ export const App: React.FC = () => {
                                 });
                                 setEditingTemplateVariant(currentVariantName);
                               }}
-                              className="px-3 py-1.5 rounded-lg border border-amber-500/25 bg-amber-500/10 text-amber-400 hover:bg-amber-500/25 text-[10px] font-bold uppercase tracking-wider transition-all cursor-pointer"
+                              className="px-3 py-1.5 rounded-lg border border-amber-500/25 bg-amber-500/10 text-amber-400 hover:bg-amber-500/25 text-[0.6875rem] font-bold uppercase tracking-wider transition-all cursor-pointer"
                             >
                               🔀 Varianten-System aktivieren
                             </button>
                           ) : (
-                            <span className="text-[9px] px-2 py-0.5 bg-amber-500/10 border border-amber-500/20 text-amber-400 rounded-full font-bold uppercase tracking-wider">
+                            <span className="text-[0.625rem] px-2 py-0.5 bg-amber-500/10 border border-amber-500/20 text-amber-400 rounded-full font-bold uppercase tracking-wider">
                               Multi-Varianten Aktiv
                             </span>
                           )}
@@ -1728,7 +1728,7 @@ export const App: React.FC = () => {
                             {/* Switch & Delete */}
                             <div className="flex items-end gap-2.5">
                               <div className="flex-1">
-                                <label className="block text-[9px] font-extrabold uppercase tracking-wider text-slate-400 mb-1">
+                                <label className="block text-[0.625rem] font-extrabold uppercase tracking-wider text-slate-400 mb-1">
                                   Aktive Variante bearbeiten
                                 </label>
                                 <select
@@ -1756,7 +1756,7 @@ export const App: React.FC = () => {
                             {/* Add New Variant */}
                             <div className="flex items-end gap-2">
                               <div className="flex-1">
-                                <label className="block text-[9px] font-extrabold uppercase tracking-wider text-slate-400 mb-1">
+                                <label className="block text-[0.625rem] font-extrabold uppercase tracking-wider text-slate-400 mb-1">
                                   Neue Variante hinzufügen
                                 </label>
                                 <input
@@ -1791,7 +1791,7 @@ export const App: React.FC = () => {
                             key={sub.id}
                             type="button"
                             onClick={() => setManualSubTab(sub.id as any)}
-                            className={`flex-1 py-1.5 rounded-lg font-bold text-[10px] uppercase tracking-wider transition-all cursor-pointer ${manualSubTab === sub.id
+                            className={`flex-1 py-1.5 rounded-lg font-bold text-[0.6875rem] uppercase tracking-wider transition-all cursor-pointer ${manualSubTab === sub.id
                                 ? 'bg-[#1e293b] text-amber-400 border border-slate-700/50'
                                 : 'text-slate-400 hover:text-slate-200'
                               }`}
@@ -1806,7 +1806,7 @@ export const App: React.FC = () => {
                         <div className="space-y-4 animate-fade-in">
                           <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
                             <div>
-                              <label className="block text-[10px] font-bold uppercase tracking-wider text-slate-400 mb-1">Stufe / HG</label>
+                              <label className="block text-[0.6875rem] font-bold uppercase tracking-wider text-slate-400 mb-1">Stufe / HG</label>
                               <input
                                 type="text"
                                 value={newEnemyLevel}
@@ -1816,7 +1816,7 @@ export const App: React.FC = () => {
                               />
                             </div>
                             <div>
-                              <label className="block text-[10px] font-bold uppercase tracking-wider text-slate-400 mb-1">Trefferpunkte (TP)</label>
+                              <label className="block text-[0.6875rem] font-bold uppercase tracking-wider text-slate-400 mb-1">Trefferpunkte (TP)</label>
                               <input
                                 type="number"
                                 value={newEnemyHP}
@@ -1825,7 +1825,7 @@ export const App: React.FC = () => {
                               />
                             </div>
                             <div>
-                              <label className="block text-[10px] font-bold uppercase tracking-wider text-slate-400 mb-1">Rüstungsklasse (RK)</label>
+                              <label className="block text-[0.6875rem] font-bold uppercase tracking-wider text-slate-400 mb-1">Rüstungsklasse (RK)</label>
                               <input
                                 type="number"
                                 value={newEnemyVP}
@@ -1834,7 +1834,7 @@ export const App: React.FC = () => {
                               />
                             </div>
                             <div>
-                              <label className="block text-[10px] font-bold uppercase tracking-wider text-slate-400 mb-1">Initiative (INI)</label>
+                              <label className="block text-[0.6875rem] font-bold uppercase tracking-wider text-slate-400 mb-1">Initiative (INI)</label>
                               <input
                                 type="number"
                                 value={newEnemyIni}
@@ -1846,7 +1846,7 @@ export const App: React.FC = () => {
 
                           <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
                             <div>
-                              <label className="block text-[10px] font-bold uppercase tracking-wider text-slate-400 mb-1">Bewegungsrate (BW)</label>
+                              <label className="block text-[0.6875rem] font-bold uppercase tracking-wider text-slate-400 mb-1">Bewegungsrate (BW)</label>
                               <input
                                 type="text"
                                 value={newEnemyBW}
@@ -1856,7 +1856,7 @@ export const App: React.FC = () => {
                               />
                             </div>
                             <div>
-                              <label className="block text-[10px] font-bold uppercase tracking-wider text-slate-400 mb-1">Übungsbonus (UB)</label>
+                              <label className="block text-[0.6875rem] font-bold uppercase tracking-wider text-slate-400 mb-1">Übungsbonus (UB)</label>
                               <input
                                 type="number"
                                 value={newEnemyUB}
@@ -1865,7 +1865,7 @@ export const App: React.FC = () => {
                               />
                             </div>
                             <div className="md:col-span-2">
-                              <label className="block text-[10px] font-bold uppercase tracking-wider text-slate-400 mb-1">Rettungswürfe (Saves)</label>
+                              <label className="block text-[0.6875rem] font-bold uppercase tracking-wider text-slate-400 mb-1">Rettungswürfe (Saves)</label>
                               <input
                                 type="text"
                                 value={newEnemySaves}
@@ -1878,7 +1878,7 @@ export const App: React.FC = () => {
 
                           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                             <div>
-                              <label className="block text-[10px] font-bold uppercase tracking-wider text-slate-400 mb-1">Immunitäten</label>
+                              <label className="block text-[0.6875rem] font-bold uppercase tracking-wider text-slate-400 mb-1">Immunitäten</label>
                               <input
                                 type="text"
                                 value={newEnemyImmunities}
@@ -1888,7 +1888,7 @@ export const App: React.FC = () => {
                               />
                             </div>
                             <div>
-                              <label className="block text-[10px] font-bold uppercase tracking-wider text-slate-400 mb-1">Sinne</label>
+                              <label className="block text-[0.6875rem] font-bold uppercase tracking-wider text-slate-400 mb-1">Sinne</label>
                               <input
                                 type="text"
                                 value={newEnemySenses}
@@ -1898,7 +1898,7 @@ export const App: React.FC = () => {
                               />
                             </div>
                             <div>
-                              <label className="block text-[10px] font-bold uppercase tracking-wider text-slate-400 mb-1">Sprachen</label>
+                              <label className="block text-[0.6875rem] font-bold uppercase tracking-wider text-slate-400 mb-1">Sprachen</label>
                               <input
                                 type="text"
                                 value={newEnemyLanguages}
@@ -1914,7 +1914,7 @@ export const App: React.FC = () => {
                       {/* Sub-Tab Content: HAUPTATTRIBUTE */}
                       {manualSubTab === 'attributes' && (
                         <div className="space-y-3 animate-fade-in">
-                          <p className="text-[10px] text-slate-450 uppercase tracking-wider font-semibold">Attributs-Modifikatoren (z.B. +4 oder -2)</p>
+                          <p className="text-[0.6875rem] text-slate-450 uppercase tracking-wider font-semibold">Attributs-Modifikatoren (z.B. +4 oder -2)</p>
                           <div className="grid grid-cols-3 sm:grid-cols-6 gap-3">
                             {[
                               { name: 'STÄ', val: newAttrSTA, set: setNewAttrSTA },
@@ -1925,7 +1925,7 @@ export const App: React.FC = () => {
                               { name: 'CHA', val: newAttrCHA, set: setNewAttrCHA }
                             ].map(a => (
                               <div key={a.name} className="text-center p-2.5 rounded-xl bg-slate-950 border border-slate-800/80">
-                                <label className="block text-[10px] font-extrabold text-amber-500 mb-1">{a.name}</label>
+                                <label className="block text-[0.6875rem] font-extrabold text-amber-500 mb-1">{a.name}</label>
                                 <input
                                   type="number"
                                   value={a.val}
@@ -1944,18 +1944,18 @@ export const App: React.FC = () => {
                           {/* Current Traits List */}
                           {newTraits.length > 0 && (
                             <div className="space-y-2">
-                              <label className="block text-[10px] font-bold uppercase tracking-wider text-slate-400">Aktuelle Eigenschaften</label>
+                              <label className="block text-[0.6875rem] font-bold uppercase tracking-wider text-slate-400">Aktuelle Eigenschaften</label>
                               <div className="space-y-1.5 max-h-40 overflow-y-auto pr-1">
                                 {newTraits.map((t, idx) => (
                                   <div key={idx} className="flex items-start justify-between p-2 rounded-lg bg-slate-900/60 border border-slate-800 text-xs gap-3">
                                     <div className="space-y-0.5">
                                       <p className="font-bold text-amber-400">{t.name}</p>
-                                      <p className="text-slate-350 text-[11px] leading-relaxed">{t.description}</p>
+                                      <p className="text-slate-350 text-xs leading-relaxed">{t.description}</p>
                                     </div>
                                     <button
                                       type="button"
                                       onClick={() => removeTempTrait(idx)}
-                                      className="text-red-400 hover:text-red-300 font-semibold uppercase tracking-wider text-[9px] shrink-0 cursor-pointer"
+                                      className="text-red-400 hover:text-red-300 font-semibold uppercase tracking-wider text-[0.625rem] shrink-0 cursor-pointer"
                                     >
                                       Löschen
                                     </button>
@@ -1967,7 +1967,7 @@ export const App: React.FC = () => {
 
                           {/* Add Trait Form */}
                           <div className="p-3.5 rounded-xl bg-slate-950 border border-slate-800/60 space-y-3">
-                            <h5 className="text-[10px] font-bold text-amber-500 uppercase tracking-widest">Eigenschaft hinzufügen</h5>
+                            <h5 className="text-[0.6875rem] font-bold text-amber-500 uppercase tracking-widest">Eigenschaft hinzufügen</h5>
                             <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
                               <div className="sm:col-span-1">
                                 <input
@@ -2005,22 +2005,22 @@ export const App: React.FC = () => {
                           {/* Current Actions List */}
                           {newActions.length > 0 && (
                             <div className="space-y-2">
-                              <label className="block text-[10px] font-bold uppercase tracking-wider text-slate-400">Aktuelle Aktionen</label>
+                              <label className="block text-[0.6875rem] font-bold uppercase tracking-wider text-slate-400">Aktuelle Aktionen</label>
                               <div className="space-y-1.5 max-h-40 overflow-y-auto pr-1">
                                 {newActions.map((a, idx) => (
                                   <div key={idx} className="flex items-start justify-between p-2 rounded-lg bg-slate-900/60 border border-slate-800 text-xs gap-3">
                                     <div className="space-y-0.5">
                                       <div className="flex items-center gap-2">
                                         <span className="font-bold text-red-400">{a.name}</span>
-                                        <span className="text-[9px] px-1.5 py-0.5 bg-slate-800 rounded font-semibold text-slate-400">{a.type}</span>
-                                        {a.damage && <span className="text-[10px] text-red-300 font-medium">({a.damage})</span>}
+                                        <span className="text-[0.625rem] px-1.5 py-0.5 bg-slate-800 rounded font-semibold text-slate-400">{a.type}</span>
+                                        {a.damage && <span className="text-[0.6875rem] text-red-300 font-medium">({a.damage})</span>}
                                       </div>
-                                      <p className="text-slate-350 text-[11px] leading-relaxed">{a.description}</p>
+                                      <p className="text-slate-350 text-xs leading-relaxed">{a.description}</p>
                                     </div>
                                     <button
                                       type="button"
                                       onClick={() => removeTempAction(idx)}
-                                      className="text-red-400 hover:text-red-300 font-semibold uppercase tracking-wider text-[9px] shrink-0 cursor-pointer"
+                                      className="text-red-400 hover:text-red-300 font-semibold uppercase tracking-wider text-[0.625rem] shrink-0 cursor-pointer"
                                     >
                                       Löschen
                                     </button>
@@ -2032,7 +2032,7 @@ export const App: React.FC = () => {
 
                           {/* Add Action Form */}
                           <div className="p-3.5 rounded-xl bg-slate-955 border border-slate-800/60 space-y-3">
-                            <h5 className="text-[10px] font-bold text-amber-500 uppercase tracking-widest">Aktion/Angriff hinzufügen</h5>
+                            <h5 className="text-[0.6875rem] font-bold text-amber-500 uppercase tracking-widest">Aktion/Angriff hinzufügen</h5>
                             <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
                               <div>
                                 <input
@@ -2092,7 +2092,7 @@ export const App: React.FC = () => {
 
                           {/* Regional effects input */}
                           <div>
-                            <label className="block text-[10px] font-bold uppercase tracking-wider text-slate-400 mb-1">Regionale Effekte (Text)</label>
+                            <label className="block text-[0.6875rem] font-bold uppercase tracking-wider text-slate-400 mb-1">Regionale Effekte (Text)</label>
                             <textarea
                               value={newRegionalEffects}
                               onChange={e => setNewRegionalEffects(e.target.value)}
@@ -2110,7 +2110,7 @@ export const App: React.FC = () => {
                   {newType === 'social' && (
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4 p-4 rounded-xl bg-slate-900/40 border border-slate-800/80 animate-fade-in">
                       <div>
-                        <label className="block text-[10px] font-bold uppercase tracking-wider text-slate-400 mb-1">Rolle / Beruf</label>
+                        <label className="block text-[0.6875rem] font-bold uppercase tracking-wider text-slate-400 mb-1">Rolle / Beruf</label>
                         <input
                           type="text"
                           value={newSocialRole}
@@ -2120,7 +2120,7 @@ export const App: React.FC = () => {
                         />
                       </div>
                       <div>
-                        <label className="block text-[10px] font-bold uppercase tracking-wider text-slate-400 mb-1">Fraktion</label>
+                        <label className="block text-[0.6875rem] font-bold uppercase tracking-wider text-slate-400 mb-1">Fraktion</label>
                         <input
                           type="text"
                           value={newSocialFaction}
@@ -2130,7 +2130,7 @@ export const App: React.FC = () => {
                         />
                       </div>
                       <div>
-                        <label className="block text-[10px] font-bold uppercase tracking-wider text-slate-400 mb-1">Motivation</label>
+                        <label className="block text-[0.6875rem] font-bold uppercase tracking-wider text-slate-400 mb-1">Motivation</label>
                         <input
                           type="text"
                           value={newSocialMotivation}
@@ -2140,7 +2140,7 @@ export const App: React.FC = () => {
                         />
                       </div>
                       <div>
-                        <label className="block text-[10px] font-bold uppercase tracking-wider text-slate-400 mb-1">Geheimnis (DM Info)</label>
+                        <label className="block text-[0.6875rem] font-bold uppercase tracking-wider text-slate-400 mb-1">Geheimnis (DM Info)</label>
                         <input
                           type="text"
                           value={newSocialSecret}
@@ -2156,7 +2156,7 @@ export const App: React.FC = () => {
                   {newType === 'trap' && (
                     <div className="grid grid-cols-1 md:grid-cols-4 gap-4 p-4 rounded-xl bg-slate-900/40 border border-slate-800/80 animate-fade-in">
                       <div className="md:col-span-2">
-                        <label className="block text-[10px] font-bold uppercase tracking-wider text-slate-400 mb-1">Auslöser</label>
+                        <label className="block text-[0.6875rem] font-bold uppercase tracking-wider text-slate-400 mb-1">Auslöser</label>
                         <input
                           type="text"
                           value={newTrapTrigger}
@@ -2166,7 +2166,7 @@ export const App: React.FC = () => {
                         />
                       </div>
                       <div>
-                        <label className="block text-[10px] font-bold uppercase tracking-wider text-slate-400 mb-1">Entdecken (Probe)</label>
+                        <label className="block text-[0.6875rem] font-bold uppercase tracking-wider text-slate-400 mb-1">Entdecken (Probe)</label>
                         <input
                           type="number"
                           value={newTrapDetect}
@@ -2175,7 +2175,7 @@ export const App: React.FC = () => {
                         />
                       </div>
                       <div>
-                        <label className="block text-[10px] font-bold uppercase tracking-wider text-slate-400 mb-1">Entschärfen (Probe)</label>
+                        <label className="block text-[0.6875rem] font-bold uppercase tracking-wider text-slate-400 mb-1">Entschärfen (Probe)</label>
                         <input
                           type="number"
                           value={newTrapDisarm}
@@ -2184,7 +2184,7 @@ export const App: React.FC = () => {
                         />
                       </div>
                       <div className="md:col-span-4">
-                        <label className="block text-[10px] font-bold uppercase tracking-wider text-slate-400 mb-1">Schaden / Effekt</label>
+                        <label className="block text-[0.6875rem] font-bold uppercase tracking-wider text-slate-400 mb-1">Schaden / Effekt</label>
                         <input
                           type="text"
                           value={newTrapDamage}
@@ -2200,7 +2200,7 @@ export const App: React.FC = () => {
                   {newType === 'hazard' && (
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-4 p-4 rounded-xl bg-slate-900/40 border border-slate-800/80 animate-fade-in">
                       <div>
-                        <label className="block text-[10px] font-bold uppercase tracking-wider text-slate-400 mb-1">Gefahrenart</label>
+                        <label className="block text-[0.6875rem] font-bold uppercase tracking-wider text-slate-400 mb-1">Gefahrenart</label>
                         <input
                           type="text"
                           value={newHazardType}
@@ -2210,7 +2210,7 @@ export const App: React.FC = () => {
                         />
                       </div>
                       <div>
-                        <label className="block text-[10px] font-bold uppercase tracking-wider text-slate-400 mb-1">Bedrohungsstufe</label>
+                        <label className="block text-[0.6875rem] font-bold uppercase tracking-wider text-slate-400 mb-1">Bedrohungsstufe</label>
                         <select
                           value={newHazardSeverity}
                           onChange={e => setNewHazardSeverity(e.target.value)}
@@ -2223,7 +2223,7 @@ export const App: React.FC = () => {
                         </select>
                       </div>
                       <div className="md:col-span-3">
-                        <label className="block text-[10px] font-bold uppercase tracking-wider text-slate-400 mb-1">Auswirkungen</label>
+                        <label className="block text-[0.6875rem] font-bold uppercase tracking-wider text-slate-400 mb-1">Auswirkungen</label>
                         <input
                           type="text"
                           value={newHazardEffects}
@@ -2236,7 +2236,7 @@ export const App: React.FC = () => {
                   )}
 
                   <div>
-                    <label className="block text-[10px] font-extrabold uppercase tracking-wider text-slate-400 mb-1.5">DM Notizen (Nur für dich sichtbar)</label>
+                    <label className="block text-[0.6875rem] font-extrabold uppercase tracking-wider text-slate-400 mb-1.5">DM Notizen (Nur für dich sichtbar)</label>
                     <input
                       type="text"
                       value={newNotes}
@@ -2378,14 +2378,14 @@ export const App: React.FC = () => {
                     <div className="flex items-start justify-between gap-3 mb-4">
                       <div className="space-y-1.5">
                         <div className="flex items-center gap-1.5 flex-wrap">
-                          <span className={`text-[9px] font-extrabold uppercase px-2.5 py-1 rounded-full border ${tagColors}`}>
+                          <span className={`text-[0.625rem] font-extrabold uppercase px-2.5 py-1 rounded-full border ${tagColors}`}>
                             {tagLabel}
                           </span>
                           {el.type === 'enemy' && el.is_multi_variant && el.active_variant && (
                             <select
                               value={el.active_variant}
                               onChange={(e) => handleCardVariantChange(el.id, e.target.value)}
-                              className="text-[9px] font-extrabold uppercase px-2.5 py-1 rounded-full border border-amber-500/30 bg-amber-500/10 text-amber-400 focus:outline-none cursor-pointer hover:bg-amber-500/20 transition-all"
+                              className="text-[0.625rem] font-extrabold uppercase px-2.5 py-1 rounded-full border border-amber-500/30 bg-amber-500/10 text-amber-400 focus:outline-none cursor-pointer hover:bg-amber-500/20 transition-all"
                             >
                               {el.variants_keys?.map(v => (
                                 <option key={v} value={v} className="bg-slate-900 text-slate-200">{v}</option>
@@ -2417,18 +2417,18 @@ export const App: React.FC = () => {
                       <div className="space-y-4 border-t border-slate-800/60 pt-4 text-xs">
                         <div className="flex items-center justify-between flex-wrap gap-2">
                           <div className="flex items-center gap-1.5">
-                            <span className="text-[10px] text-slate-500 font-bold uppercase">Stufe / HG</span>
+                            <span className="text-[0.6875rem] text-slate-500 font-bold uppercase">Stufe / HG</span>
                             <span className="font-semibold text-slate-200 px-2 py-0.5 bg-slate-850 rounded border border-slate-800">{el.level}</span>
                           </div>
                           <div className="flex items-center gap-4">
                             <div className="flex items-center gap-1">
-                              <span className="text-[10px] text-slate-500 font-bold uppercase">TP</span>
+                              <span className="text-[0.6875rem] text-slate-500 font-bold uppercase">TP</span>
                               <span className="font-extrabold text-red-400 bg-red-950/20 px-2 py-0.5 border border-red-900/30 rounded" title={el.tp_formula}>
                                 {el.hp_current}/{el.hp_max} {el.tp_formula && `(${el.tp_formula})`}
                               </span>
                             </div>
                             <div className="flex items-center gap-1">
-                              <span className="text-[10px] text-slate-500 font-bold uppercase">RK</span>
+                              <span className="text-[0.6875rem] text-slate-500 font-bold uppercase">RK</span>
                               <span className="font-bold text-slate-200 bg-slate-850 px-2 py-0.5 border border-slate-800 rounded">
                                 {el.rk !== undefined ? el.rk : el.vp}
                               </span>
@@ -2438,40 +2438,40 @@ export const App: React.FC = () => {
 
                         {/* Extra general stats for rich entries */}
                         {(el.bw || el.ub !== undefined || el.senses || el.languages || el.saves || el.immunities) && (
-                          <div className="grid grid-cols-2 gap-2 p-2.5 rounded-xl bg-slate-900/35 border border-slate-800/50 text-[10px] text-slate-350">
+                          <div className="grid grid-cols-2 gap-2 p-2.5 rounded-xl bg-slate-900/35 border border-slate-800/50 text-[0.6875rem] text-slate-350">
                             {el.bw && (
                               <div>
-                                <span className="text-slate-500 font-extrabold block uppercase text-[9px]">BW (Bewegung)</span>
+                                <span className="text-slate-500 font-extrabold block uppercase text-[0.625rem]">BW (Bewegung)</span>
                                 <span className="font-semibold">{el.bw}</span>
                               </div>
                             )}
                             {el.ub !== undefined && (
                               <div>
-                                <span className="text-slate-500 font-extrabold block uppercase text-[9px]">ÜB (Übungsbonus)</span>
+                                <span className="text-slate-500 font-extrabold block uppercase text-[0.625rem]">ÜB (Übungsbonus)</span>
                                 <span className="font-semibold text-amber-500 font-bold">+{el.ub}</span>
                               </div>
                             )}
                             {el.saves && (
                               <div className="col-span-2 border-t border-slate-800/30 pt-1.5 mt-0.5">
-                                <span className="text-slate-500 font-extrabold block uppercase text-[9px]">Rettungswürfe (RW)</span>
+                                <span className="text-slate-500 font-extrabold block uppercase text-[0.625rem]">Rettungswürfe (RW)</span>
                                 <span className="font-semibold text-slate-200">{el.saves}</span>
                               </div>
                             )}
                             {el.immunities && (
                               <div className="col-span-2 border-t border-slate-800/30 pt-1.5 mt-0.5">
-                                <span className="text-slate-500 font-extrabold block uppercase text-[9px]">Immunitäten</span>
+                                <span className="text-slate-500 font-extrabold block uppercase text-[0.625rem]">Immunitäten</span>
                                 <span className="font-semibold text-orange-400">{el.immunities}</span>
                               </div>
                             )}
                             {el.senses && (
                               <div className="col-span-2 border-t border-slate-800/30 pt-1.5 mt-0.5">
-                                <span className="text-slate-500 font-extrabold block uppercase text-[9px]">Sinne</span>
+                                <span className="text-slate-500 font-extrabold block uppercase text-[0.625rem]">Sinne</span>
                                 <span className="font-semibold">{el.senses}</span>
                               </div>
                             )}
                             {el.languages && (
                               <div className="col-span-2 border-t border-slate-800/30 pt-1.5 mt-0.5">
-                                <span className="text-slate-500 font-extrabold block uppercase text-[9px]">Sprachen</span>
+                                <span className="text-slate-500 font-extrabold block uppercase text-[0.625rem]">Sprachen</span>
                                 <span className="font-semibold">{el.languages}</span>
                               </div>
                             )}
@@ -2479,7 +2479,7 @@ export const App: React.FC = () => {
                         )}
 
                         {/* Attribute Grid */}
-                        <div className="grid grid-cols-4 gap-1 text-[10px] text-center font-bold">
+                        <div className="grid grid-cols-4 gap-1 text-[0.6875rem] text-center font-bold">
                           {el.attributes?.map(attr => (
                             <div key={attr.name} className="bg-slate-900/50 rounded p-1 border border-slate-800/40">
                               <span className="text-slate-500 block">{attr.name}</span>
@@ -2491,10 +2491,10 @@ export const App: React.FC = () => {
                         {/* Skills and passive values */}
                         {el.skills && el.skills.length > 0 && (
                           <div className="pt-1.5 space-y-1">
-                            <span className="text-[10px] text-slate-500 font-extrabold uppercase block">Fertigkeiten (Skills)</span>
+                            <span className="text-[0.6875rem] text-slate-500 font-extrabold uppercase block">Fertigkeiten (Skills)</span>
                             <div className="flex flex-wrap gap-1">
                               {el.skills.map((sk: any, idx) => (
-                                <span key={idx} className="bg-slate-900 border border-slate-800 text-[10px] px-2.5 py-0.5 rounded font-medium text-slate-300">
+                                <span key={idx} className="bg-slate-900 border border-slate-800 text-[0.6875rem] px-2.5 py-0.5 rounded font-medium text-slate-300">
                                   {sk.name}: +{sk.value} {sk.passive !== undefined && <span className="text-slate-500">(pRW: {sk.passive})</span>}
                                 </span>
                               ))}
@@ -2505,10 +2505,10 @@ export const App: React.FC = () => {
                         {/* Traits / Eigenschaften */}
                         {el.traits && el.traits.length > 0 && (
                           <div className="pt-1.5 space-y-1">
-                            <span className="text-[10px] text-slate-500 font-extrabold uppercase block">Eigenschaften (Traits)</span>
+                            <span className="text-[0.6875rem] text-slate-500 font-extrabold uppercase block">Eigenschaften (Traits)</span>
                             <div className="space-y-1">
                               {el.traits.map((t: any, idx) => (
-                                <div key={idx} className="bg-slate-900/30 border border-slate-850 p-2 rounded text-[11px]">
+                                <div key={idx} className="bg-slate-900/30 border border-slate-850 p-2 rounded text-xs">
                                   <strong className="text-amber-500">{t.name}:</strong> <span className="text-slate-300">{t.description}</span>
                                 </div>
                               ))}
@@ -2519,21 +2519,21 @@ export const App: React.FC = () => {
                         {/* Actions (Bestiary actions, e.g. multiattack, bite, ram etc) */}
                         {el.actions && el.actions.length > 0 && (
                           <div className="pt-2 space-y-1.5">
-                            <span className="text-[10px] text-slate-500 font-extrabold uppercase block border-b border-slate-800/40 pb-0.5">Aktionen</span>
+                            <span className="text-[0.6875rem] text-slate-500 font-extrabold uppercase block border-b border-slate-800/40 pb-0.5">Aktionen</span>
                             <div className="space-y-1.5">
                               {el.actions.map((act: any, idx) => (
-                                <div key={idx} className="bg-slate-900/30 border border-slate-850 p-2 rounded text-[11px] space-y-1.5">
+                                <div key={idx} className="bg-slate-900/30 border border-slate-850 p-2 rounded text-xs space-y-1.5">
                                   <div className="flex justify-between items-center">
                                     <strong className="text-red-400">{act.name}</strong>
                                     {act.type && (
-                                      <span className="text-[9px] font-extrabold uppercase px-1.5 py-0.5 bg-slate-800 border border-slate-700 rounded text-slate-300">
+                                      <span className="text-[0.625rem] font-extrabold uppercase px-1.5 py-0.5 bg-slate-800 border border-slate-700 rounded text-slate-300">
                                         {act.type}
                                       </span>
                                     )}
                                   </div>
-                                  {act.description && <p className="text-slate-350 text-[10.5px] leading-relaxed">{act.description}</p>}
+                                  {act.description && <p className="text-slate-350 text-xs leading-relaxed">{act.description}</p>}
                                   {(act.at !== undefined || act.rw || act.damage) && (
-                                    <div className="text-[10px] text-slate-400 flex flex-wrap gap-x-3 gap-y-1 pt-1 border-t border-slate-850">
+                                    <div className="text-[0.6875rem] text-slate-400 flex flex-wrap gap-x-3 gap-y-1 pt-1 border-t border-slate-850">
                                       {act.at !== undefined && <span><strong>AT:</strong> +{act.at}</span>}
                                       {act.rw && <span><strong>RW:</strong> {act.rw}</span>}
                                       {act.damage && <span><strong>Treffer:</strong> {act.damage}</span>}
@@ -2548,12 +2548,12 @@ export const App: React.FC = () => {
                         {/* Bonusactions */}
                         {el.bonus_actions && el.bonus_actions.length > 0 && (
                           <div className="pt-2 space-y-1.5">
-                            <span className="text-[10px] text-slate-500 font-extrabold uppercase block border-b border-slate-800/40 pb-0.5">Bonusaktionen</span>
+                            <span className="text-[0.6875rem] text-slate-500 font-extrabold uppercase block border-b border-slate-800/40 pb-0.5">Bonusaktionen</span>
                             <div className="space-y-1.5">
                               {el.bonus_actions.map((act: any, idx) => (
-                                <div key={idx} className="bg-slate-900/30 border border-slate-850 p-2 rounded text-[11px] space-y-1">
+                                <div key={idx} className="bg-slate-900/30 border border-slate-850 p-2 rounded text-xs space-y-1">
                                   <strong className="text-purple-400">{act.name}</strong>
-                                  {act.description && <p className="text-slate-350 text-[10.5px] leading-relaxed">{act.description}</p>}
+                                  {act.description && <p className="text-slate-350 text-xs leading-relaxed">{act.description}</p>}
                                 </div>
                               ))}
                             </div>
@@ -2563,12 +2563,12 @@ export const App: React.FC = () => {
                         {/* Reaktionen */}
                         {el.reactions && el.reactions.length > 0 && (
                           <div className="pt-2 space-y-1.5">
-                            <span className="text-[10px] text-slate-500 font-extrabold uppercase block border-b border-slate-800/40 pb-0.5">Reaktionen</span>
+                            <span className="text-[0.6875rem] text-slate-500 font-extrabold uppercase block border-b border-slate-800/40 pb-0.5">Reaktionen</span>
                             <div className="space-y-1.5">
                               {el.reactions.map((act: any, idx) => (
-                                <div key={idx} className="bg-slate-900/30 border border-slate-850 p-2 rounded text-[11px] space-y-1">
+                                <div key={idx} className="bg-slate-900/30 border border-slate-850 p-2 rounded text-xs space-y-1">
                                   <strong className="text-blue-400">{act.name}</strong>
-                                  {act.description && <p className="text-slate-350 text-[10.5px] leading-relaxed">{act.description}</p>}
+                                  {act.description && <p className="text-slate-350 text-xs leading-relaxed">{act.description}</p>}
                                 </div>
                               ))}
                             </div>
@@ -2578,12 +2578,12 @@ export const App: React.FC = () => {
                         {/* Legendäre Aktionen */}
                         {el.legendary_actions && el.legendary_actions.length > 0 && (
                           <div className="pt-2 space-y-1.5">
-                            <span className="text-[10px] text-slate-500 font-extrabold uppercase block border-b border-slate-800/40 pb-0.5">Legendäre Aktionen</span>
+                            <span className="text-[0.6875rem] text-slate-500 font-extrabold uppercase block border-b border-slate-800/40 pb-0.5">Legendäre Aktionen</span>
                             <div className="space-y-1.5">
                               {el.legendary_actions.map((act: any, idx) => (
-                                <div key={idx} className="bg-slate-900/30 border border-slate-850 p-2 rounded text-[11px] space-y-1">
+                                <div key={idx} className="bg-slate-900/30 border border-slate-850 p-2 rounded text-xs space-y-1">
                                   <strong className="text-teal-400">{act.name}</strong>
-                                  {act.description && <p className="text-slate-350 text-[10.5px] leading-relaxed">{act.description}</p>}
+                                  {act.description && <p className="text-slate-350 text-xs leading-relaxed">{act.description}</p>}
                                 </div>
                               ))}
                             </div>
@@ -2593,12 +2593,12 @@ export const App: React.FC = () => {
                         {/* Hortaktionen */}
                         {el.lair_actions && el.lair_actions.length > 0 && (
                           <div className="pt-2 space-y-1.5">
-                            <span className="text-[10px] text-slate-500 font-extrabold uppercase block border-b border-slate-800/40 pb-0.5">Hortaktionen</span>
+                            <span className="text-[0.6875rem] text-slate-500 font-extrabold uppercase block border-b border-slate-800/40 pb-0.5">Hortaktionen</span>
                             <div className="space-y-1.5">
                               {el.lair_actions.map((act: any, idx) => (
-                                <div key={idx} className="bg-slate-900/30 border border-slate-850 p-2 rounded text-[11px] space-y-1">
+                                <div key={idx} className="bg-slate-900/30 border border-slate-850 p-2 rounded text-xs space-y-1">
                                   <strong className="text-yellow-500">{act.name}</strong>
-                                  {act.description && <p className="text-slate-350 text-[10.5px] leading-relaxed">{act.description}</p>}
+                                  {act.description && <p className="text-slate-350 text-xs leading-relaxed">{act.description}</p>}
                                 </div>
                               ))}
                             </div>
@@ -2608,8 +2608,8 @@ export const App: React.FC = () => {
                         {/* Regionale Effekte */}
                         {el.regional_effects && (
                           <div className="pt-2 space-y-1.5">
-                            <span className="text-[10px] text-slate-500 font-extrabold uppercase block border-b border-slate-800/40 pb-0.5">Regionale Effekte</span>
-                            <div className="bg-slate-900/30 border border-slate-850 p-2.5 rounded text-[11px] text-slate-350 leading-relaxed">
+                            <span className="text-[0.6875rem] text-slate-500 font-extrabold uppercase block border-b border-slate-800/40 pb-0.5">Regionale Effekte</span>
+                            <div className="bg-slate-900/30 border border-slate-850 p-2.5 rounded text-xs text-slate-350 leading-relaxed">
                               {el.regional_effects}
                             </div>
                           </div>
@@ -2618,10 +2618,10 @@ export const App: React.FC = () => {
                         {/* Legacy Special Abilities (Fallbacks for standard templates) */}
                         {(!el.traits && el.abilities && el.abilities.length > 0) && (
                           <div className="pt-1.5">
-                            <span className="text-[10px] text-slate-500 font-extrabold uppercase block mb-1">Besonderheiten</span>
+                            <span className="text-[0.6875rem] text-slate-500 font-extrabold uppercase block mb-1">Besonderheiten</span>
                             <div className="flex flex-wrap gap-1">
                               {el.abilities.map((ab: any, idx) => (
-                                <span key={idx} className="bg-amber-950/20 text-amber-400/90 border border-amber-950 text-[10px] px-2 py-0.5 rounded font-medium">
+                                <span key={idx} className="bg-amber-950/20 text-amber-400/90 border border-amber-950 text-[0.6875rem] px-2 py-0.5 rounded font-medium">
                                   {typeof ab === 'string' ? ab : ab.name}
                                 </span>
                               ))}
@@ -2632,12 +2632,12 @@ export const App: React.FC = () => {
                         {/* Legacy Attacks (Fallbacks for standard templates) */}
                         {(!el.actions && el.attacks && el.attacks.length > 0) && (
                           <div className="pt-1.5 space-y-1">
-                            <span className="text-[10px] text-slate-500 font-extrabold uppercase block">Angriffe</span>
+                            <span className="text-[0.6875rem] text-slate-500 font-extrabold uppercase block">Angriffe</span>
                             <div className="space-y-1">
                               {el.attacks.map((atk: any, idx) => (
-                                <div key={idx} className="bg-slate-900/30 border border-slate-850 p-2 rounded text-[11px] flex justify-between items-center">
+                                <div key={idx} className="bg-slate-900/30 border border-slate-850 p-2 rounded text-xs flex justify-between items-center">
                                   <span className="font-semibold text-slate-200">{atk.name}</span>
-                                  <span className="text-slate-400 text-[10px]">
+                                  <span className="text-slate-400 text-[0.6875rem]">
                                     {atk.tp && `TP: ${atk.tp}`} {atk.at !== undefined && ` | AT: ${atk.at}`} {atk.pa !== undefined && ` | PA: ${atk.pa}`} {atk.range && ` | RW: ${atk.range}`}
                                   </span>
                                 </div>
@@ -2650,7 +2650,7 @@ export const App: React.FC = () => {
 
                     {el.type === 'social' && (
                       <div className="space-y-2.5 border-t border-slate-800/60 pt-4 text-xs">
-                        <div className="grid grid-cols-2 gap-2 text-[10px]">
+                        <div className="grid grid-cols-2 gap-2 text-[0.6875rem]">
                           <div>
                             <span className="text-slate-500 font-bold uppercase block">Rolle</span>
                             <span className="font-semibold text-slate-200">{el.role}</span>
@@ -2662,15 +2662,15 @@ export const App: React.FC = () => {
                         </div>
 
                         <div>
-                          <span className="text-[10px] text-slate-500 font-bold uppercase block">Motivation</span>
-                          <span className="text-slate-300 italic text-[11px] block mt-0.5">"{el.motivation}"</span>
+                          <span className="text-[0.6875rem] text-slate-500 font-bold uppercase block">Motivation</span>
+                          <span className="text-slate-300 italic text-xs block mt-0.5">"{el.motivation}"</span>
                         </div>
 
                         {/* SECRET ACCORDION FOR DM */}
                         <div className="pt-2 bg-slate-900/40 border border-slate-800/60 rounded-xl p-3">
                           <button
                             onClick={() => toggleSecret(el.id)}
-                            className="w-full flex items-center justify-between text-[10px] font-extrabold text-amber-500/90 uppercase tracking-wider hover:text-amber-400 transition-colors"
+                            className="w-full flex items-center justify-between text-[0.6875rem] font-extrabold text-amber-500/90 uppercase tracking-wider hover:text-amber-400 transition-colors"
                           >
                             <span>🔒 DM GEHEIMNIS</span>
                             <span>{revealedSecrets[el.id] ? 'Verbergen' : 'Enthüllen'}</span>
@@ -2688,23 +2688,23 @@ export const App: React.FC = () => {
                     {el.type === 'trap' && (
                       <div className="space-y-3 border-t border-slate-800/60 pt-4 text-xs">
                         <div>
-                          <span className="text-[10px] text-slate-500 font-bold uppercase block">Auslöser</span>
+                          <span className="text-[0.6875rem] text-slate-500 font-bold uppercase block">Auslöser</span>
                           <span className="font-semibold text-slate-250">{el.trigger}</span>
                         </div>
 
-                        <div className="flex items-center justify-between text-[11px]">
+                        <div className="flex items-center justify-between text-xs">
                           <div className="flex items-center gap-1.5">
-                            <span className="text-slate-500 font-bold uppercase text-[9px]">Entdecken</span>
+                            <span className="text-slate-500 font-bold uppercase text-[0.625rem]">Entdecken</span>
                             <span className="font-bold text-amber-400 px-2 py-0.5 bg-amber-950/20 border border-amber-900/30 rounded">DC {el.detection_dc}</span>
                           </div>
                           <div className="flex items-center gap-1.5">
-                            <span className="text-slate-500 font-bold uppercase text-[9px]">Entschärfen</span>
+                            <span className="text-slate-500 font-bold uppercase text-[0.625rem]">Entschärfen</span>
                             <span className="font-bold text-orange-400 px-2 py-0.5 bg-orange-950/20 border border-orange-900/30 rounded">DC {el.disarm_dc}</span>
                           </div>
                         </div>
 
                         <div className="bg-orange-500/5 border border-orange-500/10 rounded-xl p-3">
-                          <span className="text-[9px] text-orange-400 font-bold uppercase block mb-1">Schaden / Effekt</span>
+                          <span className="text-[0.625rem] text-orange-400 font-bold uppercase block mb-1">Schaden / Effekt</span>
                           <p className="font-bold text-slate-200 text-xs">{el.damage}</p>
                         </div>
                       </div>
@@ -2712,7 +2712,7 @@ export const App: React.FC = () => {
 
                     {el.type === 'hazard' && (
                       <div className="space-y-3 border-t border-slate-800/60 pt-4 text-xs">
-                        <div className="flex justify-between items-center text-[10px]">
+                        <div className="flex justify-between items-center text-[0.6875rem]">
                           <div>
                             <span className="text-slate-500 font-bold uppercase block">Art</span>
                             <span className="font-semibold text-slate-200">{el.hazard_type}</span>
@@ -2729,19 +2729,19 @@ export const App: React.FC = () => {
                         </div>
 
                         <div>
-                          <span className="text-[10px] text-slate-500 font-bold uppercase block">Auswirkungen</span>
-                          <p className="text-slate-300 mt-1 bg-slate-900/30 border border-slate-850 p-2.5 rounded-lg leading-relaxed text-[11px]">
+                          <span className="text-[0.6875rem] text-slate-500 font-bold uppercase block">Auswirkungen</span>
+                          <p className="text-slate-300 mt-1 bg-slate-900/30 border border-slate-850 p-2.5 rounded-lg leading-relaxed text-xs">
                             {el.effects}
                           </p>
                         </div>
 
-                        <div className="grid grid-cols-2 gap-2 text-[10px] text-slate-400">
+                        <div className="grid grid-cols-2 gap-2 text-[0.6875rem] text-slate-400">
                           <div>
-                            <span className="text-slate-500 font-bold block uppercase text-[9px]">Gegenprobe</span>
+                            <span className="text-slate-500 font-bold block uppercase text-[0.625rem]">Gegenprobe</span>
                             <span className="font-semibold text-slate-350">{el.avoidance}</span>
                           </div>
                           <div>
-                            <span className="text-slate-500 font-bold block uppercase text-[9px]">Dauer</span>
+                            <span className="text-slate-500 font-bold block uppercase text-[0.625rem]">Dauer</span>
                             <span className="font-semibold text-slate-350">{el.duration}</span>
                           </div>
                         </div>
@@ -2750,7 +2750,7 @@ export const App: React.FC = () => {
                   </div>
 
                   {/* Footer: timestamp / meta */}
-                  <div className="border-t border-slate-800/50 mt-6 pt-4 flex items-center justify-between text-[10px] text-slate-500 font-medium">
+                  <div className="border-t border-slate-800/50 mt-6 pt-4 flex items-center justify-between text-[0.6875rem] text-slate-500 font-medium">
                     <span>ID: {el.id}</span>
                     <span>Erstellt: {new Date(el.created_at).toLocaleDateString('de-DE')}</span>
                   </div>
@@ -2810,7 +2810,7 @@ export const App: React.FC = () => {
 
               {/* Preview Box */}
               <div className="p-3 bg-slate-900/60 rounded-xl border border-slate-800/85">
-                <p className="text-[9px] text-slate-500 font-bold uppercase tracking-wider mb-1">Vorschau</p>
+                <p className="text-[0.625rem] text-slate-500 font-bold uppercase tracking-wider mb-1">Vorschau</p>
                 <p className="text-xs text-slate-300 leading-relaxed">
                   Wie groß soll die Schrift im Bestiarium sein? Regler verschieben zum Ausprobieren.
                 </p>
@@ -2821,14 +2821,14 @@ export const App: React.FC = () => {
                 <button
                   type="button"
                   onClick={() => handleFontSizeChange(100)}
-                  className="flex-1 px-4 py-2 text-[10px] font-extrabold uppercase tracking-wider text-slate-400 hover:text-white border border-slate-805 hover:border-slate-600 rounded-xl bg-slate-900/50 hover:bg-slate-800/50 transition-all cursor-pointer"
+                  className="flex-1 px-4 py-2 text-[0.6875rem] font-extrabold uppercase tracking-wider text-slate-400 hover:text-white border border-slate-805 hover:border-slate-600 rounded-xl bg-slate-900/50 hover:bg-slate-800/50 transition-all cursor-pointer"
                 >
                   Standard (100%)
                 </button>
                 <button
                   type="button"
                   onClick={() => setShowSettingsModal(false)}
-                  className="px-5 py-2 text-[10px] font-extrabold uppercase tracking-wider text-slate-950 bg-amber-500 hover:bg-amber-400 rounded-xl transition-all cursor-pointer shadow-lg shadow-amber-900/10"
+                  className="px-5 py-2 text-[0.6875rem] font-extrabold uppercase tracking-wider text-slate-950 bg-amber-500 hover:bg-amber-400 rounded-xl transition-all cursor-pointer shadow-lg shadow-amber-900/10"
                 >
                   Fertig
                 </button>
