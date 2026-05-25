@@ -1,0 +1,185 @@
+{
+  "id": "donnerschlange",
+  "name": "Donnerschlange",
+  "type": "enemy",
+  "description": "Ein schlangenförmiges Reptil, dessen Schuppen mit elektrischer Energie geladen sind. Wenn es fliegt, kündigt es sich durch ein ständiges Donnergrollen an.",
+  "is_multi_variant": true,
+  "default_variant": "Ausgewachsen",
+  "variants": {
+    "Nestling": {
+      "level": "HG 3 (700 EP)",
+      "size": "Mittelgroßer Drache",
+      "rk": 17,
+      "tp_max": 68,
+      "tp_formula": "8W8+32",
+      "bw": "9 m, Fliegen 18 m",
+      "ub": 2,
+      "immunities": "Blitz",
+      "attributes": [
+        { "name": "STÄ", "value": 3 },
+        { "name": "GES", "value": 3 },
+        { "name": "KON", "value": 4 },
+        { "name": "INT", "value": 1 },
+        { "name": "WEI", "value": 2 },
+        { "name": "CHA", "value": 4 }
+      ],
+      "skills": [
+        { "name": "Wahrnehmung", "value": 4, "passive": 14 },
+        { "name": "Heimlichkeit", "value": 5, "passive": 15 }
+      ],
+      "senses": "Dunkelsicht 36 m",
+      "languages": "Drachisch, beliebige weitere Sprachen",
+      "traits": [],
+      "actions": [
+        { "name": "Mehrfachangriff", "description": "Der Donnerschlangen-Nestling greift einmal mit seinem Biss und einmal mit seinen Krallen an." },
+        { "name": "Biss", "type": "NK", "at": 5, "rw": "1,5 m", "damage": "8 (1W10+3) Stich plus 3 (1W6) Blitz" },
+        { "name": "Krallen", "type": "NK", "at": 5, "rw": "1,5 m", "damage": "6 (1W6+3) Hieb. Wenn mindestens 6 m in gerader Linie zubewegt: STÄ-RW (SG 13) oder umgestoßen." },
+        { "name": "Gewitterodem (Aufladung 5-6)", "description": "GES-RW (SG 12), Linie 1,5m breit und 9m lang. Misslungen: 27 (5W10) Blitzschaden. Erfolg: Halber Schaden." }
+      ],
+      "reactions": [
+        { "name": "Bel-Shugas Segen", "description": "Eine andere Kreatur in 36 m, die einen Nahkampfangriff ausführt, ist im Vorteil." }
+      ],
+      "bonus_actions": [
+        { "name": "Drachische Telekinese", "description": "Gegenstand bis 10 kg in 18 m Entfernung um bis zu 6 m bewegen. STÄ-RW (SG 12) zum Verhindern." },
+        { "name": "Zerfetzen", "description": "Führt einen Krallen-Angriff gegen eine liegende Kreatur durch." }
+      ]
+    },
+    "Jung": {
+      "level": "HG 9 (5.000 EP)",
+      "size": "Großer Drache",
+      "rk": 18,
+      "tp_max": 176,
+      "tp_formula": "13W10+104",
+      "bw": "12 m, Fliegen 24 m",
+      "ub": 4,
+      "immunities": "Blitz",
+      "attributes": [
+        { "name": "STÄ", "value": 5 },
+        { "name": "GES", "value": 4 },
+        { "name": "KON", "value": 8 },
+        { "name": "INT", "value": 2 },
+        { "name": "WEI", "value": 5 },
+        { "name": "CHA", "value": 7 }
+      ],
+      "skills": [
+        { "name": "Wahrnehmung", "value": 9, "passive": 19 },
+        { "name": "Heimlichkeit", "value": 8, "passive": 18 }
+      ],
+      "senses": "Dunkelsicht 36 m",
+      "languages": "Drachisch, beliebige weitere Sprachen",
+      "traits": [],
+      "actions": [
+        { "name": "Mehrfachangriff", "description": "Die Donnerschlange greift einmal mit ihrem Biss und zweimal mit ihren Krallen an." },
+        { "name": "Biss", "type": "NK", "at": 9, "rw": "3 m", "damage": "16 (2W10+5) Stich plus 5 (1W10) Blitz" },
+        { "name": "Krallen", "type": "NK", "at": 9, "rw": "1,5 m", "damage": "12 (2W6+5) Hieb. Wenn mindestens 6 m in gerader Linie zubewegt: STÄ-RW (SG 17) oder umgestoßen." },
+        { "name": "Gewitterodem (Aufladung 5-6)", "description": "GES-RW (SG 16), Linie 1,5m breit und 18m lang. Misslungen: 55 (10W10) Blitzschaden. Erfolg: Halber Schaden." }
+      ],
+      "reactions": [
+        { "name": "Bel-Shugas Segen", "description": "Eine andere Kreatur in 36 m, die einen Nahkampfangriff ausführt, ist im Vorteil." }
+      ],
+      "bonus_actions": [
+        { "name": "Kampfesmut", "description": "Eine andere Kreatur in 36 Metern erhält 10 temporäre Trefferpunkte." },
+        { "name": "Drachische Telekinese", "description": "Gegenstand bis 50 kg in 18 m Entfernung um bis zu 6 m bewegen. STÄ-RW (SG 17) zum Verhindern." },
+        { "name": "Zerfetzen", "description": "Führt einen Krallen-Angriff gegen eine liegende Kreatur durch." }
+      ]
+    },
+    "Ausgewachsen": {
+      "level": "HG 16 (15.000 EP)",
+      "size": "Riesiger Drache",
+      "rk": 19,
+      "tp_max": 263,
+      "tp_formula": "15W12+165",
+      "bw": "12 m, Fliegen 24 m",
+      "ub": 5,
+      "immunities": "Blitz",
+      "attributes": [
+        { "name": "STÄ", "value": 7 },
+        { "name": "GES", "value": 5 },
+        { "name": "KON", "value": 11 },
+        { "name": "INT", "value": 3 },
+        { "name": "WEI", "value": 7 },
+        { "name": "CHA", "value": 9 }
+      ],
+      "skills": [
+        { "name": "Wahrnehmung", "value": 12, "passive": 22 },
+        { "name": "Heimlichkeit", "value": 10, "passive": 20 }
+      ],
+      "senses": "Dunkelsicht 36 m",
+      "languages": "Drachisch, beliebige weitere Sprachen",
+      "traits": [
+        { "name": "Legendäre Resistenz (3/Tag)", "description": "Wenn ein Rettungswurf misslingt, kann sie ihn stattdessen schaffen." }
+      ],
+      "actions": [
+        { "name": "Mehrfachangriff", "description": "Greift einmal mit Biss und zweimal mit Krallen an. Kann Furchterregende Präsenz nutzen." },
+        { "name": "Biss", "type": "NK", "at": 11, "rw": "3 m", "damage": "18 (2W10+7) Stich plus 5 (1W10) Blitz" },
+        { "name": "Krallen", "type": "NK", "at": 12, "rw": "1,5 m", "damage": "14 (2W6+7) Hieb. Wenn mindestens 6 m in gerader Linie zubewegt: STÄ-RW (SG 20) oder umgestoßen." },
+        { "name": "Furchterregende Präsenz", "description": "WEI-RW (SG 17) für alle Kreaturen in 36 m. Misserfolg: verängstigt für 1 Min (Wiederholung am Zugend, Erfolg gibt 24 Std Immunität)." },
+        { "name": "Gewitterodem (Aufladung 5-6)", "description": "GES-RW (SG 19), Linie 1,5m breit und 27m lang. Misslungen: 66 (12W10) Blitzschaden. Erfolg: Halber Schaden." }
+      ],
+      "reactions": [
+        { "name": "Bel-Shugas Segen", "description": "Eine andere Kreatur in 36 m, die einen Nahkampfangriff ausführt, ist im Vorteil." }
+      ],
+      "bonus_actions": [
+        { "name": "Kampfesmut", "description": "Eine andere Kreatur in 36 Metern erhält 10 temporäre Trefferpunkte." },
+        { "name": "Drachische Telekinese", "description": "Gegenstand bis 150 kg in 18 m Entfernung um bis zu 6 m bewegen. STÄ-RW (SG 20) zum Verhindern." },
+        { "name": "Zerfetzen", "description": "Führt einen Krallen-Angriff gegen eine liegende Kreatur durch." }
+      ],
+      "legendary_actions": [
+        { "name": "Aufspüren", "description": "Führt die Suchen-Aktion aus." },
+        { "name": "Der aufkommende Sturm", "description": "Die Donnerschlange erhält ihre Reaktion zurück." },
+        { "name": "Kampfesmut", "description": "Führt die Kampfesmut-Bonusaktion aus." },
+        { "name": "Schwanzangriff", "type": "NK", "at": 12, "rw": "4,5 m", "damage": "16 (2W8+7) Wucht" },
+        { "name": "Donnerwoge (kostet 2 Aktionen)", "description": "STÄ-RW (SG 20), Kreaturen in 3 m Radius. Misserfolg: 14 (2W6+7) Schall und umgestoßen. Kann dabei halbe Flug-BW fliegen." }
+      ]
+    },
+    "Uralt": {
+      "level": "HG 20 (25.000 EP)",
+      "size": "Gigantischer Drache",
+      "rk": 21,
+      "tp_max": 368,
+      "tp_formula": "15W20+210",
+      "bw": "12 m, Fliegen 24 m",
+      "ub": 6,
+      "immunities": "Blitz",
+      "attributes": [
+        { "name": "STÄ", "value": 9 },
+        { "name": "GES", "value": 5 },
+        { "name": "KON", "value": 14 },
+        { "name": "INT", "value": 4 },
+        { "name": "WEI", "value": 9 },
+        { "name": "CHA", "value": 11 }
+      ],
+      "skills": [
+        { "name": "Wahrnehmung", "value": 15, "passive": 25 },
+        { "name": "Heimlichkeit", "value": 11, "passive": 21 }
+      ],
+      "senses": "Dunkelsicht 36 m",
+      "languages": "Drachisch, beliebige weitere Sprachen",
+      "traits": [
+        { "name": "Legendäre Resistenz (3/Tag)", "description": "Wenn ein Rettungswurf misslingt, kann sie ihn stattdessen schaffen." }
+      ],
+      "actions": [
+        { "name": "Mehrfachangriff", "description": "Greift einmal mit Biss und zweimal mit Krallen an. Kann Furchterregende Präsenz nutzen." },
+        { "name": "Biss", "type": "NK", "at": 15, "rw": "3 m", "damage": "20 (2W10+9) Stich plus 11 (2W10) Blitz" },
+        { "name": "Krallen", "type": "NK", "at": 15, "rw": "3 m", "damage": "16 (2W6+9) Hieb. Wenn mindestens 6 m in gerader Linie zubewegt: STÄ-RW (SG 23) oder umgestoßen." },
+        { "name": "Furchterregende Präsenz", "description": "WEI-RW (SG 19) für alle Kreaturen in 36 m. Misserfolg: verängstigt für 1 Min." },
+        { "name": "Gewitterodem (Aufladung 5-6)", "description": "GES-RW (SG 22), Linie 3m breit und 36m lang. Misslungen: 99 (18W10) Blitzschaden. Erfolg: Halber Schaden." }
+      ],
+      "reactions": [
+        { "name": "Bel-Shugas Segen", "description": "Eine andere Kreatur in 36 m, die einen Nahkampfangriff ausführt, ist im Vorteil." }
+      ],
+      "bonus_actions": [
+        { "name": "Kampfesmut", "description": "Bis zu zwei Kreaturen in 36 Metern erhalten 10 temporäre Trefferpunkte." },
+        { "name": "Drachische Telekinese", "description": "Gegenstand bis 300 kg in 18 m Entfernung um bis zu 6 m bewegen. STÄ-RW (SG 23) zum Verhindern." },
+        { "name": "Zerfetzen", "description": "Führt einen Krallen-Angriff gegen eine liegende Kreatur durch." }
+      ],
+      "legendary_actions": [
+        { "name": "Aufspüren", "description": "Führt die Suchen-Aktion aus." },
+        { "name": "Der aufkommende Sturm", "description": "Die Donnerschlange erhält ihre Reaktion zurück." },
+        { "name": "Kampfesmut", "description": "Führt die Kampfesmut-Bonusaktion aus." },
+        { "name": "Schwanzangriff", "type": "NK", "at": 15, "rw": "6 m", "damage": "18 (2W8+9) Wucht" },
+        { "name": "Donnerwoge (kostet 2 Aktionen)", "description": "STÄ-RW (SG 23), Kreaturen in 4,5 m Radius. Misserfolg: 16 (2W6+9) Schall und umgestoßen. Kann dabei halbe Flug-BW fliegen." }
+      ]
+    }
+  }
+}

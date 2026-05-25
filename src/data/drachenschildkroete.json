@@ -1,0 +1,165 @@
+{
+  "id": "drachenschildkroete",
+  "name": "Drachenschildkröte",
+  "type": "enemy",
+  "description": "Eine mächtige, reptilienartige Kreatur mit einem panzerartigen Rücken, die sowohl an Land als auch im tiefsten Meer eine gewaltige Bedrohung darstellt. Es gibt sie in verschiedenen Altersstufen.",
+  "is_multi_variant": true,
+  "default_variant": "Ausgewachsen",
+  "variants": {
+    "Nestling": {
+      "level": "HG 1 (2.000 EP)",
+      "size": "Mittelgroßer Drache",
+      "rk": 16,
+      "tp_max": 38,
+      "tp_formula": "5W8+15",
+      "bw": "3 m, Schwimmen 9 m",
+      "ub": 2,
+      "attributes": [
+        { "name": "STÄ", "value": 3 },
+        { "name": "GES", "value": 2 },
+        { "name": "KON", "value": 3 },
+        { "name": "INT", "value": -3 },
+        { "name": "WEI", "value": 2 },
+        { "name": "CHA", "value": 2 }
+      ],
+      "skills": [
+        { "name": "Wahrnehmung", "value": 4, "passive": 14 },
+        { "name": "Heimlichkeit", "value": 4, "passive": 14 }
+      ],
+      "senses": "Dunkelsicht 36 m",
+      "languages": "Drachisch, beliebige weitere Sprachen",
+      "traits": [
+        { "name": "Amphibisch", "description": "Die Drachenschildkröte kann Luft und Wasser atmen." },
+        { "name": "Schwerfällig", "description": "Außerhalb des Wassers sinken GES auf -1 und Heimlichkeit auf 11." },
+        { "name": "Belagerungsmonster", "description": "Fügt Gegenständen und Bauwerken doppelten Schaden zu." }
+      ],
+      "actions": [
+        { "name": "Mehrfachangriff", "description": "Die Drachenschildkröte greift einmal mit ihrem Biss und einmal mit ihren Krallen an." },
+        { "name": "Biss", "type": "NK", "at": 4, "rw": "1,5 m", "damage": "7 (1W10+2) Stich" },
+        { "name": "Krallen", "type": "NK", "at": 4, "rw": "1,5 m", "damage": "5 (1W6+2) Hieb" },
+        { "name": "Rammen (Aufladung 5-6)", "description": "Bewegt sich geradlinig vorwärts. Kreaturen im Weg müssen einen GES-RW (SG 11) ablegen oder erleiden 18 (4d8) Wucht und werden umgestoßen. Halber Schaden bei Erfolg. Objekte erleiden doppelten Schaden." }
+      ],
+      "bonus_actions": [
+        { "name": "Wind und Strömung", "description": "Kreatur in 36 m muss STÄ-RW (SG 11) ablegen. Bei Misserfolg: keine Reaktionen im nächsten Zug, BW halbiert, max. 1 Angriff." }
+      ]
+    },
+    "Jung": {
+      "level": "HG 7 (2.900 EP)",
+      "size": "Großer Drache",
+      "rk": 17,
+      "tp_max": 127,
+      "tp_formula": "11W10+66",
+      "bw": "6 m, Schwimmen 12 m",
+      "ub": 3,
+      "attributes": [
+        { "name": "STÄ", "value": 4 },
+        { "name": "GES", "value": 2 },
+        { "name": "KON", "value": 6 },
+        { "name": "INT", "value": 0 },
+        { "name": "WEI", "value": 6 },
+        { "name": "CHA", "value": 5 }
+      ],
+      "skills": [
+        { "name": "Wahrnehmung", "value": 9, "passive": 19 },
+        { "name": "Heimlichkeit", "value": 5, "passive": 15 }
+      ],
+      "senses": "Dunkelsicht 36 m, Magiesicht 18 m",
+      "languages": "Drachisch, beliebige weitere Sprachen",
+      "traits": [
+        { "name": "Amphibisch", "description": "Die Drachenschildkröte kann Luft und Wasser atmen." },
+        { "name": "Schwerfällig", "description": "Außerhalb des Wassers sinken GES auf -1 und Heimlichkeit auf 12." },
+        { "name": "Belagerungsmonster", "description": "Fügt Gegenständen und Bauwerken doppelten Schaden zu." },
+        { "name": "Wasseratmung verleihen", "description": "Beliebig viele Kreaturen in 36 m erhalten Unterwasseratmung." }
+      ],
+      "actions": [
+        { "name": "Mehrfachangriff", "description": "Die Drachenschildkröte greift einmal mit ihrem Biss und einmal mit ihren Krallen an." },
+        { "name": "Biss", "type": "NK", "at": 7, "rw": "3 m", "damage": "26 (4W10+4) Stich" },
+        { "name": "Krallen", "type": "NK", "at": 7, "rw": "1,5 m", "damage": "11 (2W10+4) Hieb" },
+        { "name": "Rammen (Aufladung 5-6)", "description": "Bewegt sich geradlinig vorwärts. Kreaturen im Weg müssen einen GES-RW (SG 14) ablegen oder erleiden 40 (9d8) Wucht und werden umgestoßen. Halber Schaden bei Erfolg. Objekte erleiden doppelten Schaden." }
+      ],
+      "bonus_actions": [
+        { "name": "Wind und Strömung", "description": "Kreatur in 36 m muss STÄ-RW (SG 14) ablegen. Bei Misserfolg: keine Reaktionen im nächsten Zug, BW halbiert, max. 1 Angriff." }
+      ]
+    },
+    "Ausgewachsen": {
+      "level": "HG 14 (11.500 EP)",
+      "size": "Riesiger Drache",
+      "rk": 18,
+      "tp_max": 231,
+      "tp_formula": "14W12+140",
+      "bw": "6 m, Schwimmen 12 m",
+      "ub": 5,
+      "attributes": [
+        { "name": "STÄ", "value": 6 },
+        { "name": "GES", "value": 1 },
+        { "name": "KON", "value": 10 },
+        { "name": "INT", "value": 3 },
+        { "name": "WEI", "value": 9 },
+        { "name": "CHA", "value": 8 }
+      ],
+      "skills": [
+        { "name": "Wahrnehmung", "value": 14, "passive": 24 },
+        { "name": "Heimlichkeit", "value": 6, "passive": 16 }
+      ],
+      "senses": "Dunkelsicht 36 m, Magiesicht 18 m, Wahre Sicht 18 m",
+      "languages": "Drachisch, beliebige weitere Sprachen",
+      "traits": [
+        { "name": "Amphibisch", "description": "Die Drachenschildkröte kann Luft und Wasser atmen." },
+        { "name": "Schwerfällig", "description": "Außerhalb des Wassers sinken GES auf -1 und Heimlichkeit auf 14." },
+        { "name": "Belagerungsmonster", "description": "Fügt Gegenständen und Bauwerken doppelten Schaden zu." },
+        { "name": "Legendäre Resistenz (3/Tag)", "description": "Wenn ein Rettungswurf misslingt, kann sie ihn stattdessen schaffen." },
+        { "name": "Wasseratmung verleihen", "description": "Beliebig viele Kreaturen in 36 m erhalten Unterwasseratmung." }
+      ],
+      "actions": [
+        { "name": "Mehrfachangriff", "description": "Die Drachenschildkröte greift einmal mit ihrem Biss und einmal mit ihren Krallen an." },
+        { "name": "Biss", "type": "NK", "at": 11, "rw": "3 m", "damage": "28 (4W10+6) Stich" },
+        { "name": "Krallen", "type": "NK", "at": 11, "rw": "1,5 m", "damage": "13 (2W6+6) Hieb" },
+        { "name": "Rammen (Aufladung 5-6)", "description": "Bewegt sich geradlinig vorwärts. Kreaturen im Weg müssen einen GES-RW (SG 18) ablegen oder erleiden 54 (12d8) Wucht und werden umgestoßen. Halber Schaden bei Erfolg. Objekte erleiden doppelten Schaden." },
+        { "name": "Magie bannen", "description": "Wählt Kreatur, Objekt oder magischen Effekt. Jeder Zauber 4./5. Grades oder niedriger auf dem Ziel endet." }
+      ],
+      "bonus_actions": [
+        { "name": "Wind und Strömung", "description": "Kreatur in 36 m muss STÄ-RW (SG 18) ablegen. Bei Misserfolg: keine Reaktionen im nächsten Zug, BW halbiert, max. 1 Angriff." }
+      ]
+    },
+    "Uralt": {
+      "level": "HG 18 (20.000 EP)",
+      "size": "Gigantischer Drache",
+      "rk": 21,
+      "tp_max": 294,
+      "tp_formula": "12W20+156",
+      "bw": "6 m, Schwimmen 15 m",
+      "ub": 6,
+      "attributes": [
+        { "name": "STÄ", "value": 8 },
+        { "name": "GES", "value": -1 },
+        { "name": "KON", "value": 13 },
+        { "name": "INT", "value": 9 },
+        { "name": "WEI", "value": 12 },
+        { "name": "CHA", "value": 10 }
+      ],
+      "skills": [
+        { "name": "Wahrnehmung", "value": 18, "passive": 28 },
+        { "name": "Heimlichkeit", "value": 5, "passive": 15 }
+      ],
+      "senses": "Dunkelsicht 36 m, Magiesicht 18 m, Wahre Sicht 18 m",
+      "languages": "Drachisch, beliebige weitere Sprachen",
+      "traits": [
+        { "name": "Amphibisch", "description": "Die Drachenschildkröte kann Luft und Wasser atmen." },
+        { "name": "Schwerfällig", "description": "Außerhalb des Wassers sinken GES auf -1 und Heimlichkeit auf 15." },
+        { "name": "Belagerungsmonster", "description": "Fügt Gegenständen und Bauwerken doppelten Schaden zu." },
+        { "name": "Legendäre Resistenz (3/Tag)", "description": "Wenn ein Rettungswurf misslingt, kann sie ihn stattdessen schaffen." },
+        { "name": "Wasseratmung verleihen", "description": "Beliebig viele Kreaturen in 36 m erhalten Unterwasseratmung." }
+      ],
+      "actions": [
+        { "name": "Mehrfachangriff", "description": "Die Drachenschildkröte greift einmal mit ihrem Biss und einmal mit ihren Krallen an." },
+        { "name": "Biss", "type": "NK", "at": 15, "rw": "4,5 m", "damage": "34 (4W12+8) Stich" },
+        { "name": "Krallen", "type": "NK", "at": 15, "rw": "3 m", "damage": "15 (2W6+8) Hieb" },
+        { "name": "Rammen (Aufladung 5-6)", "description": "Bewegt sich geradlinig vorwärts. Kreaturen im Weg müssen einen GES-RW (SG 21) ablegen oder erleiden 76 (17d8) Wucht und werden umgestoßen. Halber Schaden bei Erfolg. Objekte erleiden doppelten Schaden." },
+        { "name": "Magie bannen", "description": "Wählt Kreatur, Objekt oder magischen Effekt. Jeder Zauber 4./5. Grades oder niedriger auf dem Ziel endet." }
+      ],
+      "bonus_actions": [
+        { "name": "Wind und Strömung", "description": "Kreatur in 36 m muss STÄ-RW (SG 21) ablegen. Bei Misserfolg: keine Reaktionen im nächsten Zug, BW halbiert, max. 1 Angriff." }
+      ]
+    }
+  }
+}

@@ -1,0 +1,110 @@
+Donnerschlange
+Nestling/Jung/Ausgewachsen/Uralt
+Mittelgroßer/großer/riesiger/gigantischer Drache
+Herausforderungsgrad 3 (700 EP) / 9 (5.000 EP) /
+16 (15.000 EP) / 20 (25.000 EP)
+Rüstungsklasse 17/18/19/21 (natürliche Rüstung)
+Trefferpunkte 68 (8W8+32) / 176 (13W10+104) /
+263 (15W12+165) / 368 (15W20+210)
+Bewegungsrate 9 m, Fliegen 18 m (Nestling) /
+12 m, Fliegen 24 m (Alle älteren)
+Alter STÄ GES KON INT WEI CHA
+Nestling +3 +3 +4 +1 +2 +4
+Jung +5 +4 +8 +2 +5 +7
+Ausgewachsen +7 +5 +11 +3 +7 +9
+Uralt +9 +5 +14 +4 +9 +11
+Übungsbonus +2/+4/+5/+6
+Wahrnehmung +4/+9/+12/+15 (14/19/22/25)
+Heimlichkeit +5/+8/+10/+11 (15/18/20/21)
+Immunitäten: Blitz
+Sinne Dunkelsicht 36 m
+Sprachen Drachisch, beliebige weitere Sprachen
+Legendäre Resistenz (Ausgewachsen, Uralt, 3/
+Tag): Wenn die Donnerschlange einen Rettungswurf
+nicht schafft, kann sie sich stattdessen dafür
+entscheiden, ihn zu schaffen.
+Aktionen
+Mehrfachangriff (Nestling): Der Donnerschlangen-
+Nestling greift einmal mit seinem Biss und
+einmal mit seinen Krallen an.
+Mehrfachangriff (Jung oder älter): Die Donnerschlange
+greift einmal mit ihrem Biss und zweimal
+mit ihren Krallen an. Eine ausgewachsene oder
+uralte Donnerschlange kann außerdem ihre Furchterregende
+Präsenz verwenden.
+Biss: Nahkampfangriffswurf +5/+9/+11/+15,
+Reichweite 1,5 Meter (ab Jung 3 Meter). Treffer:
+8 (1W10+3) Stichschaden plus 3 (1W6 Blitzschaden)
+/ 16 (2W10+5) Stichschaden plus 5 (1W10)
+Eric Lofgren
+37
+Donnerschlange
+Blitzschaden / 18 (2W10+7) Stichschaden plus 5
+(1W10) Blitzschaden / 20 (2W10+9) Stichschaden
+plus 11 (2W10) Blitzschaden.
+Krallen: Nahkampfangriffswurf +5/+9/+12/+15,
+Reichweite 1,5 Meter (3 Meter bei Uralt). Treffer: 6
+(1W6+3) / 12 (2W6+5) / 14 (2W6+7) / 16 (2W6+9)
+Hiebschaden. Wenn sich die Donnerschlange zuvor
+mindestens 6 Meter in gerader Linie auf das Ziel
+zubewegt hat, muss es einen STÄ-Rettungswurf
+(SG 13/17/20/23) bestehen oder wird umgestoßen.
+Furchterregende Präsenz (Ausgewachsen, Uralt):
+WEI-Rettungswurf: SG 17/19, alle Kreaturen nach
+Wahl der Donnerschlange innerhalb von 36 Metern
+um sie, die sich ihrer bewusst sind. Misserfolg: Die
+Kreatur ist für 1 Minute verängstigt. Eine betroffene
+Kreatur kann den Rettungswurf am Ende eines
+jeden ihrer Züge wiederholen. Erfolg: Die Kreaturl
+ist für die nächsten 24 Stunden gegen die Furchterregende
+Präsenz der Donnerschlange immun.
+Gewitterodem (Aufladung 5-6): GES-Rettungswurf:
+SG 12/16/19/22, alle Kreaturen in einer 1,5
+Meter (3 Meter bei Uralt) breiten und 9/18/27/36
+Meter langen Linie. Misslungen: 27 (5W10) /
+55 (10W10) / 66 (12W10) / 99 (18W10) Blitzschaden.
+Erfolg: Halber Schaden.
+Bonusaktionen
+Kampfesmut (Jung oder älter): Eine andere Kreatur
+(bis zu zwei Kreaturen bei Uralt) innerhalb von
+36 Metern, welche die Donnerschlange sehen kann,
+erhält 10 temporäre Trefferpunkte.
+Drachische Telekinese: Die Donnerschlange kann
+einen bis zu 18 Meter entfernten Gegenstand, der
+nicht mehr als 10/50/150/300 Kilogramm wiegt,
+bis zu 6 Meter in eine beliebige Richtung bewegen.
+Wird der Gegenstand von einer Kreatur getragen
+oder in der Hand gehalten, kann die Kreatur einen
+STÄ-Rettungswurf (SG 12/17/20/23) ablegen, um
+die Bewegung zu verhindern.
+Zerfetzen: Die Donnerschlange führt einen Krallen-
+Angriff gegen eine liegende Kreatur durch.
+Reaktionen
+Bel-Shugas Segen: Eine andere Kreatur innerhalb
+von 36 Metern, die einen Nahkampfangriffswurf
+durchführt, ist dabei im Vorteil.
+Legendäre Aktionen
+(Ausgewachsen, Uralt)
+Die Donnerschlange kann 3 legendäre Aktionen
+durchführen, wobei sie aus den unten beschriebenen
+auswählt. Sie kann nur eine legendäre Option
+auf einmal verwenden und nur am Ende eines Zugs
+eines anderen Charakters.
+Die Donnerschlange erhält verbrauchte legendäre
+Aktionen zu Beginn ihres Zuges zurück.
+Aufspüren: Die Donnerschlange führt die Suchen-
+Aktion aus.
+Der aufkommende Sturm: Die Donnerschlange
+erhält ihre Reaktion zurück.
+Kampfesmut: Die Donnerschlange führt die
+Kampfesmut-Bonusaktion aus.
+Schwanzangriff: Nahkampfangriffswurf +12/+15,
+Reichweite 4,5/6 Meter. Treffer: 16 (2W8+7) /
+18 (2W8+9) Wuchtschaden.
+Donnerwoge (kostet 2 Aktionen): STÄ-Rettungswurf:
+SG 20/23, alle Kreaturen innerhalb von
+3/4,5 Metern um die Donnerschlange. Misserfolg:
+14 (2W6+7) / 16 (2W6+9) Schallschaden und die
+Kreatur wird umgestoßen.
+Die Donnerschlange kann dabei ihre halbe Flugbewegungsrate
+weit fliegen.

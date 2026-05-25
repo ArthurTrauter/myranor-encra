@@ -1,0 +1,128 @@
+{
+  "id": "verkuender",
+  "name": "Verkünder",
+  "type": "enemy",
+  "description": "Ein zweiköpfiger Drache, der in der Lage ist, Stimmen und Geräusche täuschend echt nachzuahmen. Im Kampf setzt er mächtige Schallwellen frei.",
+  "is_multi_variant": true,
+  "default_variant": "Ausgewachsen",
+  "variants": {
+    "Nestling": {
+      "level": "HG 1 (200 EP)",
+      "size": "Mittelgroßer Drache",
+      "rk": 16,
+      "tp_max": 35,
+      "tp_formula": "3W8+9",
+      "bw": "9 m, Fliegen 18 m",
+      "ub": 2,
+      "immunities": "Schall",
+      "attributes": [
+        { "name": "STÄ", "value": 2 },
+        { "name": "GES", "value": 3 },
+        { "name": "KON", "value": 3 },
+        { "name": "INT", "value": -3 },
+        { "name": "WEI", "value": 2 },
+        { "name": "CHA", "value": 2 }
+      ],
+      "skills": [
+        { "name": "Wahrnehmung", "value": 4, "passive": 19 },
+        { "name": "Heimlichkeit", "value": 5, "passive": 15 }
+      ],
+      "senses": "Dunkelsicht 36 m",
+      "languages": "Drachisch, beliebige weitere Sprachen",
+      "traits": [
+        { "name": "Zwei Köpfe", "description": "Vorteil bei WEI (Wahrnehmung)-Würfen (+5 bei passiver Wahrnehmung eingerechnet) und bei Rettungswürfen gegen betäubt, bewusstlos, bezaubert, blind, taub und verängstigt." }
+      ],
+      "actions": [
+        { "name": "Mehrfachangriff", "description": "Der Verkünder-Nestling greift zweimal mit seinem Biss an." },
+        { "name": "Biss", "type": "NK", "at": 4, "rw": "1,5 m", "damage": "7 (1W10+2) Stich" },
+        { "name": "Krallen", "type": "NK", "at": 4, "rw": "1,5 m", "damage": "5 (1W6+2) Hieb" },
+        { "name": "Schallentladung (Aufladung 5-6)", "description": "KON-RW (SG 12), Kegel mit 6 m Länge. Misslungen: 18 (4W8) Schallschaden und taub bis zum nächsten Zug. Erfolg: Halber Schaden." },
+        { "name": "Geräuschillusion", "description": "Erzeugt Töne aus 9 Metern Entfernung. INT (Nachforschung)-Wurf (SG 11) entlarvt die Illusion." }
+      ],
+      "bonus_actions": [
+        { "name": "Verwirrende Töne", "description": "Kreatur in 9 m ist bei allen Angriffs- und Attributswürfen im Nachteil. Taube Kreaturen sind immun." }
+      ]
+    },
+    "Jung": {
+      "level": "HG 6 (2.300 EP)",
+      "size": "Großer Drache",
+      "rk": 17,
+      "tp_max": 127,
+      "tp_formula": "11W10+66",
+      "bw": "12 m, Fliegen 24 m",
+      "ub": 3,
+      "immunities": "Schall",
+      "attributes": [
+        { "name": "STÄ", "value": 4 },
+        { "name": "GES", "value": 4 },
+        { "name": "KON", "value": 6 },
+        { "name": "INT", "value": 0 },
+        { "name": "WEI", "value": 4 },
+        { "name": "CHA", "value": 4 }
+      ],
+      "skills": [
+        { "name": "Wahrnehmung", "value": 7, "passive": 22 },
+        { "name": "Heimlichkeit", "value": 7, "passive": 17 }
+      ],
+      "senses": "Dunkelsicht 36 m",
+      "languages": "Drachisch, beliebige weitere Sprachen",
+      "traits": [
+        { "name": "Zwei Köpfe", "description": "Vorteil bei WEI (Wahrnehmung)-Würfen (+5 bei passiver Wahrnehmung eingerechnet) und bei Rettungswürfen gegen betäubt, bewusstlos, bezaubert, blind, taub und verängstigt." }
+      ],
+      "actions": [
+        { "name": "Mehrfachangriff", "description": "Der Verkünder greift zweimal mit seinem Biss und einmal mit seinen Krallen an." },
+        { "name": "Biss", "type": "NK", "at": 7, "rw": "3 m", "damage": "15 (2W10+4) Stich" },
+        { "name": "Krallen", "type": "NK", "at": 7, "rw": "1,5 m", "damage": "11 (2W6+4) Hieb" },
+        { "name": "Schallentladung (Aufladung 5-6)", "description": "KON-RW (SG 15), Kegel mit 6 m Länge. Misslungen: 31 (7W8) Schallschaden und taub bis zum nächsten Zug. Erfolg: Halber Schaden." },
+        { "name": "Geräuschillusion", "description": "Erzeugt Töne aus 18 Metern Entfernung. INT (Nachforschung)-Wurf (SG 14) entlarvt die Illusion." }
+      ],
+      "bonus_actions": [
+        { "name": "Verwirrende Töne", "description": "Kreatur in 18 m ist bei allen Angriffs- und Attributswürfen im Nachteil. Taube Kreaturen sind immun." }
+      ]
+    },
+    "Ausgewachsen": {
+      "level": "HG 13 (10.000 EP)",
+      "size": "Riesiger Drache",
+      "rk": 18,
+      "tp_max": 240,
+      "tp_formula": "14W12+150",
+      "bw": "12 m, Fliegen 24 m",
+      "ub": 4,
+      "immunities": "Schall",
+      "attributes": [
+        { "name": "STÄ", "value": 5 },
+        { "name": "GES", "value": 3 },
+        { "name": "KON", "value": 10 },
+        { "name": "INT", "value": 1 },
+        { "name": "WEI", "value": 7 },
+        { "name": "CHA", "value": 6 }
+      ],
+      "skills": [
+        { "name": "Wahrnehmung", "value": 11, "passive": 26 },
+        { "name": "Heimlichkeit", "value": 7, "passive": 17 }
+      ],
+      "senses": "Dunkelsicht 36 m",
+      "languages": "Drachisch, beliebige weitere Sprachen",
+      "traits": [
+        { "name": "Zwei Köpfe", "description": "Vorteil bei WEI (Wahrnehmung)-Würfen (+5 bei passiver Wahrnehmung eingerechnet) und bei Rettungswürfen gegen betäubt, bewusstlos, bezaubert, blind, taub und verängstigt." },
+        { "name": "Legendäre Resistenz (3/Tag)", "description": "Wenn ein Rettungswurf misslingt, kann er ihn stattdessen schaffen." }
+      ],
+      "actions": [
+        { "name": "Mehrfachangriff", "description": "Greift zweimal mit Biss und einmal mit Krallen an. Kann Furchterregende Präsenz nutzen." },
+        { "name": "Biss", "type": "NK", "at": 11, "rw": "3 m", "damage": "17 (2W10+6) Stich" },
+        { "name": "Krallen", "type": "NK", "at": 11, "rw": "1,5 m", "damage": "13 (2W6+6) Hieb" },
+        { "name": "Furchterregende Präsenz", "description": "WEI-RW (SG 16) für alle Kreaturen in 36 m. Misserfolg: verängstigt für 1 Min (Erfolg gibt 24 Std Immunität)." },
+        { "name": "Schallentladung (Aufladung 5-6)", "description": "KON-RW (SG 19), Kegel mit 6 m Länge. Misslungen: 44 (8W10) Schallschaden und taub bis zum nächsten Zug. Erfolg: Halber Schaden." },
+        { "name": "Geräuschillusion", "description": "Erzeugt Töne aus 27 Metern Entfernung. INT (Nachforschung)-Wurf (SG 18) entlarvt die Illusion." }
+      ],
+      "bonus_actions": [
+        { "name": "Verwirrende Töne", "description": "Kreatur in 27 m ist bei allen Angriffs- und Attributswürfen im Nachteil. Taube Kreaturen sind immun." }
+      ],
+      "legendary_actions": [
+        { "name": "Aufspüren", "description": "Der Verkünder führt die Suchen-Aktion aus." },
+        { "name": "Schwanzangriff", "type": "NK", "at": 11, "rw": "4,5 m", "damage": "15 (2W8+6) Wucht" },
+        { "name": "Geräuschmanipulation", "description": "Setzt seine Aktion Geräuschillusion oder seine Bonusaktion Verwirrende Töne ein." }
+      ]
+    }
+  }
+}

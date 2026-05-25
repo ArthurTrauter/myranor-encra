@@ -1,0 +1,78 @@
+Drachenschildkröte
+Nestling/Jung/Ausgewachsen/Uralt
+Mittelgroßer/großer/riesiger/gigantischer Drache
+Herausforderungsgrad 1 (2000 EP) /
+7 (2.900 EP) / 14 (11.500 EP) / 18 (20.000 EP)
+Rüstungsklasse 16/17/18/21 (natürliche Rüstung)
+Trefferpunkte 38 (5W8+15) / 127 (11W10+66) /
+231 (14W12+140) / 294 (12W20+156)
+Bewegungsrate 3/6/6/6 m,
+Schwimmen 9/12/12/15 m
+Alter STÄ GES KON INT WEI CHA
+Nestling +3 +2 +3 -3 +2 +2
+Jung +4 +2 +6 +0 +6 +5
+Ausgewachsen +6 +1 +10 +3 +9 +8
+Uralt +8 -1 +13 +9 +12 +10
+Übungsbonus +2/+3/+5/+6
+Wahrnehmung +4/+9/+14/+18 (14/19/24/28)
+Heimlichkeit +4/+5/+6/+5 (14/15/16/15)
+Sinne Dunkelsicht 36 m, Magiesicht 18 m (Jung oder
+älter), Wahre Sicht 18 m (Ausgewachsen oder Uralt)
+Sprachen Drachisch, beliebige weitere Sprachen
+Amphibisch: Die Drachenschildkröte kann Luft
+und Wasser atmen.
+Schwerfällig: Außerhalb des Wassers sinken GES
+der Drachenschildkröte auf -1 und Heimlichkeit
+auf 11/12/14/15.
+Belagerungsmonster: Die Drachenschildkröte
+fügt Gegenständen und Bauwerken doppelten
+Schaden zu.
+Legendäre Resistenz (Ausgewachsen, Uralt,
+3/Tag): Wenn die Drachenschildkröte einen Rettungswurf
+nicht schafft, kann sie sich stattdessen
+dafür entscheiden, ihn zu schaffen.
+Wasseratmung verleihen (Jung, Ausgewachsen,
+Uralt): Beliebig viele Kreaturen nach Wahl der
+Drachenschildkröte erhalten die Fähigkeit zur Unterwasseratmung,
+solange sie sich nicht weiter als 36
+Meter von der Drachenschildkröte entfernen. Sie
+behalten auch ihre normalen Atemmöglichkeiten.
+Aktionen
+Mehrfachangriff: Die Drachenschildkröte greift
+einmal mit ihrem Biss und einmal mit ihren Krallen
+an.
+Biss: Nahkampfangriffswurf +4/+7/+11/+15, Reichweite
+1,5/3/3/4,5 Meter. Treffer: 7 (1W10+2) / 26
+(4W10+4) / 28 (4W10+6) / 34 (4W12+8) Stichschaden.
+Krallen: Nahkampfangriffswurf +4/+7/+11/+15,
+Reichweite 1,5 Meter (3 Meter bei Uralt).
+Treffer: 5 (1W6+2) / 11 (2W10+4) / 13 (2W6+6) /
+15 (2W6+8) Hiebschaden.
+Rammen (Aufladung 5-6): Die Drachenschildkröte
+bewegt sich bis zu ihrer Bewegungsrate
+weit in gerader Linie vorwärts. Jede Kreatur, die
+sie dabei berührt und die kleiner ist als die Drachenschildkröte,
+wird auf kürzestem Weg aus der
+Route der Drachenschildkröte bewegt und muss
+einen GES-Rettungswurf (SG 11/14/18/21) ablegen.
+Misserfolg: 18 (4d8) / 40 (9d8) / 54 (12d8) /
+76 (17d8) Wuchtschaden und das Ziel wird umgestoßen.
+Erfolg: Halber Schaden. Jedes Objekt im
+Weg der Drachenschildkröte erleidet automatisch
+den Wuchtschaden (wegen Belagerungsmonster
+verdoppelt).
+Magie bannen (Ausgewachsen, Uralt): Die Drachenschildkröte
+wählt eine Kreatur, ein Objekt
+oder einen magischen Effekt in Reichweite. Jeder
+Zauber des 4./5. Grades oder niedriger, der auf
+dem Ziel liegt, endet.
+Bonusaktionen
+Wind und Strömung: Die Drachenschildkröte
+setzt Winde und Strömung gegen eine Kreatur
+innerhalb von 36 Metern, die sie sehen kann,
+ein. Die Kreatur muss einen STÄ-Rettungswurf
+(SG 11/14/18/21) ablegen. Bei einem Misserfolg
+kann sie in ihrem nächsten Zug keine Reaktionen
+nutzen, ihre Bewegungsrate wird halbiert und
+sie kann höchstens einen Angriff in ihrem Zug
+ausführen.

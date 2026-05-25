@@ -84,5 +84,596 @@
     "notes": "Dampf ist brennbar; offenes Feuer verursacht eine Explosion (3D6 TP in 3 Schritt Radius).",
     "created_at": "2026-05-24T11:45:00Z",
     "updated_at": "2026-05-24T11:45:00Z"
+  },
+  {
+    "id": "drachenschildkroete",
+    "name": "Drachenschildkröte",
+    "type": "enemy",
+    "description": "Eine mächtige, reptilienartige Kreatur mit einem panzerartigen Rücken, die sowohl an Land als auch im tiefsten Meer eine gewaltige Bedrohung darstellt. Es gibt sie in verschiedenen Altersstufen.",
+    "is_multi_variant": true,
+    "default_variant": "Ausgewachsen",
+    "variants": {
+      "Nestling": {
+        "level": "HG 1 (2.000 EP)",
+        "size": "Mittelgroßer Drache",
+        "rk": 16,
+        "tp_max": 38,
+        "tp_formula": "5W8+15",
+        "bw": "3 m, Schwimmen 9 m",
+        "ub": 2,
+        "attributes": [
+          { "name": "STÄ", "value": 3 },
+          { "name": "GES", "value": 2 },
+          { "name": "KON", "value": 3 },
+          { "name": "INT", "value": -3 },
+          { "name": "WEI", "value": 2 },
+          { "name": "CHA", "value": 2 }
+        ],
+        "skills": [
+          { "name": "Wahrnehmung", "value": 4, "passive": 14 },
+          { "name": "Heimlichkeit", "value": 4, "passive": 14 }
+        ],
+        "senses": "Dunkelsicht 36 m",
+        "languages": "Drachisch, beliebige weitere Sprachen",
+        "traits": [
+          { "name": "Amphibisch", "description": "Die Drachenschildkröte kann Luft und Wasser atmen." },
+          { "name": "Schwerfällig", "description": "Außerhalb des Wassers sinken GES auf -1 und Heimlichkeit auf 11." },
+          { "name": "Belagerungsmonster", "description": "Fügt Gegenständen und Bauwerken doppelten Schaden zu." }
+        ],
+        "actions": [
+          { "name": "Mehrfachangriff", "description": "Die Drachenschildkröte greift einmal mit ihrem Biss und einmal mit ihren Krallen an." },
+          { "name": "Biss", "type": "NK", "at": 4, "rw": "1,5 m", "damage": "7 (1W10+2) Stich" },
+          { "name": "Krallen", "type": "NK", "at": 4, "rw": "1,5 m", "damage": "5 (1W6+2) Hieb" },
+          { "name": "Rammen (Aufladung 5-6)", "description": "Bewegt sich geradlinig vorwärts. Kreaturen im Weg müssen einen GES-RW (SG 11) ablegen oder erleiden 18 (4d8) Wucht und werden umgestoßen. Halber Schaden bei Erfolg. Objekte erleiden doppelten Schaden." }
+        ],
+        "bonus_actions": [
+          { "name": "Wind und Strömung", "description": "Kreatur in 36 m muss STÄ-RW (SG 11) ablegen. Bei Misserfolg: keine Reaktionen im nächsten Zug, BW halbiert, max. 1 Angriff." }
+        ]
+      },
+      "Jung": {
+        "level": "HG 7 (2.900 EP)",
+        "size": "Großer Drache",
+        "rk": 17,
+        "tp_max": 127,
+        "tp_formula": "11W10+66",
+        "bw": "6 m, Schwimmen 12 m",
+        "ub": 3,
+        "attributes": [
+          { "name": "STÄ", "value": 4 },
+          { "name": "GES", "value": 2 },
+          { "name": "KON", "value": 6 },
+          { "name": "INT", "value": 0 },
+          { "name": "WEI", "value": 6 },
+          { "name": "CHA", "value": 5 }
+        ],
+        "skills": [
+          { "name": "Wahrnehmung", "value": 9, "passive": 19 },
+          { "name": "Heimlichkeit", "value": 5, "passive": 15 }
+        ],
+        "senses": "Dunkelsicht 36 m, Magiesicht 18 m",
+        "languages": "Drachisch, beliebige weitere Sprachen",
+        "traits": [
+          { "name": "Amphibisch", "description": "Die Drachenschildkröte kann Luft und Wasser atmen." },
+          { "name": "Schwerfällig", "description": "Außerhalb des Wassers sinken GES auf -1 und Heimlichkeit auf 12." },
+          { "name": "Belagerungsmonster", "description": "Fügt Gegenständen und Bauwerken doppelten Schaden zu." },
+          { "name": "Wasseratmung verleihen", "description": "Beliebig viele Kreaturen in 36 m erhalten Unterwasseratmung." }
+        ],
+        "actions": [
+          { "name": "Mehrfachangriff", "description": "Die Drachenschildkröte greift einmal mit ihrem Biss und einmal mit ihren Krallen an." },
+          { "name": "Biss", "type": "NK", "at": 7, "rw": "3 m", "damage": "26 (4W10+4) Stich" },
+          { "name": "Krallen", "type": "NK", "at": 7, "rw": "1,5 m", "damage": "11 (2W10+4) Hieb" },
+          { "name": "Rammen (Aufladung 5-6)", "description": "Bewegt sich geradlinig vorwärts. Kreaturen im Weg müssen einen GES-RW (SG 14) ablegen oder erleiden 40 (9d8) Wucht und werden umgestoßen. Halber Schaden bei Erfolg. Objekte erleiden doppelten Schaden." }
+        ],
+        "bonus_actions": [
+          { "name": "Wind und Strömung", "description": "Kreatur in 36 m muss STÄ-RW (SG 14) ablegen. Bei Misserfolg: keine Reaktionen im nächsten Zug, BW halbiert, max. 1 Angriff." }
+        ]
+      },
+      "Ausgewachsen": {
+        "level": "HG 14 (11.500 EP)",
+        "size": "Riesiger Drache",
+        "rk": 18,
+        "tp_max": 231,
+        "tp_formula": "14W12+140",
+        "bw": "6 m, Schwimmen 12 m",
+        "ub": 5,
+        "attributes": [
+          { "name": "STÄ", "value": 6 },
+          { "name": "GES", "value": 1 },
+          { "name": "KON", "value": 10 },
+          { "name": "INT", "value": 3 },
+          { "name": "WEI", "value": 9 },
+          { "name": "CHA", "value": 8 }
+        ],
+        "skills": [
+          { "name": "Wahrnehmung", "value": 14, "passive": 24 },
+          { "name": "Heimlichkeit", "value": 6, "passive": 16 }
+        ],
+        "senses": "Dunkelsicht 36 m, Magiesicht 18 m, Wahre Sicht 18 m",
+        "languages": "Drachisch, beliebige weitere Sprachen",
+        "traits": [
+          { "name": "Amphibisch", "description": "Die Drachenschildkröte kann Luft und Wasser atmen." },
+          { "name": "Schwerfällig", "description": "Außerhalb des Wassers sinken GES auf -1 und Heimlichkeit auf 14." },
+          { "name": "Belagerungsmonster", "description": "Fügt Gegenständen und Bauwerken doppelten Schaden zu." },
+          { "name": "Legendäre Resistenz (3/Tag)", "description": "Wenn ein Rettungswurf misslingt, kann sie ihn stattdessen schaffen." },
+          { "name": "Wasseratmung verleihen", "description": "Beliebig viele Kreaturen in 36 m erhalten Unterwasseratmung." }
+        ],
+        "actions": [
+          { "name": "Mehrfachangriff", "description": "Die Drachenschildkröte greift einmal mit ihrem Biss und einmal mit ihren Krallen an." },
+          { "name": "Biss", "type": "NK", "at": 11, "rw": "3 m", "damage": "28 (4W10+6) Stich" },
+          { "name": "Krallen", "type": "NK", "at": 11, "rw": "1,5 m", "damage": "13 (2W6+6) Hieb" },
+          { "name": "Rammen (Aufladung 5-6)", "description": "Bewegt sich geradlinig vorwärts. Kreaturen im Weg müssen einen GES-RW (SG 18) ablegen oder erleiden 54 (12d8) Wucht und werden umgestoßen. Halber Schaden bei Erfolg. Objekte erleiden doppelten Schaden." },
+          { "name": "Magie bannen", "description": "Wählt Kreatur, Objekt oder magischen Effekt. Jeder Zauber 4./5. Grades oder niedriger auf dem Ziel endet." }
+        ],
+        "bonus_actions": [
+          { "name": "Wind und Strömung", "description": "Kreatur in 36 m muss STÄ-RW (SG 18) ablegen. Bei Misserfolg: keine Reaktionen im nächsten Zug, BW halbiert, max. 1 Angriff." }
+        ]
+      },
+      "Uralt": {
+        "level": "HG 18 (20.000 EP)",
+        "size": "Gigantischer Drache",
+        "rk": 21,
+        "tp_max": 294,
+        "tp_formula": "12W20+156",
+        "bw": "6 m, Schwimmen 15 m",
+        "ub": 6,
+        "attributes": [
+          { "name": "STÄ", "value": 8 },
+          { "name": "GES", "value": -1 },
+          { "name": "KON", "value": 13 },
+          { "name": "INT", "value": 9 },
+          { "name": "WEI", "value": 12 },
+          { "name": "CHA", "value": 10 }
+        ],
+        "skills": [
+          { "name": "Wahrnehmung", "value": 18, "passive": 28 },
+          { "name": "Heimlichkeit", "value": 5, "passive": 15 }
+        ],
+        "senses": "Dunkelsicht 36 m, Magiesicht 18 m, Wahre Sicht 18 m",
+        "languages": "Drachisch, beliebige weitere Sprachen",
+        "traits": [
+          { "name": "Amphibisch", "description": "Die Drachenschildkröte kann Luft und Wasser atmen." },
+          { "name": "Schwerfällig", "description": "Außerhalb des Wassers sinken GES auf -1 und Heimlichkeit auf 15." },
+          { "name": "Belagerungsmonster", "description": "Fügt Gegenständen und Bauwerken doppelten Schaden zu." },
+          { "name": "Legendäre Resistenz (3/Tag)", "description": "Wenn ein Rettungswurf misslingt, kann sie ihn stattdessen schaffen." },
+          { "name": "Wasseratmung verleihen", "description": "Beliebig viele Kreaturen in 36 m erhalten Unterwasseratmung." }
+        ],
+        "actions": [
+          { "name": "Mehrfachangriff", "description": "Die Drachenschildkröte greift einmal mit ihrem Biss und einmal mit ihren Krallen an." },
+          { "name": "Biss", "type": "NK", "at": 15, "rw": "4,5 m", "damage": "34 (4W12+8) Stich" },
+          { "name": "Krallen", "type": "NK", "at": 15, "rw": "3 m", "damage": "15 (2W6+8) Hieb" },
+          { "name": "Rammen (Aufladung 5-6)", "description": "Bewegt sich geradlinig vorwärts. Kreaturen im Weg müssen einen GES-RW (SG 21) ablegen oder erleiden 76 (17d8) Wucht und werden umgestoßen. Halber Schaden bei Erfolg. Objekte erleiden doppelten Schaden." },
+          { "name": "Magie bannen", "description": "Wählt Kreatur, Objekt oder magischen Effekt. Jeder Zauber 4./5. Grades oder niedriger auf dem Ziel endet." }
+        ],
+        "bonus_actions": [
+          { "name": "Wind und Strömung", "description": "Kreatur in 36 m muss STÄ-RW (SG 21) ablegen. Bei Misserfolg: keine Reaktionen im nächsten Zug, BW halbiert, max. 1 Angriff." }
+        ]
+      }
+    },
+    "created_at": "2026-05-24T11:45:00Z",
+    "updated_at": "2026-05-24T11:45:00Z"
+  },
+  {
+    "id": "chrattac-koenigin",
+    "name": "Chrattac-Königin",
+    "type": "enemy",
+    "description": "Eine gewaltige, herrschsüchtige Kreatur aus den Tiefen der Schwarmnester. Sie lenkt den Willen der niederen Krabbler mit eiserner Pheromondisziplin.",
+    "is_multi_variant": true,
+    "default_variant": "Königin",
+    "variants": {
+      "Jungkönigin": {
+        "level": "HG 11 (7.200 EP)",
+        "size": "Große Monstrosität",
+        "rk": 19,
+        "tp_max": 189,
+        "tp_formula": "14W10+112",
+        "bw": "9 m",
+        "ub": 4,
+        "saves": "INT +12, WEI +9, CHA +12",
+        "attributes": [
+          { "name": "STÄ", "value": 6 },
+          { "name": "GES", "value": 3 },
+          { "name": "KON", "value": 8 },
+          { "name": "INT", "value": 8 },
+          { "name": "WEI", "value": 5 },
+          { "name": "CHA", "value": 8 }
+        ],
+        "skills": [
+          { "name": "Wahrnehmung", "value": 9, "passive": 19 },
+          { "name": "Heimlichkeit", "value": 7, "passive": 17 }
+        ],
+        "senses": "Dunkelsicht 36 m, Blindsicht 36 m",
+        "languages": "Chrattac, Telepathie",
+        "traits": [
+          { "name": "Herrin des Schwarms", "description": "Innerhalb von 300 Metern sind alle Chrattac und bezauberten Verbündeten im Vorteil bei Angriffen, wenn sich eine nicht kampfunfähige verbündete Kreatur in 1,5 Metern befindet." },
+          { "name": "Zauberwirken", "description": "Alle Aktionen, die als Zauber markiert sind, gelten als mit dem 4. Grad gewirkte Zauber." },
+          { "name": "Legendäre Resistenz (3/Tag)", "description": "Wenn ein Rettungswurf misslingt, kann sie ihn stattdessen schaffen." }
+        ],
+        "actions": [
+          { "name": "Mehrfachangriff", "description": "Greift einmal mit Biss, zweimal mit Krallen an und setzt Psychischen Schrei ein. Kann den Biss durch einen Zauber ersetzen." },
+          { "name": "Biss", "type": "NK", "at": 10, "rw": "1,5 m", "damage": "17 (2W10+6) Stich" },
+          { "name": "Krallen", "type": "NK", "at": 10, "rw": "3 m", "damage": "13 (2W6+6) Hieb" },
+          { "name": "Psychischer Schrei (Zauber)", "type": "FK", "at": 10, "rw": "18 m", "damage": "16 (3W10) psychischer" },
+          { "name": "Einfluss (Zauber, Konzentration)", "description": "Wähle festgesetzt, bezaubert oder verängstigt. 4 Personen in 18 Metern müssen WEI-RW (SG 19) ablegen oder unterliegen dem Zustand für 1 Minute (Wiederholung am Zugende)." }
+        ],
+        "legendary_actions": [
+          { "name": "Aufspüren", "description": "Führt eine Suchen-Aktion aus." },
+          { "name": "Psychischer Schrei", "description": "Führt einen Angriff mit Psychischer Schrei aus." },
+          { "name": "Zauber wirken (kostet 2 Aktionen)", "description": "Wirkt einen verfügbaren Zauber." }
+        ],
+        "lair_actions": [
+          { "name": "Verstärkung", "description": "Ein Chrattac-Krieger taucht in 36 Metern auf und handelt bei Initiative 20." },
+          { "name": "Sie kommen aus dem Boden", "description": "Chrattac brechen aus dem Boden hervor: bis zu drei Kreaturen in 36 m müssen GES-RW (SG 15) ablegen oder sind festgesetzt (Befreiung SG 15)." },
+          { "name": "Giftiger Schleim", "description": "Giftschwall in 24 m: Kreaturen in 3 m müssen KON-RW (SG 15) ablegen oder erleiden 7 (2W6) Gift und sind für 1 Min vergiftet." }
+        ],
+        "regional_effects": "Gebiet im Umkreis von 5 km ist abgegrast; keine Nahrung vorhanden; Überlebenskunst-Proben für Wasser sind im Nachteil. Im Nest ist es dunkel (helles Licht wird zu dämmrig, dämmrig zu Dunkelheit). Nach 1 Stunde im Nest muss ein WEI-RW (SG 10) bestanden werden (SG steigt um 1 pro 10 min) oder die Kreatur wird bezaubert."
+      },
+      "Königin": {
+        "level": "HG 18 (20.000 EP)",
+        "size": "Riesige Monstrosität",
+        "rk": 19,
+        "tp_max": 277,
+        "tp_formula": "15W12+180",
+        "bw": "9 m",
+        "ub": 6,
+        "saves": "INT +14, WEI +13, CHA +18",
+        "attributes": [
+          { "name": "STÄ", "value": 7 },
+          { "name": "GES", "value": 3 },
+          { "name": "KON", "value": 12 },
+          { "name": "INT", "value": 10 },
+          { "name": "WEI", "value": 7 },
+          { "name": "CHA", "value": 12 }
+        ],
+        "skills": [
+          { "name": "Wahrnehmung", "value": 13, "passive": 23 },
+          { "name": "Heimlichkeit", "value": 9, "passive": 19 }
+        ],
+        "senses": "Dunkelsicht 36 m, Blindsicht 36 m",
+        "languages": "Chrattac, Telepathie",
+        "traits": [
+          { "name": "Herrin des Schwarms", "description": "Innerhalb von 1 km sind alle Chrattac und bezauberten Verbündeten im Vorteil bei Angriffen, wenn sich eine nicht kampfunfähige verbündete Kreatur in 1,5 Metern befindet." },
+          { "name": "Für die Königin", "description": "Wird die Königin angegriffen, kann ein naher Chrattac seine Reaktion nutzen, um den Angriff im Nachteil sein zu lassen, oder sich bewegen, um einen Fernkampf-Treffer abzufangen." },
+          { "name": "Zauberwirken", "description": "Alle Aktionen, die als Zauber markiert sind, gelten als mit dem 5. Grad gewirkte Zauber." },
+          { "name": "Legendäre Resistenz (3/Tag)", "description": "Wenn ein Rettungswurf misslingt, kann sie ihn stattdessen schaffen." }
+        ],
+        "actions": [
+          { "name": "Mehrfachangriff", "description": "Greift einmal mit Biss, zweimal mit Krallen an und setzt Psychischen Schrei ein. Kann den Biss durch einen Zauber ersetzen." },
+          { "name": "Biss", "type": "NK", "at": 13, "rw": "1,5 m", "damage": "18 (2W10+7) Stich" },
+          { "name": "Krallen", "type": "NK", "at": 13, "rw": "3 m", "damage": "14 (2W6+7) Hieb" },
+          { "name": "Psychischer Schrei (Zauber)", "type": "FK", "at": 14, "rw": "36 m", "damage": "18 (4W8) psychischer" },
+          { "name": "Einfluss (Zauber, Konzentration)", "description": "Wähle festgesetzt, bezaubert oder verängstigt. 5 Personen in 18 Metern müssen WEI-RW (SG 22) ablegen oder unterliegen dem Zustand für 1 Minute (Wiederholung am Zugende)." }
+        ],
+        "legendary_actions": [
+          { "name": "Aufspüren", "description": "Führt eine Suchen-Aktion aus." },
+          { "name": "Psychischer Schrei", "description": "Führt einen Angriff mit Psychischer Schrei aus." },
+          { "name": "Zauber wirken (kostet 2 Aktionen)", "description": "Wirkt einen verfügbaren Zauber." }
+        ],
+        "lair_actions": [
+          { "name": "Verstärkung", "description": "Ein Chrattac-Krieger taucht in 36 Metern auf und handelt bei Initiative 20." },
+          { "name": "Sie kommen aus dem Boden", "description": "Chrattac brechen aus dem Boden hervor: bis zu drei Kreaturen in 36 m müssen GES-RW (SG 15) ablegen oder sind festgesetzt (Befreiung SG 15)." },
+          { "name": "Giftiger Schleim", "description": "Giftschwall in 24 m: Kreaturen in 3 m müssen KON-RW (SG 15) ablegen oder erleiden 7 (2W6) Gift und sind für 1 Min vergiftet." }
+        ],
+        "regional_effects": "Gebiet im Umkreis von 5 km ist abgegrast; keine Nahrung vorhanden; Überlebenskunst-Proben für Wasser sind im Nachteil. Im Nest ist es dunkel (helles Licht wird zu dämmrig, dämmrig zu Dunkelheit). Nach 1 Stunde im Nest muss ein WEI-RW (SG 10) bestanden werden (SG steigt um 1 pro 10 min) oder die Kreatur wird bezaubert."
+      }
+    },
+    "created_at": "2026-05-24T11:45:00Z",
+    "updated_at": "2026-05-24T11:45:00Z"
+  },
+  {
+    "id": "donnerschlange",
+    "name": "Donnerschlange",
+    "type": "enemy",
+    "description": "Ein schlangenförmiges Reptil, dessen Schuppen mit elektrischer Energie geladen sind. Wenn es fliegt, kündigt es sich durch ein ständiges Donnergrollen an.",
+    "is_multi_variant": true,
+    "default_variant": "Ausgewachsen",
+    "variants": {
+      "Nestling": {
+        "level": "HG 3 (700 EP)",
+        "size": "Mittelgroßer Drache",
+        "rk": 17,
+        "tp_max": 68,
+        "tp_formula": "8W8+32",
+        "bw": "9 m, Fliegen 18 m",
+        "ub": 2,
+        "immunities": "Blitz",
+        "attributes": [
+          { "name": "STÄ", "value": 3 },
+          { "name": "GES", "value": 3 },
+          { "name": "KON", "value": 4 },
+          { "name": "INT", "value": 1 },
+          { "name": "WEI", "value": 2 },
+          { "name": "CHA", "value": 4 }
+        ],
+        "skills": [
+          { "name": "Wahrnehmung", "value": 4, "passive": 14 },
+          { "name": "Heimlichkeit", "value": 5, "passive": 15 }
+        ],
+        "senses": "Dunkelsicht 36 m",
+        "languages": "Drachisch, beliebige weitere Sprachen",
+        "traits": [],
+        "actions": [
+          { "name": "Mehrfachangriff", "description": "Der Donnerschlangen-Nestling greift einmal mit seinem Biss und einmal mit seinen Krallen an." },
+          { "name": "Biss", "type": "NK", "at": 5, "rw": "1,5 m", "damage": "8 (1W10+3) Stich plus 3 (1W6) Blitz" },
+          { "name": "Krallen", "type": "NK", "at": 5, "rw": "1,5 m", "damage": "6 (1W6+3) Hieb. Wenn mindestens 6 m in gerader Linie zubewegt: STÄ-RW (SG 13) oder umgestoßen." },
+          { "name": "Gewitterodem (Aufladung 5-6)", "description": "GES-RW (SG 12), Linie 1,5m breit und 9m lang. Misslungen: 27 (5W10) Blitzschaden. Erfolg: Halber Schaden." }
+        ],
+        "reactions": [
+          { "name": "Bel-Shugas Segen", "description": "Eine andere Kreatur in 36 m, die einen Nahkampfangriff ausführt, ist im Vorteil." }
+        ],
+        "bonus_actions": [
+          { "name": "Drachische Telekinese", "description": "Gegenstand bis 10 kg in 18 m Entfernung um bis zu 6 m bewegen. STÄ-RW (SG 12) zum Verhindern." },
+          { "name": "Zerfetzen", "description": "Führt einen Krallen-Angriff gegen eine liegende Kreatur durch." }
+        ]
+      },
+      "Jung": {
+        "level": "HG 9 (5.000 EP)",
+        "size": "Großer Drache",
+        "rk": 18,
+        "tp_max": 176,
+        "tp_formula": "13W10+104",
+        "bw": "12 m, Fliegen 24 m",
+        "ub": 4,
+        "immunities": "Blitz",
+        "attributes": [
+          { "name": "STÄ", "value": 5 },
+          { "name": "GES", "value": 4 },
+          { "name": "KON", "value": 8 },
+          { "name": "INT", "value": 2 },
+          { "name": "WEI", "value": 5 },
+          { "name": "CHA", "value": 7 }
+        ],
+        "skills": [
+          { "name": "Wahrnehmung", "value": 9, "passive": 19 },
+          { "name": "Heimlichkeit", "value": 8, "passive": 18 }
+        ],
+        "senses": "Dunkelsicht 36 m",
+        "languages": "Drachisch, beliebige weitere Sprachen",
+        "traits": [],
+        "actions": [
+          { "name": "Mehrfachangriff", "description": "Die Donnerschlange greift einmal mit ihrem Biss und zweimal mit ihren Krallen an." },
+          { "name": "Biss", "type": "NK", "at": 9, "rw": "3 m", "damage": "16 (2W10+5) Stich plus 5 (1W10) Blitz" },
+          { "name": "Krallen", "type": "NK", "at": 9, "rw": "1,5 m", "damage": "12 (2W6+5) Hieb. Wenn mindestens 6 m in gerader Linie zubewegt: STÄ-RW (SG 17) oder umgestoßen." },
+          { "name": "Gewitterodem (Aufladung 5-6)", "description": "GES-RW (SG 16), Linie 1,5m breit und 18m lang. Misslungen: 55 (10W10) Blitzschaden. Erfolg: Halber Schaden." }
+        ],
+        "reactions": [
+          { "name": "Bel-Shugas Segen", "description": "Eine andere Kreatur in 36 m, die einen Nahkampfangriff ausführt, ist im Vorteil." }
+        ],
+        "bonus_actions": [
+          { "name": "Kampfesmut", "description": "Eine andere Kreatur in 36 Metern erhält 10 temporäre Trefferpunkte." },
+          { "name": "Drachische Telekinese", "description": "Gegenstand bis 50 kg in 18 m Entfernung um bis zu 6 m bewegen. STÄ-RW (SG 17) zum Verhindern." },
+          { "name": "Zerfetzen", "description": "Führt einen Krallen-Angriff gegen eine liegende Kreatur durch." }
+        ]
+      },
+      "Ausgewachsen": {
+        "level": "HG 16 (15.000 EP)",
+        "size": "Riesiger Drache",
+        "rk": 19,
+        "tp_max": 263,
+        "tp_formula": "15W12+165",
+        "bw": "12 m, Fliegen 24 m",
+        "ub": 5,
+        "immunities": "Blitz",
+        "attributes": [
+          { "name": "STÄ", "value": 7 },
+          { "name": "GES", "value": 5 },
+          { "name": "KON", "value": 11 },
+          { "name": "INT", "value": 3 },
+          { "name": "WEI", "value": 7 },
+          { "name": "CHA", "value": 9 }
+        ],
+        "skills": [
+          { "name": "Wahrnehmung", "value": 12, "passive": 22 },
+          { "name": "Heimlichkeit", "value": 10, "passive": 20 }
+        ],
+        "senses": "Dunkelsicht 36 m",
+        "languages": "Drachisch, beliebige weitere Sprachen",
+        "traits": [
+          { "name": "Legendäre Resistenz (3/Tag)", "description": "Wenn ein Rettungswurf misslingt, kann sie ihn stattdessen schaffen." }
+        ],
+        "actions": [
+          { "name": "Mehrfachangriff", "description": "Greift einmal mit Biss und zweimal mit Krallen an. Kann Furchterregende Präsenz nutzen." },
+          { "name": "Biss", "type": "NK", "at": 11, "rw": "3 m", "damage": "18 (2W10+7) Stich plus 5 (1W10) Blitz" },
+          { "name": "Krallen", "type": "NK", "at": 12, "rw": "1,5 m", "damage": "14 (2W6+7) Hieb. Wenn mindestens 6 m in gerader Linie zubewegt: STÄ-RW (SG 20) oder umgestoßen." },
+          { "name": "Furchterregende Präsenz", "description": "WEI-RW (SG 17) für alle Kreaturen in 36 m. Misserfolg: verängstigt für 1 Min (Wiederholung am Zugend, Erfolg gibt 24 Std Immunität)." },
+          { "name": "Gewitterodem (Aufladung 5-6)", "description": "GES-RW (SG 19), Linie 1,5m breit und 27m lang. Misslungen: 66 (12W10) Blitzschaden. Erfolg: Halber Schaden." }
+        ],
+        "reactions": [
+          { "name": "Bel-Shugas Segen", "description": "Eine andere Kreatur in 36 m, die einen Nahkampfangriff ausführt, ist im Vorteil." }
+        ],
+        "bonus_actions": [
+          { "name": "Kampfesmut", "description": "Eine andere Kreatur in 36 Metern erhält 10 temporäre Trefferpunkte." },
+          { "name": "Drachische Telekinese", "description": "Gegenstand bis 150 kg in 18 m Entfernung um bis zu 6 m bewegen. STÄ-RW (SG 20) zum Verhindern." },
+          { "name": "Zerfetzen", "description": "Führt einen Krallen-Angriff gegen eine liegende Kreatur durch." }
+        ],
+        "legendary_actions": [
+          { "name": "Aufspüren", "description": "Führt die Suchen-Aktion aus." },
+          { "name": "Der aufkommende Sturm", "description": "Die Donnerschlange erhält ihre Reaktion zurück." },
+          { "name": "Kampfesmut", "description": "Führt die Kampfesmut-Bonusaktion aus." },
+          { "name": "Schwanzangriff", "type": "NK", "at": 12, "rw": "4,5 m", "damage": "16 (2W8+7) Wucht" },
+          { "name": "Donnerwoge (kostet 2 Aktionen)", "description": "STÄ-RW (SG 20), Kreaturen in 3 m Radius. Misserfolg: 14 (2W6+7) Schall und umgestoßen. Kann dabei halbe Flug-BW fliegen." }
+        ]
+      },
+      "Uralt": {
+        "level": "HG 20 (25.000 EP)",
+        "size": "Gigantischer Drache",
+        "rk": 21,
+        "tp_max": 368,
+        "tp_formula": "15W20+210",
+        "bw": "12 m, Fliegen 24 m",
+        "ub": 6,
+        "immunities": "Blitz",
+        "attributes": [
+          { "name": "STÄ", "value": 9 },
+          { "name": "GES", "value": 5 },
+          { "name": "KON", "value": 14 },
+          { "name": "INT", "value": 4 },
+          { "name": "WEI", "value": 9 },
+          { "name": "CHA", "value": 11 }
+        ],
+        "skills": [
+          { "name": "Wahrnehmung", "value": 15, "passive": 25 },
+          { "name": "Heimlichkeit", "value": 11, "passive": 21 }
+        ],
+        "senses": "Dunkelsicht 36 m",
+        "languages": "Drachisch, beliebige weitere Sprachen",
+        "traits": [
+          { "name": "Legendäre Resistenz (3/Tag)", "description": "Wenn ein Rettungswurf misslingt, kann sie ihn stattdessen schaffen." }
+        ],
+        "actions": [
+          { "name": "Mehrfachangriff", "description": "Greift einmal mit Biss und zweimal mit Krallen an. Kann Furchterregende Präsenz nutzen." },
+          { "name": "Biss", "type": "NK", "at": 15, "rw": "3 m", "damage": "20 (2W10+9) Stich plus 11 (2W10) Blitz" },
+          { "name": "Krallen", "type": "NK", "at": 15, "rw": "3 m", "damage": "16 (2W6+9) Hieb. Wenn mindestens 6 m in gerader Linie zubewegt: STÄ-RW (SG 23) oder umgestoßen." },
+          { "name": "Furchterregende Präsenz", "description": "WEI-RW (SG 19) für alle Kreaturen in 36 m. Misserfolg: verängstigt für 1 Min." },
+          { "name": "Gewitterodem (Aufladung 5-6)", "description": "GES-RW (SG 22), Linie 3m breit und 36m lang. Misslungen: 99 (18W10) Blitzschaden. Erfolg: Halber Schaden." }
+        ],
+        "reactions": [
+          { "name": "Bel-Shugas Segen", "description": "Eine andere Kreatur in 36 m, die einen Nahkampfangriff ausführt, ist im Vorteil." }
+        ],
+        "bonus_actions": [
+          { "name": "Kampfesmut", "description": "Bis zu zwei Kreaturen in 36 Metern erhalten 10 temporäre Trefferpunkte." },
+          { "name": "Drachische Telekinese", "description": "Gegenstand bis 300 kg in 18 m Entfernung um bis zu 6 m bewegen. STÄ-RW (SG 23) zum Verhindern." },
+          { "name": "Zerfetzen", "description": "Führt einen Krallen-Angriff gegen eine liegende Kreatur durch." }
+        ],
+        "legendary_actions": [
+          { "name": "Aufspüren", "description": "Führt die Suchen-Aktion aus." },
+          { "name": "Der aufkommende Sturm", "description": "Die Donnerschlange erhält ihre Reaktion zurück." },
+          { "name": "Kampfesmut", "description": "Führt die Kampfesmut-Bonusaktion aus." },
+          { "name": "Schwanzangriff", "type": "NK", "at": 15, "rw": "6 m", "damage": "18 (2W8+9) Wucht" },
+          { "name": "Donnerwoge (kostet 2 Aktionen)", "description": "STÄ-RW (SG 23), Kreaturen in 4,5 m Radius. Misserfolg: 16 (2W6+9) Schall und umgestoßen. Kann dabei halbe Flug-BW fliegen." }
+        ]
+      }
+    },
+    "created_at": "2026-05-24T11:45:00Z",
+    "updated_at": "2026-05-24T11:45:00Z"
+  },
+  {
+    "id": "verkuender",
+    "name": "Verkünder",
+    "type": "enemy",
+    "description": "Ein zweiköpfiger Drache, der in der Lage ist, Stimmen und Geräusche täuschend echt nachzuahmen. Im Kampf setzt er mächtige Schallwellen frei.",
+    "is_multi_variant": true,
+    "default_variant": "Ausgewachsen",
+    "variants": {
+      "Nestling": {
+        "level": "HG 1 (200 EP)",
+        "size": "Mittelgroßer Drache",
+        "rk": 16,
+        "tp_max": 35,
+        "tp_formula": "3W8+9",
+        "bw": "9 m, Fliegen 18 m",
+        "ub": 2,
+        "immunities": "Schall",
+        "attributes": [
+          { "name": "STÄ", "value": 2 },
+          { "name": "GES", "value": 3 },
+          { "name": "KON", "value": 3 },
+          { "name": "INT", "value": -3 },
+          { "name": "WEI", "value": 2 },
+          { "name": "CHA", "value": 2 }
+        ],
+        "skills": [
+          { "name": "Wahrnehmung", "value": 4, "passive": 19 },
+          { "name": "Heimlichkeit", "value": 5, "passive": 15 }
+        ],
+        "senses": "Dunkelsicht 36 m",
+        "languages": "Drachisch, beliebige weitere Sprachen",
+        "traits": [
+          { "name": "Zwei Köpfe", "description": "Vorteil bei WEI (Wahrnehmung)-Würfen (+5 bei passiver Wahrnehmung eingerechnet) und bei Rettungswürfen gegen betäubt, bewusstlos, bezaubert, blind, taub und verängstigt." }
+        ],
+        "actions": [
+          { "name": "Mehrfachangriff", "description": "Der Verkünder-Nestling greift zweimal mit seinem Biss an." },
+          { "name": "Biss", "type": "NK", "at": 4, "rw": "1,5 m", "damage": "7 (1W10+2) Stich" },
+          { "name": "Krallen", "type": "NK", "at": 4, "rw": "1,5 m", "damage": "5 (1W6+2) Hieb" },
+          { "name": "Schallentladung (Aufladung 5-6)", "description": "KON-RW (SG 12), Kegel mit 6 m Länge. Misslungen: 18 (4W8) Schallschaden und taub bis zum nächsten Zug. Erfolg: Halber Schaden." },
+          { "name": "Geräuschillusion", "description": "Erzeugt Töne aus 9 Metern Entfernung. INT (Nachforschung)-Wurf (SG 11) entlarvt die Illusion." }
+        ],
+        "bonus_actions": [
+          { "name": "Verwirrende Töne", "description": "Kreatur in 9 m ist bei allen Angriffs- und Attributswürfen im Nachteil. Taube Kreaturen sind immun." }
+        ]
+      },
+      "Jung": {
+        "level": "HG 6 (2.300 EP)",
+        "size": "Großer Drache",
+        "rk": 17,
+        "tp_max": 127,
+        "tp_formula": "11W10+66",
+        "bw": "12 m, Fliegen 24 m",
+        "ub": 3,
+        "immunities": "Schall",
+        "attributes": [
+          { "name": "STÄ", "value": 4 },
+          { "name": "GES", "value": 4 },
+          { "name": "KON", "value": 6 },
+          { "name": "INT", "value": 0 },
+          { "name": "WEI", "value": 4 },
+          { "name": "CHA", "value": 4 }
+        ],
+        "skills": [
+          { "name": "Wahrnehmung", "value": 7, "passive": 22 },
+          { "name": "Heimlichkeit", "value": 7, "passive": 17 }
+        ],
+        "senses": "Dunkelsicht 36 m",
+        "languages": "Drachisch, beliebige weitere Sprachen",
+        "traits": [
+          { "name": "Zwei Köpfe", "description": "Vorteil bei WEI (Wahrnehmung)-Würfen (+5 bei passiver Wahrnehmung eingerechnet) und bei Rettungswürfen gegen betäubt, bewusstlos, bezaubert, blind, taub und verängstigt." }
+        ],
+        "actions": [
+          { "name": "Mehrfachangriff", "description": "Der Verkünder greift zweimal mit seinem Biss und einmal mit seinen Krallen an." },
+          { "name": "Biss", "type": "NK", "at": 7, "rw": "3 m", "damage": "15 (2W10+4) Stich" },
+          { "name": "Krallen", "type": "NK", "at": 7, "rw": "1,5 m", "damage": "11 (2W6+4) Hieb" },
+          { "name": "Schallentladung (Aufladung 5-6)", "description": "KON-RW (SG 15), Kegel mit 6 m Länge. Misslungen: 31 (7W8) Schallschaden und taub bis zum nächsten Zug. Erfolg: Halber Schaden." },
+          { "name": "Geräuschillusion", "description": "Erzeugt Töne aus 18 Metern Entfernung. INT (Nachforschung)-Wurf (SG 14) entlarvt die Illusion." }
+        ],
+        "bonus_actions": [
+          { "name": "Verwirrende Töne", "description": "Kreatur in 18 m ist bei allen Angriffs- und Attributswürfen im Nachteil. Taube Kreaturen sind immun." }
+        ]
+      },
+      "Ausgewachsen": {
+        "level": "HG 13 (10.000 EP)",
+        "size": "Riesiger Drache",
+        "rk": 18,
+        "tp_max": 240,
+        "tp_formula": "14W12+150",
+        "bw": "12 m, Fliegen 24 m",
+        "ub": 4,
+        "immunities": "Schall",
+        "attributes": [
+          { "name": "STÄ", "value": 5 },
+          { "name": "GES", "value": 3 },
+          { "name": "KON", "value": 10 },
+          { "name": "INT", "value": 1 },
+          { "name": "WEI", "value": 7 },
+          { "name": "CHA", "value": 6 }
+        ],
+        "skills": [
+          { "name": "Wahrnehmung", "value": 11, "passive": 26 },
+          { "name": "Heimlichkeit", "value": 7, "passive": 17 }
+        ],
+        "senses": "Dunkelsicht 36 m",
+        "languages": "Drachisch, beliebige weitere Sprachen",
+        "traits": [
+          { "name": "Zwei Köpfe", "description": "Vorteil bei WEI (Wahrnehmung)-Würfen (+5 bei passiver Wahrnehmung eingerechnet) und bei Rettungswürfen gegen betäubt, bewusstlos, bezaubert, blind, taub und verängstigt." },
+          { "name": "Legendäre Resistenz (3/Tag)", "description": "Wenn ein Rettungswurf misslingt, kann er ihn stattdessen schaffen." }
+        ],
+        "actions": [
+          { "name": "Mehrfachangriff", "description": "Greift zweimal mit Biss und einmal mit Krallen an. Kann Furchterregende Präsenz nutzen." },
+          { "name": "Biss", "type": "NK", "at": 11, "rw": "3 m", "damage": "17 (2W10+6) Stich" },
+          { "name": "Krallen", "type": "NK", "at": 11, "rw": "1,5 m", "damage": "13 (2W6+6) Hieb" },
+          { "name": "Furchterregende Präsenz", "description": "WEI-RW (SG 16) für alle Kreaturen in 36 m. Misserfolg: verängstigt für 1 Min (Erfolg gibt 24 Std Immunität)." },
+          { "name": "Schallentladung (Aufladung 5-6)", "description": "KON-RW (SG 19), Kegel mit 6 m Länge. Misslungen: 44 (8W10) Schallschaden und taub bis zum nächsten Zug. Erfolg: Halber Schaden." },
+          { "name": "Geräuschillusion", "description": "Erzeugt Töne aus 27 Metern Entfernung. INT (Nachforschung)-Wurf (SG 18) entlarvt die Illusion." }
+        ],
+        "bonus_actions": [
+          { "name": "Verwirrende Töne", "description": "Kreatur in 27 m ist bei allen Angriffs- und Attributswürfen im Nachteil. Taube Kreaturen sind immun." }
+        ],
+        "legendary_actions": [
+          { "name": "Aufspüren", "description": "Der Verkünder führt die Suchen-Aktion aus." },
+          { "name": "Schwanzangriff", "type": "NK", "at": 11, "rw": "4,5 m", "damage": "15 (2W8+6) Wucht" },
+          { "name": "Geräuschmanipulation", "description": "Setzt seine Aktion Geräuschillusion oder seine Bonusaktion Verwirrende Töne ein." }
+        ]
+      }
+    },
+    "created_at": "2026-05-24T11:45:00Z",
+    "updated_at": "2026-05-24T11:45:00Z"
   }
 ]

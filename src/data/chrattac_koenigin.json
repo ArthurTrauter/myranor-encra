@@ -1,0 +1,105 @@
+{
+  "id": "chrattac-koenigin",
+  "name": "Chrattac-Königin",
+  "type": "enemy",
+  "description": "Eine gewaltige, herrschsüchtige Kreatur aus den Tiefen der Schwarmnester. Sie lenkt den Willen der niederen Krabbler mit eiserner Pheromondisziplin.",
+  "is_multi_variant": true,
+  "default_variant": "Königin",
+  "variants": {
+    "Jungkönigin": {
+      "level": "HG 11 (7.200 EP)",
+      "size": "Große Monstrosität",
+      "rk": 19,
+      "tp_max": 189,
+      "tp_formula": "14W10+112",
+      "bw": "9 m",
+      "ub": 4,
+      "saves": "INT +12, WEI +9, CHA +12",
+      "attributes": [
+        { "name": "STÄ", "value": 6 },
+        { "name": "GES", "value": 3 },
+        { "name": "KON", "value": 8 },
+        { "name": "INT", "value": 8 },
+        { "name": "WEI", "value": 5 },
+        { "name": "CHA", "value": 8 }
+      ],
+      "skills": [
+        { "name": "Wahrnehmung", "value": 9, "passive": 19 },
+        { "name": "Heimlichkeit", "value": 7, "passive": 17 }
+      ],
+      "senses": "Dunkelsicht 36 m, Blindsicht 36 m",
+      "languages": "Chrattac, Telepathie",
+      "traits": [
+        { "name": "Herrin des Schwarms", "description": "Innerhalb von 300 Metern sind alle Chrattac und bezauberten Verbündeten im Vorteil bei Angriffen, wenn sich eine nicht kampfunfähige verbündete Kreatur in 1,5 Metern befindet." },
+        { "name": "Zauberwirken", "description": "Alle Aktionen, die als Zauber markiert sind, gelten als mit dem 4. Grad gewirkte Zauber." },
+        { "name": "Legendäre Resistenz (3/Tag)", "description": "Wenn ein Rettungswurf misslingt, kann sie ihn stattdessen schaffen." }
+      ],
+      "actions": [
+        { "name": "Mehrfachangriff", "description": "Greift einmal mit Biss, zweimal mit Krallen an und setzt Psychischen Schrei ein. Kann den Biss durch einen Zauber ersetzen." },
+        { "name": "Biss", "type": "NK", "at": 10, "rw": "1,5 m", "damage": "17 (2W10+6) Stich" },
+        { "name": "Krallen", "type": "NK", "at": 10, "rw": "3 m", "damage": "13 (2W6+6) Hieb" },
+        { "name": "Psychischer Schrei (Zauber)", "type": "FK", "at": 10, "rw": "18 m", "damage": "16 (3W10) psychischer" },
+        { "name": "Einfluss (Zauber, Konzentration)", "description": "Wähle festgesetzt, bezaubert oder verängstigt. 4 Personen in 18 Metern müssen WEI-RW (SG 19) ablegen oder unterliegen dem Zustand für 1 Minute (Wiederholung am Zugende)." }
+      ],
+      "legendary_actions": [
+        { "name": "Aufspüren", "description": "Führt eine Suchen-Aktion aus." },
+        { "name": "Psychischer Schrei", "description": "Führt einen Angriff mit Psychischer Schrei aus." },
+        { "name": "Zauber wirken (kostet 2 Aktionen)", "description": "Wirkt einen verfügbaren Zauber." }
+      ],
+      "lair_actions": [
+        { "name": "Verstärkung", "description": "Ein Chrattac-Krieger taucht in 36 Metern auf und handelt bei Initiative 20." },
+        { "name": "Sie kommen aus dem Boden", "description": "Chrattac brechen aus dem Boden hervor: bis zu drei Kreaturen in 36 m müssen GES-RW (SG 15) ablegen oder sind festgesetzt (Befreiung SG 15)." },
+        { "name": "Giftiger Schleim", "description": "Giftschwall in 24 m: Kreaturen in 3 m müssen KON-RW (SG 15) ablegen oder erleiden 7 (2W6) Gift und sind für 1 Min vergiftet." }
+      ],
+      "regional_effects": "Gebiet im Umkreis von 5 km ist abgegrast; keine Nahrung vorhanden; Überlebenskunst-Proben für Wasser sind im Nachteil. Im Nest ist es dunkel (helles Licht wird zu dämmrig, dämmrig zu Dunkelheit). Nach 1 Stunde im Nest muss ein WEI-RW (SG 10) bestanden werden (SG steigt um 1 pro 10 min) oder die Kreatur wird bezaubert."
+    },
+    "Königin": {
+      "level": "HG 18 (20.000 EP)",
+      "size": "Riesige Monstrosität",
+      "rk": 19,
+      "tp_max": 277,
+      "tp_formula": "15W12+180",
+      "bw": "9 m",
+      "ub": 6,
+      "saves": "INT +14, WEI +13, CHA +18",
+      "attributes": [
+        { "name": "STÄ", "value": 7 },
+        { "name": "GES", "value": 3 },
+        { "name": "KON", "value": 12 },
+        { "name": "INT", "value": 10 },
+        { "name": "WEI", "value": 7 },
+        { "name": "CHA", "value": 12 }
+      ],
+      "skills": [
+        { "name": "Wahrnehmung", "value": 13, "passive": 23 },
+        { "name": "Heimlichkeit", "value": 9, "passive": 19 }
+      ],
+      "senses": "Dunkelsicht 36 m, Blindsicht 36 m",
+      "languages": "Chrattac, Telepathie",
+      "traits": [
+        { "name": "Herrin des Schwarms", "description": "Innerhalb von 1 km sind alle Chrattac und bezauberten Verbündeten im Vorteil bei Angriffen, wenn sich eine nicht kampfunfähige verbündete Kreatur in 1,5 Metern befindet." },
+        { "name": "Für die Königin", "description": "Wird die Königin angegriffen, kann ein naher Chrattac seine Reaktion nutzen, um den Angriff im Nachteil sein zu lassen, oder sich bewegen, um einen Fernkampf-Treffer abzufangen." },
+        { "name": "Zauberwirken", "description": "Alle Aktionen, die als Zauber markiert sind, gelten als mit dem 5. Grad gewirkte Zauber." },
+        { "name": "Legendäre Resistenz (3/Tag)", "description": "Wenn ein Rettungswurf misslingt, kann sie ihn stattdessen schaffen." }
+      ],
+      "actions": [
+        { "name": "Mehrfachangriff", "description": "Greift einmal mit Biss, zweimal mit Krallen an und setzt Psychischen Schrei ein. Kann den Biss durch einen Zauber ersetzen." },
+        { "name": "Biss", "type": "NK", "at": 13, "rw": "1,5 m", "damage": "18 (2W10+7) Stich" },
+        { "name": "Krallen", "type": "NK", "at": 13, "rw": "3 m", "damage": "14 (2W6+7) Hieb" },
+        { "name": "Psychischer Schrei (Zauber)", "type": "FK", "at": 14, "rw": "36 m", "damage": "18 (4W8) psychischer" },
+        { "name": "Einfluss (Zauber, Konzentration)", "description": "Wähle festgesetzt, bezaubert oder verängstigt. 5 Personen in 18 Metern müssen WEI-RW (SG 22) ablegen oder unterliegen dem Zustand für 1 Minute (Wiederholung am Zugende)." }
+      ],
+      "legendary_actions": [
+        { "name": "Aufspüren", "description": "Führt eine Suchen-Aktion aus." },
+        { "name": "Psychischer Schrei", "description": "Führt einen Angriff mit Psychischer Schrei aus." },
+        { "name": "Zauber wirken (kostet 2 Aktionen)", "description": "Wirkt einen verfügbaren Zauber." }
+      ],
+      "lair_actions": [
+        { "name": "Verstärkung", "description": "Ein Chrattac-Krieger taucht in 36 Metern auf und handelt bei Initiative 20." },
+        { "name": "Sie kommen aus dem Boden", "description": "Chrattac brechen aus dem Boden hervor: bis zu drei Kreaturen in 36 m müssen GES-RW (SG 15) ablegen oder sind festgesetzt (Befreiung SG 15)." },
+        { "name": "Giftiger Schleim", "description": "Giftschwall in 24 m: Kreaturen in 3 m müssen KON-RW (SG 15) ablegen oder erleiden 7 (2W6) Gift und sind für 1 Min vergiftet." }
+      ],
+      "regional_effects": "Gebiet im Umkreis von 5 km ist abgegrast; keine Nahrung vorhanden; Überlebenskunst-Proben für Wasser sind im Nachteil. Im Nest ist es dunkel (helles Licht wird zu dämmrig, dämmrig zu Dunkelheit). Nach 1 Stunde im Nest muss ein WEI-RW (SG 10) bestanden werden (SG steigt um 1 pro 10 min) oder die Kreatur wird bezaubert."
+    }
+  }
+}

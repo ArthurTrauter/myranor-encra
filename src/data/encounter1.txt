@@ -1,0 +1,138 @@
+Chrattac-Königin
+Jungkönigin/Königin
+Große/riesige Monstrosität
+Herausforderungsgrad 11 (7.200 EP) /
+18 (20.000 EP)
+Rüstungsklasse 19 (natürliche Rüstung)
+Trefferpunkte 189 (14W10+112) /
+277 (15W12+180)
+Bewegungsrate 9 m
+Alter STÄ GES KON INT WEI CHA
+Jungkönigin +6 +3 +8 +8 +5 +8
+Königin +7 +3 +12 +10 +7 +12
+Übungsbonus +4/+6
+Rettungswürfe INT+12/+14, WEI+9/+13,
+CHA +12/+18
+Wahrnehmung +9 (19)/+13 (23)
+Heimlichkeit +7 (17)/+9 (19)
+Sinne Dunkelsicht 36 m, Blindsicht 36 m
+Sprachen Chrattac, Telepathie
+Herrin des Schwarms: Innerhalb von 300 Metern
+/1 Kilometer sind alle Chrattac und von Chrattac
+bezauberte Verbündete im Vorteil bei ihren Angriffswürfen,
+sofern sich eine andere nicht kampfunfähige
+und von diesem Effekt betroffene Kreatur
+innerhalb von 1,5 Metern befindet.
+Für die Königin. Wenn eine Kreatur einen Angriff
+gegen die Chrattac-Königin durchführt, kann ein
+Chrattac innerhalb von 1,5 Metern um die Kreatur
+seine Reaktion verwenden, um den Angriff im
+Nachteil sein zu lassen. Wenn ein Fernkampfangriff
+die Königin treffen würde, kann sich ein Chrattac
+sofort bis zu 3 Meter bewegen (er löst dabei gegebenenfalls
+Gelegenheitsangriffe aus). Wenn der
+Chrattac sich nach der Bewegung zwischen der Königin
+und der angreifenden Kreatur befindet, trifft
+der Fernkampfangriff stattdessen den Chrattac.
+Zauberwirken: Alle Aktionen, die als Zauber markiert
+sind, gelten als mit dem 4./5. Grad gewirkte
+Zauber und können mit entsprechenden Effekten
+blockiert oder aufgehoben werden.
+Legendäre Resistenz (3/Tag): Wenn die Chrattac-
+Königin einen Rettungswurf nicht schafft, kann sie
+sich stattdessen dafür entscheiden, ihn zu schaffen.
+Aktionen
+Mehrfachangriff: Die Chrattac-Königin greift einmal
+mit ihrem Biss und zweimal mit ihren Krallen
+an und setzt ihren psychischen Schrei ein. Sie kann
+den Biss durch das Wirken eines verfügbaren Zaubers
+ersetzen.
+33
+Chrattac
+Biss: Nahkampfangriffswurf +10/+13, Reichweite.
+1,5 Meter. Treffer: 17 (2W10+6) / 18 (2W10+7)
+Stichschaden.
+Krallen: Nahkampfangriffswurf +10/+13, Reichweite
+3 Meter. Treffer: 13 (2W6+6) / 14 (2W6+7)
+Hiebschaden.
+Psychischer Schrei (Zauber): Fernkampf-Zauberangriff:
++10/+14, Reichweite 18/36 Meter. Treffer:
+16 (3W10) / 18 (4W8) psychischer Schaden.
+Einfluss (Zauber, Konzentration): Wähle festgesetzt,
+bezaubert oder verängstigt. 4/5 Personen
+innerhalb von 18 Metern müssen einen WEIRettungswurf
+(SG 19/22) ablegen. Bei einem
+Misserfolg unterliegt die Person für 1 Minute
+dem gewählten Zustand gegenüber der Chattac-
+Königin. Zum Ende jedes seiner Züge kann das
+Ziel den Rettungswurf wiederholen und den Effekt
+auf sich bei einem Erfolg beenden.
+Legendäre Aktionen
+Die Chrattac-Königin kann 3 legendäre Aktionen
+durchführen, wobei sie aus den unten beschriebenen
+auswählt. Sie kann nur eine legendäre Option
+auf einmal verwenden und nur am Ende eines Zugs
+eines anderen Charakters. Die Chrattac-Königin
+erhält verbrauchte legendäre Aktionen zu Beginn
+ihres Zuges zurück.
+Aufspüren: Die Chrattac-Königin führt die Suchen-
+Aktion aus.
+Psychischer Schrei: Die Chrattac-Königin führt
+einen Angriff mit Psychischer Schrei aus.
+Zauber wirken (kostet 2 Aktionen): Die Chrattac-
+Königin wirkt einen verfügbaren Zauber.
+Hortaktionen
+Wenn sich die Chrattac-Königin in ihrem Nest
+befindet, führt sie bei Initiative 20 (sie verliert alle
+Initiative-Gleichstände) eine der folgenden Hortaktionen
+aus. Sie kann denselben Effekt nicht
+zweimal hintereinander nutzen:
+Verstärkung: Ein Chrattac der Kriegskaste taucht
+an einem Punkt innerhalb von 36 Metern um
+die Chrattac-Königin durch einen versteckten
+Zugang auf. Er handelt beim Initiativewert der
+Königin.
+Sie kommen aus dem Boden: Chrattac brechen
+aus einer tieferen Ebene durch Boden und
+greifen von unten nach bis zu drei Kreaturen
+innerhalb von 36 Metern um die Königin. Jedes
+Ziel muss einen GES-Rettungswurf (SG15) bestehen,
+oder ist festgesetzt (SG zum Befreien 15).
+Giftiger Schleim: Aus der Decke oder den Wänden
+innerhalb von 24 Metern um die Königin bricht
+ein Schwall einer giftigen Substanz. Jede Kreatur
+innerhalb von 3 Metern vom Punkt muss einen
+KON-Rettungswurf (SG15) bestehen oder erleidet
+7 (2W6) Giftschaden und ist für 1 Minute
+vergiftet. Zum Ende jedes seiner Züge kann die
+Kreatur den Rettungswurf wiederholen und bei
+einem Erfolg den Effekt auf sich beenden.
+Regionale Effekte
+Das Gebiet um ein Chrattac-Nest ist völlig abgegrast
+und bar allen Lebens. Innerhalb von 5 Kilometern
+findet man keine Nahrung und WEI
+(Überlebenskunst)-Würfe zum Finden von Wasser
+sind im Nachteil.
+Innerhalb des Nestes ist es dunkel und die Luft
+ist von Flocken der Baumasse erfüllt. Helles Licht
+wirkt wie dämmriges Licht, dämmriges Licht als
+Dunkelheit.
+Jede Kreatur, die sich eine Stunde oder länger im
+Nest oder innerhalb von 500 Metern davon aufhält,
+wird von den Chrattac-Pheromonen betroffen und
+beginnt, die Stimme der Königin in ihrem Kopf zu
+hören. Sie muss einen WEI-Rettungswurf (SG10)
+ablegen. Bei einem Misserfolg wird sie von der
+Königin bezaubert und muss sich auf schnellstem
+Wege zu ihr begeben. Chrattac bemerken diesen
+Einfluss der Königin und lassen eine solche Kreatur
+passieren. Nach jeweils 10 Minuten muss der
+Wurf wiederholt werden, wobei der SG jeweils um
+1 steigt. Bei einem Erfolg ist die Kreatur für 10
+Minuten frei vom Einfluss der Königin, bei einem
+Misserfolg ist sie wie beschrieben bezaubert. Wenn
+eine Kreatur den Einflussbereich verlässt, ist sie
+nicht mehr bezaubert. Wenn sie sich aber innerhalb
+einer Stunde wieder in den Bereich begibt, muss
+sie sofort erneut einen Rettungswurf ablegen. Der
+SG sinkt nach einer langen Rast wieder auf 10.

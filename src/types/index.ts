@@ -31,7 +31,7 @@ export interface Attack {
 
 export interface EnemyNPC extends BaseElement {
   type: 'enemy';
-  level: string; // e.g., "Leicht", "Mittel", "Schwer", "Boss"
+  level: string; // e.g., "Leicht", "Mittel", "Schwer", "Boss" / "HG 1"
   hp_max: number; // Lebenspunkte
   hp_current: number;
   vp: number; // Rüstungsschutz / Verteidigungspunkte
@@ -40,7 +40,31 @@ export interface EnemyNPC extends BaseElement {
   skills: Skill[];
   attacks: Attack[];
   abilities: string[]; // Special rules / actions
+  
+  // Extended fields for rich bestiary entries / Myranor translation
+  rk?: number; // Rüstungsklasse (RK)
+  bw?: string; // Bewegungsrate (BW)
+  ub?: number; // Übungsbonus
+  senses?: string; // Sinne
+  languages?: string; // Sprachen
+  tp_formula?: string; // Trefferpunkte-Formel (z.B. 5W8+15)
+  traits?: { name: string; description: string }[]; // Eigenschaften
+  actions?: any[]; // Aktionen
+  bonus_actions?: any[]; // Bonusaktionen
+  saves?: string; // Rettungswürfe (RW)
+  immunities?: string; // Immunitäten
+  reactions?: any[]; // Reaktionen
+  legendary_actions?: any[]; // Legendäre Aktionen
+  lair_actions?: any[]; // Hortaktionen
+  regional_effects?: string; // Regionale Effekte
+  
+  // Variant system
+  template_id?: string;
+  active_variant?: string;
+  variants_keys?: string[];
+  is_multi_variant?: boolean;
 }
+
 
 export interface SocialNPC extends BaseElement {
   type: 'social';
@@ -77,8 +101,13 @@ export type EncounterElement = EnemyNPC | SocialNPC | Trap | Hazard;
 
 export interface EncounterContextType {
   elements: EncounterElement[];
+  templates: EncounterElement[];
   loadingElements: boolean;
+  loadingTemplates: boolean;
   addElement: (element: Omit<EncounterElement, 'id' | 'created_at' | 'updated_at'>) => Promise<EncounterElement | null>;
   updateElement: (id: string, updates: Partial<EncounterElement>) => Promise<void>;
   deleteElement: (id: string) => Promise<void>;
+  addTemplate: (template: Omit<EncounterElement, 'id' | 'created_at' | 'updated_at'>) => Promise<EncounterElement | null>;
+  deleteTemplate: (id: string) => Promise<void>;
+  updateTemplate: (id: string, updates: Partial<EncounterElement>) => Promise<void>;
 }

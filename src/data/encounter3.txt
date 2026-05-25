@@ -1,0 +1,88 @@
+Verkünder
+Nestling/Jung/Ausgewachsen
+Mittelgroßer/großer/riesiger Drache
+Herausforderungsgrad 1 (200 EP) / 6 (2.300 EP) /
+13 (10.000 EP)
+Rüstungsklasse 16/17/18 (natürliche Rüstung)
+Trefferpunkte 35 (3W8+9) / 127 (11W10+66) /
+240 (14W12+150)
+Bewegungsrate 9 m, Fliegen 18 m /
+12 m, Fliegen 24 m / 12 m, Fliegen 24 m
+Alter STÄ GES KON INT WEI CHA
+Nestling +2 +3 +3 -3 +2 +2
+Jung +4 +4 +6 +0 +4 +4
+Ausgewachsen +5 +3 +10 +1 +7 +6
+Übungsbonus +2/+3/+4
+Wahrnehmung+4/+7/+11 (19/22/26)
+Heimlichkeit +5/+7/+7 (15/17/17)
+Immunitäten Schall
+Sinne Dunkelsicht 36 m
+Sprachen Drachisch, beliebige weitere Sprachen
+Zwei Köpfe: Der Verkünder ist im Vorteil bei WEI
+(Wahrnehmung)-Würfen (+5 bei passiver Wahrnehmung
+ist bereits eingerechnet) und bei Rettungswürfen
+gegen die Zustände betäubt, bewusstlos, bezaubert,
+blind, taub und verängstigt.
+Legendäre Resistenz (Ausgewachsen, 3/Tag):
+Wenn der Verkünder einen Rettungswurf nicht
+schafft, kann er sich stattdessen dafür entscheiden,
+ihn zu schaffen.
+Aktionen
+Mehrfachangriff (Nestling): Der Verkünder-Nestling
+greift zweimal mit seinem Biss an.
+Mehrfachangriff (Jung, Ausgewachsen): Der Verkünder
+greift zweimal mit seinem Biss und einmal
+mit seinen Krallen an. Ein ausgewachsener Verkünder
+kann außerdem seine Furchterregende Präsenz
+verwenden.
+Biss: Nahkampfangriffswurf +4/+7/+11, Reichweite
+1,5/3/3 Meter. Treffer: 7 (1W10+2) / 15 (2W10+4) /
+17 (2W10+6) Stichschaden.
+Krallen: Nahkampfangriffswurf +4/+7/+11, Reichweite
+1,5 Meter. Treffer: 5 (1W6+2) / 11 (2W6+4) /
+13 (2W6+6) Hiebschaden.
+Furchterregende Präsenz (Ausgewachsen): WEIRettungswurf:
+SG 16, alle Kreaturen nach Wahl des
+Verkünders innerhalb von 36 Metern um ihn, die
+sich seiner bewusst sind. Misserfolg: Das Ziel ist für 1
+Minute verängstigt. Das Ziel kann den Rettungswurf
+am Ende jedes seiner Züge wiederholen. Erfolg oder
+Ende des Effekts: Die Kreatur ist für die nächsten
+24 Stunden gegen die Furchterregende Präsenz des
+Verkünders immun.
+Schallentladung (Aufladung 5-6): KON-Rettungswurf:
+SG 12/15/19, alle Kreaturen in einem Kegel mit
+6 Metern Länge. Misslungen: 18 (4W8) / 31 (7W8) /
+44 (8W10) Schallschaden und die Kreatur ist bis
+zum nächsten Zug des Verkünders taub. Erfolg: Halber
+Schaden.
+Geräuschillusion: Der Verkünder erzeugt Geräusche,
+die von einem Punkt innerhalb von 9/18/27 Metern
+ertönen. Das können einfache Geräusche (wie das
+Rascheln von Blättern) sein, aber auch Tier- oder sogar
+Menschenstimmen. Die Geräusche können keine
+Schmerzen oder Schaden verursachen. Eine Kreatur
+kann mit einem erfolgreichen INT (Nachforschung)-
+Wurf (SG 11/14/18) auf die Feinheiten der Geräusche
+achten und die Illusion bei einem Erfolg entlarven.
+Bonusaktionen
+Verwirrende Töne: Der Verkünder erzeugt ablenkende
+Töne oder Stimmen aus verschiedenen Richtungen.
+Eine Kreatur innerhalb von 9/18/27 Metern ist bis zu
+ihrem nächsten Zug bei allen Angriffs- und Attributswürfen
+im Nachteil. Wenn die Kreatur taub ist, ist sie
+gegen die verwirrenden Töne des Verkünders immun.
+Legendäre Aktionen (Ausgewachsen)
+Der Verkünder kann 3 legendäre Aktionen durchführen,
+wobei er aus den unten beschriebenen auswählt.
+Er kann nur eine legendäre Option auf einmal
+verwenden und nur am Ende eines Zugs eines anderen
+Charakters. Der Verkünder erhält verbrauchte
+legendäre Aktionen zu Beginn seines Zuges zurück.
+Aufspüren: Der Verkünder führt die Suchen-Aktion
+aus.
+Schwanzangriff: Nahkampfangriffswurf: +11, Reichweite
+4,5 m. Treffer: 15 (2W8+6) Wuchtschaden.
+Geräuschmanipulation: Der Verkünder setzt seine
+Aktion Geräuschillusion oder seine Bonusaktion
+Verwirrende Töne ein.
