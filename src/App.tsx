@@ -21,6 +21,18 @@ export const App: React.FC = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const [activeTab, setActiveTab] = useState<EncounterElementType | 'all'>('all');
   const [revealedSecrets, setRevealedSecrets] = useState<Record<string, boolean>>({});
+  
+  // Settings & Font-Size States
+  const [showSettingsModal, setShowSettingsModal] = useState(false);
+  const [fontSize, setFontSize] = useState(() => {
+    return parseInt(localStorage.getItem('rpg-font-size') || '100');
+  });
+
+  const handleFontSizeChange = (val: number) => {
+    setFontSize(val);
+    document.documentElement.style.fontSize = `${val}%`;
+    localStorage.setItem('rpg-font-size', val.toString());
+  };
 
   // Tab within the "+ Element" drawer
   const [creatorTab, setCreatorTab] = useState<'template' | 'parser' | 'manual'>('template');
@@ -1110,8 +1122,19 @@ export const App: React.FC = () => {
             <p className="text-sm font-semibold text-slate-200">{user?.email}</p>
           </div>
           <button
+            onClick={() => setShowSettingsModal(true)}
+            className="p-2.5 text-slate-400 hover:text-white border border-slate-800 hover:border-slate-600 rounded-xl bg-slate-900/50 hover:bg-slate-800/50 transition-all cursor-pointer flex items-center justify-center"
+            title="Einstellungen"
+            id="btn-settings"
+          >
+            <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
+              <path strokeLinecap="round" strokeLinejoin="round" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" />
+              <path strokeLinecap="round" strokeLinejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+            </svg>
+          </button>
+          <button
             onClick={() => signOut()}
-            className="px-4 py-2 text-xs font-semibold uppercase tracking-wider text-slate-400 hover:text-white border border-slate-800 hover:border-slate-600 rounded-xl bg-slate-900/50 hover:bg-slate-800/50 transition-all"
+            className="px-4 py-2 text-xs font-semibold uppercase tracking-wider text-slate-400 hover:text-white border border-slate-800 hover:border-slate-600 rounded-xl bg-slate-900/50 hover:bg-slate-800/50 transition-all cursor-pointer"
             id="btn-sign-out"
           >
             Ausloggen
@@ -2742,6 +2765,78 @@ export const App: React.FC = () => {
       <footer className="border-t border-slate-900 bg-slate-950 py-6 text-center text-xs text-slate-650 font-semibold tracking-wider uppercase mt-12">
         <span>© 2026 Myranor Encra RPG Toolkit — Pair Programmed with Antigravity</span>
       </footer>
+
+      {/* SETTINGS MODAL */}
+      {showSettingsModal && (
+        <div className="fixed inset-0 bg-slate-950/75 backdrop-blur-xs z-50 flex items-center justify-center p-4 animate-fade-in">
+          <div className="relative w-full max-w-sm bg-[#131b2e]/95 border border-slate-800 rounded-2xl p-6 shadow-2xl space-y-5 animate-scale-in">
+            {/* Top gold highlight bar */}
+            <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-amber-500 via-yellow-500 to-amber-700 rounded-t-2xl" />
+
+            <div className="flex items-center justify-between">
+              <h3 className="text-base font-bold text-transparent bg-clip-text bg-gradient-to-r from-amber-200 to-amber-400 font-display uppercase tracking-wider flex items-center gap-2">
+                <svg className="w-4 h-4 text-amber-400 animate-spin-slow" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" />
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                </svg>
+                Visuelle Einstellungen
+              </h3>
+              <button
+                type="button"
+                onClick={() => setShowSettingsModal(false)}
+                className="text-slate-400 hover:text-slate-200 text-sm font-semibold transition-colors cursor-pointer"
+                title="Schließen"
+              >
+                ✕
+              </button>
+            </div>
+
+            <div className="space-y-4">
+              <div className="space-y-2">
+                <div className="flex justify-between items-center text-xs font-semibold text-slate-350">
+                  <span>Schriftgröße</span>
+                  <span className="text-amber-400 font-bold">{fontSize}%</span>
+                </div>
+                <input
+                  type="range"
+                  min="80"
+                  max="150"
+                  step="5"
+                  value={fontSize}
+                  onChange={(e) => handleFontSizeChange(parseInt(e.target.value))}
+                  className="w-full h-1.5 bg-slate-800 rounded-lg appearance-none cursor-pointer accent-amber-500"
+                />
+              </div>
+
+              {/* Preview Box */}
+              <div className="p-3 bg-slate-900/60 rounded-xl border border-slate-800/85">
+                <p className="text-[9px] text-slate-500 font-bold uppercase tracking-wider mb-1">Vorschau</p>
+                <p className="text-xs text-slate-300 leading-relaxed">
+                  Wie groß soll die Schrift im Bestiarium sein? Regler verschieben zum Ausprobieren.
+                </p>
+              </div>
+
+              {/* Action Buttons */}
+              <div className="flex gap-2 pt-2">
+                <button
+                  type="button"
+                  onClick={() => handleFontSizeChange(100)}
+                  className="flex-1 px-4 py-2 text-[10px] font-extrabold uppercase tracking-wider text-slate-400 hover:text-white border border-slate-805 hover:border-slate-600 rounded-xl bg-slate-900/50 hover:bg-slate-800/50 transition-all cursor-pointer"
+                >
+                  Standard (100%)
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setShowSettingsModal(false)}
+                  className="px-5 py-2 text-[10px] font-extrabold uppercase tracking-wider text-slate-950 bg-amber-500 hover:bg-amber-400 rounded-xl transition-all cursor-pointer shadow-lg shadow-amber-900/10"
+                >
+                  Fertig
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
