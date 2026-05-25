@@ -41,6 +41,8 @@ export const App: React.FC = () => {
   const [editingTemplateId, setEditingTemplateId] = useState<string | null>(null);
   const [editingTemplateVariant, setEditingTemplateVariant] = useState<string | null>(null);
   const [newVariantNameInput, setNewVariantNameInput] = useState('');
+  const [tempCopyTemplateId, setTempCopyTemplateId] = useState('');
+  const [tempCopyVariantName, setTempCopyVariantName] = useState('');
 
   // Quick-Add Form States
   const [showAddForm, setShowAddForm] = useState(false);
@@ -403,6 +405,89 @@ export const App: React.FC = () => {
       setNewLairActions(tpl.lair_actions || []);
       setNewRegionalEffects(tpl.regional_effects || '');
     }
+  };
+
+  const handleCopyTemplateStats = (templateId: string, variantName: string) => {
+    const tpl = templates.find(t => t.id === templateId) as any;
+    if (!tpl) return;
+
+    setNewName(tpl.name + " (Kopie)");
+    setNewDesc(tpl.description || '');
+    setNewNotes(tpl.notes || '');
+    setNewType(tpl.type || 'enemy');
+    setParserSuccess(`Werte aus Vorlage "${tpl.name}" erfolgreich kopiert!`);
+    setParserError('');
+
+    if (tpl.is_multi_variant && tpl.variants) {
+      const activeVar = variantName || tpl.default_variant || Object.keys(tpl.variants)[0];
+      const stats = tpl.variants[activeVar];
+      if (stats) {
+        setNewEnemyLevel(stats.level || 'HG 1');
+        setNewEnemyHP(stats.hp_max || stats.tp_max || 30);
+        setNewEnemyVP(stats.rk || stats.vp || 10);
+        setNewEnemyIni(stats.ini || 10);
+        setNewEnemyBW(stats.bw || '9 m');
+        setNewEnemyUB(stats.ub || 2);
+        setNewEnemySaves(stats.saves || '');
+        setNewEnemyImmunities(stats.immunities || '');
+        setNewEnemySenses(stats.senses || '');
+        setNewEnemyLanguages(stats.languages || '');
+        
+        setNewAttrSTA(stats.attributes?.find((a: any) => a.name === 'STÄ')?.value ?? 0);
+        setNewAttrGES(stats.attributes?.find((a: any) => a.name === 'GES')?.value ?? 0);
+        setNewAttrKON(stats.attributes?.find((a: any) => a.name === 'KON')?.value ?? 0);
+        setNewAttrINT(stats.attributes?.find((a: any) => a.name === 'INT')?.value ?? 0);
+        setNewAttrWEI(stats.attributes?.find((a: any) => a.name === 'WEI')?.value ?? 0);
+        setNewAttrCHA(stats.attributes?.find((a: any) => a.name === 'CHA')?.value ?? 0);
+
+        setNewTraits(stats.traits || []);
+        setNewActions(stats.actions || []);
+        setNewBonusActions(stats.bonus_actions || []);
+        setNewReactions(stats.reactions || []);
+        setNewLegendaryActions(stats.legendary_actions || []);
+        setNewLairActions(stats.lair_actions || []);
+        setNewRegionalEffects(stats.regional_effects || '');
+
+        setParsedMultiVariantData({
+          ...tpl,
+          id: undefined,
+          name: tpl.name + " (Kopie)",
+          user_id: undefined
+        });
+        setEditingTemplateVariant(activeVar);
+      }
+    } else {
+      setParsedMultiVariantData(null);
+      setEditingTemplateVariant(null);
+      setNewEnemyLevel(tpl.level || 'HG 1');
+      setNewEnemyHP(tpl.hp_max || 30);
+      setNewEnemyVP(tpl.rk || tpl.vp || 10);
+      setNewEnemyIni(tpl.ini || 10);
+      setNewEnemyBW(tpl.bw || '9 m');
+      setNewEnemyUB(tpl.ub || 2);
+      setNewEnemySaves(tpl.saves || '');
+      setNewEnemyImmunities(tpl.immunities || '');
+      setNewEnemySenses(tpl.senses || '');
+      setNewEnemyLanguages(tpl.languages || '');
+      
+      setNewAttrSTA(tpl.attributes?.find((a: any) => a.name === 'STÄ')?.value ?? 0);
+      setNewAttrGES(tpl.attributes?.find((a: any) => a.name === 'GES')?.value ?? 0);
+      setNewAttrKON(tpl.attributes?.find((a: any) => a.name === 'KON')?.value ?? 0);
+      setNewAttrINT(tpl.attributes?.find((a: any) => a.name === 'INT')?.value ?? 0);
+      setNewAttrWEI(tpl.attributes?.find((a: any) => a.name === 'WEI')?.value ?? 0);
+      setNewAttrCHA(tpl.attributes?.find((a: any) => a.name === 'CHA')?.value ?? 0);
+
+      setNewTraits(tpl.traits || []);
+      setNewActions(tpl.actions || []);
+      setNewBonusActions(tpl.bonus_actions || []);
+      setNewReactions(tpl.reactions || []);
+      setNewLegendaryActions(tpl.legendary_actions || []);
+      setNewLairActions(tpl.lair_actions || []);
+      setNewRegionalEffects(tpl.regional_effects || '');
+    }
+
+    setTempCopyTemplateId('');
+    setTempCopyVariantName('');
   };
 
   const handleSwitchEditVariant = (newVarName: string) => {
@@ -1292,6 +1377,200 @@ export const App: React.FC = () => {
               {/* TAB 3: UPGRADED MANUAL CREATION FORM */}
               {creatorTab === 'manual' && (
                 <form onSubmit={handleCreate} className="space-y-5">
+                  {editingTemplateId ? (
+                    <div className="p-3.5 rounded-xl bg-amber-500/10 border border-amber-500/20 text-xs text-amber-400 flex items-center justify-between flex-wrap gap-2 animate-fade-in">
+                      <div>
+                        Du bearbeitest gerade die Vorlage: <strong className="text-slate-100">{newName}</strong> (ID: {editingTemplateId}).
+                      </div>
+                      <button
+                        type="button"
+                        onClick={() => {
+                          setEditingTemplateId(null);
+                          setEditingTemplateVariant(null);
+                          setParsedMultiVariantData(null);
+                          // Reset Form & Form states
+                          setNewName('');
+                          setNewDesc('');
+                          setNewNotes('');
+                          setNewEnemyHP(30);
+                          setNewEnemyVP(10);
+                          setNewEnemyIni(10);
+                          setNewEnemyLevel('HG 1');
+                          setNewEnemyBW('9 m');
+                          setNewEnemyUB(2);
+                          setNewEnemySaves('');
+                          setNewEnemyImmunities('');
+                          setNewEnemySenses('Dunkelsicht 36 m');
+                          setNewEnemyLanguages('Gemeinsprache');
+                          
+                          setNewAttrSTA(0);
+                          setNewAttrGES(0);
+                          setNewAttrKON(0);
+                          setNewAttrINT(0);
+                          setNewAttrWEI(0);
+                          setNewAttrCHA(0);
+
+                          setNewTraits([]);
+                          setNewActions([]);
+                          setNewBonusActions([]);
+                          setNewReactions([]);
+                          setNewLegendaryActions([]);
+                          setNewLairActions([]);
+                          setNewRegionalEffects('');
+
+                          setNewSocialRole('');
+                          setNewSocialFaction('');
+                          setNewSocialMotivation('');
+                          setNewSocialSecret('');
+                          setNewTrapTrigger('');
+                          setNewTrapDamage('');
+                          setNewHazardType('');
+                          setNewHazardEffects('');
+                        }}
+                        className="px-2.5 py-1 rounded bg-amber-500 text-slate-950 font-bold hover:bg-amber-400 transition-all cursor-pointer text-[10px] uppercase tracking-wider"
+                      >
+                        Bearbeitung beenden (Leeres Formular)
+                      </button>
+                    </div>
+                  ) : (
+                    <div className="p-3.5 rounded-xl bg-slate-900/60 border border-slate-800/80 space-y-3 animate-fade-in">
+                      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+                        <div className="space-y-0.5">
+                          <h4 className="text-xs font-bold text-amber-500 uppercase tracking-widest">
+                            Vorlage kopieren / Formular leeren
+                          </h4>
+                          <p className="text-[10px] text-slate-400">
+                            Kopiere Werte aus einer Vorlage als Basis für ein neues Element oder setze das Formular zurück.
+                          </p>
+                        </div>
+                        <button
+                          type="button"
+                          onClick={() => {
+                            setNewName('');
+                            setNewDesc('');
+                            setNewNotes('');
+                            setNewEnemyHP(30);
+                            setNewEnemyVP(10);
+                            setNewEnemyIni(10);
+                            setNewEnemyLevel('HG 1');
+                            setNewEnemyBW('9 m');
+                            setNewEnemyUB(2);
+                            setNewEnemySaves('');
+                            setNewEnemyImmunities('');
+                            setNewEnemySenses('Dunkelsicht 36 m');
+                            setNewEnemyLanguages('Gemeinsprache');
+                            
+                            setNewAttrSTA(0);
+                            setNewAttrGES(0);
+                            setNewAttrKON(0);
+                            setNewAttrINT(0);
+                            setNewAttrWEI(0);
+                            setNewAttrCHA(0);
+
+                            setNewTraits([]);
+                            setNewActions([]);
+                            setNewBonusActions([]);
+                            setNewReactions([]);
+                            setNewLegendaryActions([]);
+                            setNewLairActions([]);
+                            setNewRegionalEffects('');
+
+                            setNewSocialRole('');
+                            setNewSocialFaction('');
+                            setNewSocialMotivation('');
+                            setNewSocialSecret('');
+                            setNewTrapTrigger('');
+                            setNewTrapDamage('');
+                            setNewHazardType('');
+                            setNewHazardEffects('');
+                            
+                            setParsedMultiVariantData(null);
+                            setEditingTemplateVariant(null);
+                          }}
+                          className="px-2.5 py-1.5 rounded border border-slate-700 hover:bg-slate-800 text-slate-350 font-bold transition-all cursor-pointer text-[10px] uppercase tracking-wider shrink-0"
+                        >
+                          Formular leeren
+                        </button>
+                      </div>
+
+                      <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 items-end pt-1 border-t border-slate-900">
+                        <div>
+                          <label className="block text-[9px] font-extrabold uppercase tracking-wider text-slate-400 mb-1">Vorlage wählen</label>
+                          <select
+                            value={tempCopyTemplateId}
+                            onChange={e => {
+                              setTempCopyTemplateId(e.target.value);
+                              const t = templates.find(tmp => tmp.id === e.target.value) as any;
+                              if (t && t.is_multi_variant) {
+                                setTempCopyVariantName(t.default_variant || Object.keys(t.variants)[0]);
+                              } else {
+                                setTempCopyVariantName('');
+                              }
+                            }}
+                            className="w-full px-3 py-1.5 rounded bg-slate-900 border border-slate-800 text-slate-100 focus:outline-none focus:border-amber-500 text-xs font-semibold"
+                          >
+                            <option value="">-- Keine Vorlage --</option>
+                            {(() => {
+                              const official = templates.filter(t => !t.user_id);
+                              const custom = templates.filter(t => t.user_id);
+                              return (
+                                <>
+                                  {official.length > 0 && (
+                                    <optgroup label="Offizielle Monster">
+                                      {official.map((t: any) => (
+                                        <option key={t.id} value={t.id}>{t.name} (HG {t.level || t.variants?.[Object.keys(t.variants)[0]]?.level || '?'})</option>
+                                      ))}
+                                    </optgroup>
+                                  )}
+                                  {custom.length > 0 && (
+                                    <optgroup label="Eigene Vorlagen">
+                                      {custom.map((t: any) => (
+                                        <option key={t.id} value={t.id}>{t.name} (Custom)</option>
+                                      ))}
+                                    </optgroup>
+                                  )}
+                                </>
+                              );
+                            })()}
+                          </select>
+                        </div>
+
+                        {tempCopyTemplateId && (() => {
+                          const t = templates.find(tmp => tmp.id === tempCopyTemplateId) as any;
+                          return t && t.is_multi_variant ? (
+                            <div>
+                              <label className="block text-[9px] font-extrabold uppercase tracking-wider text-slate-400 mb-1">Variante wählen</label>
+                              <select
+                                value={tempCopyVariantName}
+                                onChange={e => setTempCopyVariantName(e.target.value)}
+                                className="w-full px-3 py-1.5 rounded bg-slate-900 border border-slate-800 text-slate-100 focus:outline-none focus:border-amber-500 text-xs font-semibold"
+                              >
+                                {Object.keys(t.variants).map(v => (
+                                  <option key={v} value={v}>{v} ({t.variants[v].level})</option>
+                                ))}
+                              </select>
+                            </div>
+                          ) : null;
+                        })()}
+
+                        <div className={
+                          (() => {
+                            const t = templates.find(tmp => tmp.id === tempCopyTemplateId) as any;
+                            return t && t.is_multi_variant ? "col-span-1" : "col-span-1 sm:col-span-2";
+                          })()
+                        }>
+                          <button
+                            type="button"
+                            disabled={!tempCopyTemplateId}
+                            onClick={() => handleCopyTemplateStats(tempCopyTemplateId, tempCopyVariantName)}
+                            className="w-full px-3 py-2 rounded bg-amber-500 hover:bg-amber-400 disabled:bg-slate-900 disabled:text-slate-650 disabled:border-slate-800 disabled:border text-slate-950 font-bold text-xs uppercase tracking-wider transition-all cursor-pointer disabled:cursor-not-allowed"
+                          >
+                            Vorlage reinkopieren
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+                  )}
                   {parserSuccess && (
                     <div className="p-3.5 rounded-xl bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 text-xs flex justify-between items-center animate-fade-in">
                       <span className="font-semibold">{parserSuccess}</span>
