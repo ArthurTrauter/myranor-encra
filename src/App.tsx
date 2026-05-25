@@ -14,7 +14,8 @@ export const App: React.FC = () => {
     updateElement, 
     deleteElement,
     addTemplate,
-    deleteTemplate
+    deleteTemplate,
+    updateTemplate
   } = useEncounters();
   
   const [searchTerm, setSearchTerm] = useState('');
@@ -329,6 +330,7 @@ export const App: React.FC = () => {
   };
 
   const handleEditTemplate = (tpl: any) => {
+    setShowAddForm(true);
     setEditingTemplateId(tpl.id);
     setNewName(tpl.name);
     setNewDesc(tpl.description || '');
@@ -594,108 +596,67 @@ export const App: React.FC = () => {
     e.preventDefault();
     if (!newName.trim()) return;
 
-    let payload: any = {};
+    if (editingTemplateId) {
+      // Editing template flow
+      let updates: any = {};
 
-    if (newType === 'enemy') {
-      const attributes = [
-        { name: "STÄ", value: newAttrSTA }, { name: "GES", value: newAttrGES }, { name: "KON", value: newAttrKON },
-        { name: "INT", value: newAttrINT }, { name: "WEI", value: newAttrWEI }, { name: "CHA", value: newAttrCHA }
-      ];
+      if (newType === 'enemy') {
+        const attributes = [
+          { name: "STÄ", value: newAttrSTA }, { name: "GES", value: newAttrGES }, { name: "KON", value: newAttrKON },
+          { name: "INT", value: newAttrINT }, { name: "WEI", value: newAttrWEI }, { name: "CHA", value: newAttrCHA }
+        ];
 
-      // If we parsed a multi-variant template and checked "saveToTemplates"
-      if (parsedMultiVariantData && parsedMultiVariantData.is_multi_variant) {
-        const defaultVar = parsedMultiVariantData.default_variant || parsedMultiVariantData.variants_keys[0];
-        const activeVariantData = parsedMultiVariantData.variants[defaultVar];
+        if (parsedMultiVariantData && parsedMultiVariantData.is_multi_variant) {
+          // Sync current form fields to active variant before saving template
+          let finalVariants = { ...parsedMultiVariantData.variants };
+          if (editingTemplateVariant) {
+            const activeVariantData = {
+              level: newEnemyLevel,
+              hp_max: newEnemyHP,
+              hp_current: newEnemyHP,
+              rk: newEnemyVP,
+              vp: newEnemyVP,
+              ini: newEnemyIni,
+              bw: newEnemyBW,
+              ub: newEnemyUB,
+              saves: newEnemySaves || undefined,
+              immunities: newEnemyImmunities || undefined,
+              senses: newEnemySenses || undefined,
+              languages: newEnemyLanguages || undefined,
+              attributes,
+              skills: [
+                { name: 'Wahrnehmung', value: newAttrWEI, passive: 10 + newAttrWEI },
+                { name: 'Heimlichkeit', value: newAttrGES, passive: 10 + newAttrGES }
+              ],
+              attacks: newActions,
+              traits: newTraits,
+              actions: newActions,
+              bonus_actions: newBonusActions,
+              reactions: newReactions,
+              legendary_actions: newLegendaryActions,
+              lair_actions: newLairActions,
+              regional_effects: newRegionalEffects || undefined
+            };
+            finalVariants[editingTemplateVariant] = activeVariantData;
+          }
 
-        payload = {
-          name: `${parsedMultiVariantData.name} (${defaultVar})`,
-          type: 'enemy',
-          description: parsedMultiVariantData.description,
-          notes: newNotes,
-          level: activeVariantData.level,
-          hp_max: activeVariantData.hp_max,
-          hp_current: activeVariantData.hp_max,
-          vp: activeVariantData.rk,
-          rk: activeVariantData.rk,
-          tp_formula: activeVariantData.tp_formula,
-          bw: activeVariantData.bw,
-          ub: activeVariantData.ub,
-          senses: activeVariantData.senses,
-          languages: activeVariantData.languages,
-          ini: activeVariantData.ini,
-          saves: activeVariantData.saves,
-          immunities: activeVariantData.immunities,
-          attributes: activeVariantData.attributes,
-          skills: activeVariantData.skills,
-          attacks: activeVariantData.attacks || [],
-          abilities: [],
-          traits: activeVariantData.traits,
-          actions: activeVariantData.actions,
-          bonus_actions: activeVariantData.bonus_actions,
-          reactions: activeVariantData.reactions,
-          legendary_actions: activeVariantData.legendary_actions,
-          lair_actions: activeVariantData.lair_actions,
-          regional_effects: activeVariantData.regional_effects,
-          template_id: parsedMultiVariantData.id || `custom-${parsedMultiVariantData.name.toLowerCase().replace(/\s+/g, '-')}`,
-          active_variant: defaultVar,
-          variants_keys: parsedMultiVariantData.variants_keys,
-          is_multi_variant: true
-        };
-
-        if (saveToTemplates) {
-          const tplPayload = {
-            id: parsedMultiVariantData.id || `custom-${parsedMultiVariantData.name.toLowerCase().replace(/\s+/g, '-')}`,
-            name: parsedMultiVariantData.name,
+          const defaultVar = editingTemplateVariant || Object.keys(finalVariants)[0];
+          updates = {
+            name: newName,
             type: 'enemy',
-            description: parsedMultiVariantData.description,
+            description: newDesc,
             notes: newNotes,
             is_multi_variant: true,
             default_variant: defaultVar,
-            variants: parsedMultiVariantData.variants,
+            variants: finalVariants,
             attributes: [],
             skills: [],
             attacks: [],
             abilities: []
           };
-          await addTemplate(tplPayload as any);
-        }
-      } else {
-        // Single variant enemy payload
-        payload = {
-          name: newName,
-          type: 'enemy',
-          description: newDesc,
-          notes: newNotes,
-          level: newEnemyLevel,
-          hp_max: newEnemyHP,
-          hp_current: newEnemyHP,
-          vp: newEnemyVP,
-          rk: newEnemyVP,
-          ini: newEnemyIni,
-          bw: newEnemyBW,
-          ub: newEnemyUB,
-          saves: newEnemySaves || undefined,
-          immunities: newEnemyImmunities || undefined,
-          senses: newEnemySenses || undefined,
-          languages: newEnemyLanguages || undefined,
-          attributes,
-          skills: [
-            { name: 'Wahrnehmung', value: newAttrWEI, passive: 10 + newAttrWEI },
-            { name: 'Heimlichkeit', value: newAttrGES, passive: 10 + newAttrGES }
-          ],
-          attacks: newActions,
-          abilities: [],
-          traits: newTraits,
-          actions: newActions,
-          bonus_actions: newBonusActions,
-          reactions: newReactions,
-          legendary_actions: newLegendaryActions,
-          lair_actions: newLairActions,
-          regional_effects: newRegionalEffects || undefined
-        };
-
-        if (saveToTemplates) {
-          const tplPayload = {
+        } else {
+          // Single variant enemy template
+          updates = {
             name: newName,
             type: 'enemy',
             description: newDesc,
@@ -712,7 +673,10 @@ export const App: React.FC = () => {
             senses: newEnemySenses || undefined,
             languages: newEnemyLanguages || undefined,
             attributes,
-            skills: payload.skills,
+            skills: [
+              { name: 'Wahrnehmung', value: newAttrWEI, passive: 10 + newAttrWEI },
+              { name: 'Heimlichkeit', value: newAttrGES, passive: 10 + newAttrGES }
+            ],
             attacks: newActions,
             abilities: [],
             traits: newTraits,
@@ -724,57 +688,234 @@ export const App: React.FC = () => {
             regional_effects: newRegionalEffects || undefined,
             is_multi_variant: false
           };
+        }
+      } else {
+        // Social, Trap, or Hazard template
+        let specificData = {};
+        if (newType === 'social') {
+          specificData = {
+            role: newSocialRole || 'Unbekannt',
+            faction: newSocialFaction || 'Keine',
+            motivation: newSocialMotivation || 'Geheim',
+            secrets: newSocialSecret || 'Keine Geheimnisse',
+            key_skills: [],
+            relationships: []
+          };
+        } else if (newType === 'trap') {
+          specificData = {
+            trigger: newTrapTrigger || 'Trittplatte',
+            detection_dc: newTrapDetect,
+            disarm_dc: newTrapDisarm,
+            damage: newTrapDamage || '1D6 TP',
+            cooldown: 'Einmalig'
+          };
+        } else if (newType === 'hazard') {
+          specificData = {
+            hazard_type: newHazardType || 'Magisch',
+            severity: newHazardSeverity,
+            effects: newHazardEffects || 'Keine besonderen Effekte.',
+            avoidance: 'Zähigkeitsprobe',
+            duration: 'Permanent'
+          };
+        }
+
+        updates = {
+          name: newName,
+          type: newType,
+          description: newDesc,
+          notes: newNotes,
+          ...specificData,
+          is_multi_variant: false
+        };
+      }
+
+      await updateTemplate(editingTemplateId, updates);
+      setEditingTemplateId(null);
+      setEditingTemplateVariant(null);
+    } else {
+      // Original summoning flow (create element in deck)
+      let payload: any = {};
+
+      if (newType === 'enemy') {
+        const attributes = [
+          { name: "STÄ", value: newAttrSTA }, { name: "GES", value: newAttrGES }, { name: "KON", value: newAttrKON },
+          { name: "INT", value: newAttrINT }, { name: "WEI", value: newAttrWEI }, { name: "CHA", value: newAttrCHA }
+        ];
+
+        // If we parsed a multi-variant template and checked "saveToTemplates"
+        if (parsedMultiVariantData && parsedMultiVariantData.is_multi_variant) {
+          const defaultVar = parsedMultiVariantData.default_variant || parsedMultiVariantData.variants_keys[0];
+          const activeVariantData = parsedMultiVariantData.variants[defaultVar];
+
+          payload = {
+            name: `${parsedMultiVariantData.name} (${defaultVar})`,
+            type: 'enemy',
+            description: parsedMultiVariantData.description,
+            notes: newNotes,
+            level: activeVariantData.level,
+            hp_max: activeVariantData.hp_max,
+            hp_current: activeVariantData.hp_max,
+            vp: activeVariantData.rk,
+            rk: activeVariantData.rk,
+            tp_formula: activeVariantData.tp_formula,
+            bw: activeVariantData.bw,
+            ub: activeVariantData.ub,
+            senses: activeVariantData.senses,
+            languages: activeVariantData.languages,
+            ini: activeVariantData.ini,
+            saves: activeVariantData.saves,
+            immunities: activeVariantData.immunities,
+            attributes: activeVariantData.attributes,
+            skills: activeVariantData.skills,
+            attacks: activeVariantData.attacks || [],
+            abilities: [],
+            traits: activeVariantData.traits,
+            actions: activeVariantData.actions,
+            bonus_actions: activeVariantData.bonus_actions,
+            reactions: activeVariantData.reactions,
+            legendary_actions: activeVariantData.legendary_actions,
+            lair_actions: activeVariantData.lair_actions,
+            regional_effects: activeVariantData.regional_effects,
+            template_id: parsedMultiVariantData.id || `custom-${parsedMultiVariantData.name.toLowerCase().replace(/\s+/g, '-')}`,
+            active_variant: defaultVar,
+            variants_keys: parsedMultiVariantData.variants_keys,
+            is_multi_variant: true
+          };
+
+          if (saveToTemplates) {
+            const tplPayload = {
+              id: parsedMultiVariantData.id || `custom-${parsedMultiVariantData.name.toLowerCase().replace(/\s+/g, '-')}`,
+              name: parsedMultiVariantData.name,
+              type: 'enemy',
+              description: parsedMultiVariantData.description,
+              notes: newNotes,
+              is_multi_variant: true,
+              default_variant: defaultVar,
+              variants: parsedMultiVariantData.variants,
+              attributes: [],
+              skills: [],
+              attacks: [],
+              abilities: []
+            };
+            await addTemplate(tplPayload as any);
+          }
+        } else {
+          // Single variant enemy payload
+          payload = {
+            name: newName,
+            type: 'enemy',
+            description: newDesc,
+            notes: newNotes,
+            level: newEnemyLevel,
+            hp_max: newEnemyHP,
+            hp_current: newEnemyHP,
+            vp: newEnemyVP,
+            rk: newEnemyVP,
+            ini: newEnemyIni,
+            bw: newEnemyBW,
+            ub: newEnemyUB,
+            saves: newEnemySaves || undefined,
+            immunities: newEnemyImmunities || undefined,
+            senses: newEnemySenses || undefined,
+            languages: newEnemyLanguages || undefined,
+            attributes,
+            skills: [
+              { name: 'Wahrnehmung', value: newAttrWEI, passive: 10 + newAttrWEI },
+              { name: 'Heimlichkeit', value: newAttrGES, passive: 10 + newAttrGES }
+            ],
+            attacks: newActions,
+            abilities: [],
+            traits: newTraits,
+            actions: newActions,
+            bonus_actions: newBonusActions,
+            reactions: newReactions,
+            legendary_actions: newLegendaryActions,
+            lair_actions: newLairActions,
+            regional_effects: newRegionalEffects || undefined
+          };
+
+          if (saveToTemplates) {
+            const tplPayload = {
+              name: newName,
+              type: 'enemy',
+              description: newDesc,
+              notes: newNotes,
+              level: newEnemyLevel,
+              hp_max: newEnemyHP,
+              vp: newEnemyVP,
+              rk: newEnemyVP,
+              ini: newEnemyIni,
+              bw: newEnemyBW,
+              ub: newEnemyUB,
+              saves: newEnemySaves || undefined,
+              immunities: newEnemyImmunities || undefined,
+              senses: newEnemySenses || undefined,
+              languages: newEnemyLanguages || undefined,
+              attributes,
+              skills: payload.skills,
+              attacks: newActions,
+              abilities: [],
+              traits: newTraits,
+              actions: newActions,
+              bonus_actions: newBonusActions,
+              reactions: newReactions,
+              legendary_actions: newLegendaryActions,
+              lair_actions: newLairActions,
+              regional_effects: newRegionalEffects || undefined,
+              is_multi_variant: false
+            };
+            await addTemplate(tplPayload as any);
+          }
+        }
+      } else {
+        // Social, Trap, or Hazard
+        let specificData = {};
+        if (newType === 'social') {
+          specificData = {
+            role: newSocialRole || 'Unbekannt',
+            faction: newSocialFaction || 'Keine',
+            motivation: newSocialMotivation || 'Geheim',
+            secrets: newSocialSecret || 'Keine Geheimnisse',
+            key_skills: [],
+            relationships: []
+          };
+        } else if (newType === 'trap') {
+          specificData = {
+            trigger: newTrapTrigger || 'Trittplatte',
+            detection_dc: newTrapDetect,
+            disarm_dc: newTrapDisarm,
+            damage: newTrapDamage || '1D6 TP',
+            cooldown: 'Einmalig'
+          };
+        } else if (newType === 'hazard') {
+          specificData = {
+            hazard_type: newHazardType || 'Magisch',
+            severity: newHazardSeverity,
+            effects: newHazardEffects || 'Keine besonderen Effekte.',
+            avoidance: 'Zähigkeitsprobe',
+            duration: 'Permanent'
+          };
+        }
+
+        payload = {
+          name: newName,
+          type: newType,
+          description: newDesc,
+          notes: newNotes,
+          ...specificData
+        };
+
+        if (saveToTemplates) {
+          const tplPayload = {
+            ...payload,
+            is_multi_variant: false
+          };
           await addTemplate(tplPayload as any);
         }
       }
-    } else {
-      // Social, Trap, or Hazard
-      let specificData = {};
-      if (newType === 'social') {
-        specificData = {
-          role: newSocialRole || 'Unbekannt',
-          faction: newSocialFaction || 'Keine',
-          motivation: newSocialMotivation || 'Geheim',
-          secrets: newSocialSecret || 'Keine Geheimnisse',
-          key_skills: [],
-          relationships: []
-        };
-      } else if (newType === 'trap') {
-        specificData = {
-          trigger: newTrapTrigger || 'Trittplatte',
-          detection_dc: newTrapDetect,
-          disarm_dc: newTrapDisarm,
-          damage: newTrapDamage || '1D6 TP',
-          cooldown: 'Einmalig'
-        };
-      } else if (newType === 'hazard') {
-        specificData = {
-          hazard_type: newHazardType || 'Magisch',
-          severity: newHazardSeverity,
-          effects: newHazardEffects || 'Keine besonderen Effekte.',
-          avoidance: 'Zähigkeitsprobe',
-          duration: 'Permanent'
-        };
-      }
 
-      payload = {
-        name: newName,
-        type: newType,
-        description: newDesc,
-        notes: newNotes,
-        ...specificData
-      };
-
-      if (saveToTemplates) {
-        const tplPayload = {
-          ...payload,
-          is_multi_variant: false
-        };
-        await addTemplate(tplPayload as any);
-      }
+      await addElement(payload as any);
     }
-
-    await addElement(payload as any);
 
     // Reset Form & Form states
     setNewName('');
@@ -1087,13 +1228,22 @@ export const App: React.FC = () => {
                                   {{ enemy: 'Gegner', social: 'Sozialer NPC', trap: 'Falle', hazard: 'Gefahr' }[t.type as EncounterElementType]}
                                 </p>
                               </div>
-                              <button
-                                type="button"
-                                onClick={() => deleteTemplate(t.id)}
-                                className="text-red-400 hover:text-red-300 font-semibold px-2 py-1 rounded hover:bg-red-500/10 transition-all text-[10px] uppercase tracking-wider border border-red-500/20"
-                              >
-                                Löschen
-                              </button>
+                              <div className="flex gap-2">
+                                <button
+                                  type="button"
+                                  onClick={() => handleEditTemplate(t)}
+                                  className="text-amber-400 hover:text-amber-300 font-semibold px-2 py-1 rounded hover:bg-amber-500/10 transition-all text-[10px] uppercase tracking-wider border border-amber-500/20"
+                                >
+                                  Bearbeiten
+                                </button>
+                                <button
+                                  type="button"
+                                  onClick={() => deleteTemplate(t.id)}
+                                  className="text-red-400 hover:text-red-300 font-semibold px-2 py-1 rounded hover:bg-red-500/10 transition-all text-[10px] uppercase tracking-wider border border-red-500/20"
+                                >
+                                  Löschen
+                                </button>
+                              </div>
                             </div>
                           ))}
                         </div>
@@ -1197,6 +1347,138 @@ export const App: React.FC = () => {
                   {/* ENEMY-SPECIFIC UPGRADED FORMS WITH SUB-TABS */}
                   {newType === 'enemy' && (
                     <div className="space-y-4 border border-slate-800/80 rounded-2xl p-4 bg-slate-900/20">
+                      {/* Variant Manager */}
+                      <div className="p-3.5 rounded-xl bg-slate-950/80 border border-slate-800/80 space-y-3">
+                        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 border-b border-slate-900 pb-2.5">
+                          <div>
+                            <h4 className="text-xs font-bold text-amber-500 uppercase tracking-widest">
+                              Varianten-Verwaltung
+                            </h4>
+                            <p className="text-[10px] text-slate-400">
+                              Erstelle verschiedene Varianten für diese Vorlage (z.B. Mittelschwer, Schwer, Boss)
+                            </p>
+                          </div>
+                          {!parsedMultiVariantData ? (
+                            <button
+                              type="button"
+                              onClick={() => {
+                                const currentVariantName = newEnemyLevel || 'Standard';
+                                const currentVariantData = {
+                                  level: newEnemyLevel,
+                                  hp_max: newEnemyHP,
+                                  hp_current: newEnemyHP,
+                                  rk: newEnemyVP,
+                                  vp: newEnemyVP,
+                                  ini: newEnemyIni,
+                                  bw: newEnemyBW,
+                                  ub: newEnemyUB,
+                                  saves: newEnemySaves || undefined,
+                                  immunities: newEnemyImmunities || undefined,
+                                  senses: newEnemySenses || undefined,
+                                  languages: newEnemyLanguages || undefined,
+                                  attributes: [
+                                    { name: "STÄ", value: newAttrSTA },
+                                    { name: "GES", value: newAttrGES },
+                                    { name: "KON", value: newAttrKON },
+                                    { name: "INT", value: newAttrINT },
+                                    { name: "WEI", value: newAttrWEI },
+                                    { name: "CHA", value: newAttrCHA }
+                                  ],
+                                  skills: [
+                                    { name: 'Wahrnehmung', value: newAttrWEI, passive: 10 + newAttrWEI },
+                                    { name: 'Heimlichkeit', value: newAttrGES, passive: 10 + newAttrGES }
+                                  ],
+                                  attacks: newActions,
+                                  traits: newTraits,
+                                  actions: newActions,
+                                  bonus_actions: newBonusActions,
+                                  reactions: newReactions,
+                                  legendary_actions: newLegendaryActions,
+                                  lair_actions: newLairActions,
+                                  regional_effects: newRegionalEffects || undefined
+                                };
+
+                                setParsedMultiVariantData({
+                                  name: newName || 'Neue Vorlage',
+                                  type: 'enemy',
+                                  description: newDesc,
+                                  notes: newNotes,
+                                  is_multi_variant: true,
+                                  default_variant: currentVariantName,
+                                  variants: {
+                                    [currentVariantName]: currentVariantData
+                                  },
+                                  variants_keys: [currentVariantName]
+                                });
+                                setEditingTemplateVariant(currentVariantName);
+                              }}
+                              className="px-3 py-1.5 rounded-lg border border-amber-500/25 bg-amber-500/10 text-amber-400 hover:bg-amber-500/25 text-[10px] font-bold uppercase tracking-wider transition-all cursor-pointer"
+                            >
+                              🔀 Varianten-System aktivieren
+                            </button>
+                          ) : (
+                            <span className="text-[9px] px-2 py-0.5 bg-amber-500/10 border border-amber-500/20 text-amber-400 rounded-full font-bold uppercase tracking-wider">
+                              Multi-Varianten Aktiv
+                            </span>
+                          )}
+                        </div>
+
+                        {parsedMultiVariantData && (
+                          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            {/* Switch & Delete */}
+                            <div className="flex items-end gap-2.5">
+                              <div className="flex-1">
+                                <label className="block text-[9px] font-extrabold uppercase tracking-wider text-slate-400 mb-1">
+                                  Aktive Variante bearbeiten
+                                </label>
+                                <select
+                                  value={editingTemplateVariant || ''}
+                                  onChange={e => handleSwitchEditVariant(e.target.value)}
+                                  className="w-full px-3 py-2 rounded-lg bg-slate-900 border border-slate-800 text-slate-100 text-xs font-semibold focus:outline-none focus:border-amber-500"
+                                >
+                                  {Object.keys(parsedMultiVariantData.variants || {}).map(v => (
+                                    <option key={v} value={v}>
+                                      {v} ({parsedMultiVariantData.variants[v]?.level || 'HG ?'})
+                                    </option>
+                                  ))}
+                                </select>
+                              </div>
+                              <button
+                                type="button"
+                                onClick={() => handleDeleteVariant(editingTemplateVariant || '')}
+                                className="px-3 py-2 rounded-lg border border-red-500/20 text-red-400 hover:bg-red-500/15 text-xs font-semibold transition-all cursor-pointer shrink-0"
+                                title="Diese Variante löschen"
+                              >
+                                Löschen
+                              </button>
+                            </div>
+
+                            {/* Add New Variant */}
+                            <div className="flex items-end gap-2">
+                              <div className="flex-1">
+                                <label className="block text-[9px] font-extrabold uppercase tracking-wider text-slate-400 mb-1">
+                                  Neue Variante hinzufügen
+                                </label>
+                                <input
+                                  type="text"
+                                  placeholder="z.B. Mittelschwer, Schwer..."
+                                  value={newVariantNameInput}
+                                  onChange={e => setNewVariantNameInput(e.target.value)}
+                                  className="w-full px-3 py-2 rounded-lg bg-slate-900 border border-slate-800 text-slate-100 placeholder-slate-600 focus:outline-none focus:border-amber-500 text-xs"
+                                />
+                              </div>
+                              <button
+                                type="button"
+                                onClick={handleAddNewVariant}
+                                className="px-4 py-2 rounded-lg bg-amber-500 hover:bg-amber-400 text-slate-950 font-bold text-xs uppercase tracking-wider transition-all cursor-pointer shrink-0"
+                              >
+                                Hinzufügen
+                              </button>
+                            </div>
+                          </div>
+                        )}
+                      </div>
+
                       {/* Sub-tab navigation */}
                       <div className="flex flex-wrap gap-1 p-1 bg-slate-950 border border-slate-800/60 rounded-xl max-w-lg">
                         {[
@@ -1666,26 +1948,86 @@ export const App: React.FC = () => {
                   </div>
 
                   {/* SAVE TO TEMPLATES CHECKBOX */}
-                  <div className="flex items-center gap-2.5 p-3 rounded-xl bg-slate-900/40 border border-slate-800/80 max-w-sm">
-                    <input
-                      type="checkbox"
-                      id="chk-save-template"
-                      checked={saveToTemplates}
-                      onChange={e => setSaveToTemplates(e.target.checked)}
-                      className="w-4 h-4 rounded border-slate-800 text-amber-500 bg-slate-900 focus:ring-amber-500"
-                    />
-                    <label htmlFor="chk-save-template" className="text-xs font-bold text-slate-350 cursor-pointer select-none">
-                      In meiner Vorlagen-Datenbank speichern
-                    </label>
-                  </div>
+                  {!editingTemplateId && (
+                    <div className="flex items-center gap-2.5 p-3 rounded-xl bg-slate-900/40 border border-slate-800/80 max-w-sm">
+                      <input
+                        type="checkbox"
+                        id="chk-save-template"
+                        checked={saveToTemplates}
+                        onChange={e => setSaveToTemplates(e.target.checked)}
+                        className="w-4 h-4 rounded border-slate-800 text-amber-500 bg-slate-900 focus:ring-amber-500"
+                      />
+                      <label htmlFor="chk-save-template" className="text-xs font-bold text-slate-350 cursor-pointer select-none">
+                        In meiner Vorlagen-Datenbank speichern
+                      </label>
+                    </div>
+                  )}
 
-                  <div className="pt-2">
+                  <div className="pt-2 flex gap-3">
                     <button
                       type="submit"
                       className="px-6 py-3 rounded-xl bg-amber-500 hover:bg-amber-400 text-slate-950 font-bold text-xs uppercase tracking-widest shadow-lg shadow-amber-500/10 transition-all cursor-pointer"
                     >
-                      Beschwörung abschließen
+                      {editingTemplateId ? 'Vorlage speichern' : 'Beschwörung abschließen'}
                     </button>
+                    {editingTemplateId && (
+                      <button
+                        type="button"
+                        onClick={() => {
+                          setEditingTemplateId(null);
+                          setEditingTemplateVariant(null);
+                          setParsedMultiVariantData(null);
+                          // Reset Form & Form states
+                          setNewName('');
+                          setNewDesc('');
+                          setNewNotes('');
+                          setNewEnemyHP(30);
+                          setNewEnemyVP(10);
+                          setNewEnemyIni(10);
+                          setNewEnemyLevel('HG 1');
+                          setNewEnemyBW('9 m');
+                          setNewEnemyUB(2);
+                          setNewEnemySaves('');
+                          setNewEnemyImmunities('');
+                          setNewEnemySenses('Dunkelsicht 36 m');
+                          setNewEnemyLanguages('Gemeinsprache');
+                          
+                          setNewAttrSTA(0);
+                          setNewAttrGES(0);
+                          setNewAttrKON(0);
+                          setNewAttrINT(0);
+                          setNewAttrWEI(0);
+                          setNewAttrCHA(0);
+
+                          setNewTraits([]);
+                          setNewActions([]);
+                          setNewBonusActions([]);
+                          setNewReactions([]);
+                          setNewLegendaryActions([]);
+                          setNewLairActions([]);
+                          setNewRegionalEffects('');
+
+                          setNewSocialRole('');
+                          setNewSocialFaction('');
+                          setNewSocialMotivation('');
+                          setNewSocialSecret('');
+                          setNewTrapTrigger('');
+                          setNewTrapDamage('');
+                          setNewHazardType('');
+                          setNewHazardEffects('');
+                          
+                          setRawBestiaryText('');
+                          setParserSuccess('');
+                          setParserError('');
+                          setSaveToTemplates(false);
+                          
+                          setShowAddForm(false);
+                        }}
+                        className="px-6 py-3 rounded-xl border border-slate-700 hover:bg-slate-800 text-slate-350 font-bold text-xs uppercase tracking-widest transition-all cursor-pointer"
+                      >
+                        Abbrechen
+                      </button>
+                    )}
                   </div>
                 </form>
               )}
