@@ -6,22 +6,22 @@ import { parseBestiaryText } from './lib/bestiaryParser';
 
 export const App: React.FC = () => {
   const { user, signOut } = useAuth();
-  const { 
-    elements, 
-    templates, 
-    loadingElements, 
-    addElement, 
-    updateElement, 
+  const {
+    elements,
+    templates,
+    loadingElements,
+    addElement,
+    updateElement,
     deleteElement,
     addTemplate,
     deleteTemplate,
     updateTemplate
   } = useEncounters();
-  
+
   const [searchTerm, setSearchTerm] = useState('');
   const [activeTab, setActiveTab] = useState<EncounterElementType | 'all'>('all');
   const [revealedSecrets, setRevealedSecrets] = useState<Record<string, boolean>>({});
-  
+
   // Tab within the "+ Element" drawer
   const [creatorTab, setCreatorTab] = useState<'template' | 'parser' | 'manual'>('template');
   const [manualSubTab, setManualSubTab] = useState<'stats' | 'attributes' | 'traits' | 'actions'>('stats');
@@ -50,13 +50,13 @@ export const App: React.FC = () => {
   const [newName, setNewName] = useState('');
   const [newDesc, setNewDesc] = useState('');
   const [newNotes, setNewNotes] = useState('');
-  
+
   // Core enemy fields
   const [newEnemyLevel, setNewEnemyLevel] = useState('HG 1');
   const [newEnemyHP, setNewEnemyHP] = useState(30);
   const [newEnemyVP, setNewEnemyVP] = useState(10); // Rüstungsklasse (RK)
   const [newEnemyIni, setNewEnemyIni] = useState(10);
-  
+
   // Extended enemy fields
   const [newEnemyBW, setNewEnemyBW] = useState('9 m');
   const [newEnemyUB, setNewEnemyUB] = useState(2);
@@ -250,7 +250,7 @@ export const App: React.FC = () => {
     try {
       setParserError('');
       setParserSuccess('');
-      
+
       const parsed = parseBestiaryText(rawBestiaryText);
       if (!parsed) {
         setParserError('Konnte den Bestiarium-Text nicht parsen. Bitte überprüfe das Format (Name in Zeile 1, Stufen in Zeile 2).');
@@ -276,7 +276,7 @@ export const App: React.FC = () => {
           setNewEnemyImmunities(stats.immunities || '');
           setNewEnemySenses(stats.senses || '');
           setNewEnemyLanguages(stats.languages || '');
-          
+
           setNewAttrSTA(stats.attributes?.find(a => a.name === 'STÄ')?.value ?? 0);
           setNewAttrGES(stats.attributes?.find(a => a.name === 'GES')?.value ?? 0);
           setNewAttrKON(stats.attributes?.find(a => a.name === 'KON')?.value ?? 0);
@@ -305,7 +305,7 @@ export const App: React.FC = () => {
         setNewEnemyImmunities(parsed.immunities || '');
         setNewEnemySenses(parsed.senses || '');
         setNewEnemyLanguages(parsed.languages || '');
-        
+
         setNewAttrSTA(parsed.attributes?.find(a => a.name === 'STÄ')?.value ?? 0);
         setNewAttrGES(parsed.attributes?.find(a => a.name === 'GES')?.value ?? 0);
         setNewAttrKON(parsed.attributes?.find(a => a.name === 'KON')?.value ?? 0);
@@ -320,7 +320,7 @@ export const App: React.FC = () => {
         setNewLegendaryActions(parsed.legendary_actions || []);
         setNewLairActions(parsed.lair_actions || []);
         setNewRegionalEffects(parsed.regional_effects || '');
-        
+
         setParserSuccess(`Bestiarium-Text "${parsed.name}" erfolgreich analysiert!`);
       }
 
@@ -347,7 +347,7 @@ export const App: React.FC = () => {
       const variantsList = Object.keys(tpl.variants);
       const defVar = tpl.default_variant || variantsList[0];
       setEditingTemplateVariant(defVar);
-      
+
       const stats = tpl.variants[defVar];
       if (stats) {
         setNewEnemyLevel(stats.level || 'HG 1');
@@ -360,7 +360,7 @@ export const App: React.FC = () => {
         setNewEnemyImmunities(stats.immunities || '');
         setNewEnemySenses(stats.senses || '');
         setNewEnemyLanguages(stats.languages || '');
-        
+
         setNewAttrSTA(stats.attributes?.find((a: any) => a.name === 'STÄ')?.value ?? 0);
         setNewAttrGES(stats.attributes?.find((a: any) => a.name === 'GES')?.value ?? 0);
         setNewAttrKON(stats.attributes?.find((a: any) => a.name === 'KON')?.value ?? 0);
@@ -389,7 +389,7 @@ export const App: React.FC = () => {
       setNewEnemyImmunities(tpl.immunities || '');
       setNewEnemySenses(tpl.senses || '');
       setNewEnemyLanguages(tpl.languages || '');
-      
+
       setNewAttrSTA(tpl.attributes?.find((a: any) => a.name === 'STÄ')?.value ?? 0);
       setNewAttrGES(tpl.attributes?.find((a: any) => a.name === 'GES')?.value ?? 0);
       setNewAttrKON(tpl.attributes?.find((a: any) => a.name === 'KON')?.value ?? 0);
@@ -432,7 +432,7 @@ export const App: React.FC = () => {
         setNewEnemyImmunities(stats.immunities || '');
         setNewEnemySenses(stats.senses || '');
         setNewEnemyLanguages(stats.languages || '');
-        
+
         setNewAttrSTA(stats.attributes?.find((a: any) => a.name === 'STÄ')?.value ?? 0);
         setNewAttrGES(stats.attributes?.find((a: any) => a.name === 'GES')?.value ?? 0);
         setNewAttrKON(stats.attributes?.find((a: any) => a.name === 'KON')?.value ?? 0);
@@ -469,7 +469,7 @@ export const App: React.FC = () => {
       setNewEnemyImmunities(tpl.immunities || '');
       setNewEnemySenses(tpl.senses || '');
       setNewEnemyLanguages(tpl.languages || '');
-      
+
       setNewAttrSTA(tpl.attributes?.find((a: any) => a.name === 'STÄ')?.value ?? 0);
       setNewAttrGES(tpl.attributes?.find((a: any) => a.name === 'GES')?.value ?? 0);
       setNewAttrKON(tpl.attributes?.find((a: any) => a.name === 'KON')?.value ?? 0);
@@ -553,7 +553,7 @@ export const App: React.FC = () => {
       setNewEnemyImmunities(stats.immunities || '');
       setNewEnemySenses(stats.senses || '');
       setNewEnemyLanguages(stats.languages || '');
-      
+
       setNewAttrSTA(stats.attributes?.find((a: any) => a.name === 'STÄ')?.value ?? 0);
       setNewAttrGES(stats.attributes?.find((a: any) => a.name === 'GES')?.value ?? 0);
       setNewAttrKON(stats.attributes?.find((a: any) => a.name === 'KON')?.value ?? 0);
@@ -574,7 +574,7 @@ export const App: React.FC = () => {
   const handleAddNewVariant = () => {
     if (!newVariantNameInput.trim() || !parsedMultiVariantData) return;
     const newNameClean = newVariantNameInput.trim();
-    
+
     const currentVariantData = {
       level: newEnemyLevel,
       hp_max: newEnemyHP,
@@ -628,7 +628,7 @@ export const App: React.FC = () => {
 
   const handleDeleteVariant = (varNameToDelete: string) => {
     if (!parsedMultiVariantData || !parsedMultiVariantData.variants) return;
-    
+
     const remainingKeys = Object.keys(parsedMultiVariantData.variants).filter(k => k !== varNameToDelete);
     if (remainingKeys.length === 0) {
       alert('Eine Kreatur muss mindestens eine Variante besitzen.');
@@ -646,7 +646,7 @@ export const App: React.FC = () => {
     setParsedMultiVariantData(updatedTemplateData);
     const fallbackVar = remainingKeys[0];
     setEditingTemplateVariant(fallbackVar);
-    
+
     const stats = remainingVariants[fallbackVar];
     if (stats) {
       setNewEnemyLevel(stats.level || 'HG 1');
@@ -659,7 +659,7 @@ export const App: React.FC = () => {
       setNewEnemyImmunities(stats.immunities || '');
       setNewEnemySenses(stats.senses || '');
       setNewEnemyLanguages(stats.languages || '');
-      
+
       setNewAttrSTA(stats.attributes?.find((a: any) => a.name === 'STÄ')?.value ?? 0);
       setNewAttrGES(stats.attributes?.find((a: any) => a.name === 'GES')?.value ?? 0);
       setNewAttrKON(stats.attributes?.find((a: any) => a.name === 'KON')?.value ?? 0);
@@ -1016,7 +1016,7 @@ export const App: React.FC = () => {
     setNewEnemyImmunities('');
     setNewEnemySenses('Dunkelsicht 36 m');
     setNewEnemyLanguages('Gemeinsprache');
-    
+
     setNewAttrSTA(0);
     setNewAttrGES(0);
     setNewAttrKON(0);
@@ -1040,13 +1040,13 @@ export const App: React.FC = () => {
     setNewTrapDamage('');
     setNewHazardType('');
     setNewHazardEffects('');
-    
+
     setRawBestiaryText('');
     setParserSuccess('');
     setParserError('');
     setParsedMultiVariantData(null);
     setSaveToTemplates(false);
-    
+
     setShowAddForm(false);
   };
 
@@ -1082,14 +1082,14 @@ export const App: React.FC = () => {
 
   const filteredElements = elements.filter(el => {
     const matchesSearch = el.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                          el.description.toLowerCase().includes(searchTerm.toLowerCase());
+      el.description.toLowerCase().includes(searchTerm.toLowerCase());
     const matchesTab = activeTab === 'all' || el.type === activeTab;
     return matchesSearch && matchesTab;
   });
 
   return (
     <div className="min-h-screen bg-[#090d16] text-slate-100 flex flex-col font-sans">
-      
+
       {/* HEADER */}
       <header className="border-b border-slate-800 bg-[#131b2e]/60 backdrop-blur-md sticky top-0 z-40 px-6 py-4 flex items-center justify-between">
         <div className="flex items-center gap-3">
@@ -1100,7 +1100,7 @@ export const App: React.FC = () => {
             <h1 className="text-xl font-black tracking-wider text-transparent bg-clip-text bg-gradient-to-r from-amber-200 via-amber-400 to-yellow-500 font-display uppercase">
               Myranor Encra
             </h1>
-            <p className="text-[10px] text-slate-400 uppercase tracking-widest font-semibold">RPG Encounter Scaffold</p>
+            <p className="text-[10px] text-slate-400 uppercase tracking-widest font-semibold">ENCRA ENcounter + CReature Assistant</p>
           </div>
         </div>
 
@@ -1121,7 +1121,7 @@ export const App: React.FC = () => {
 
       {/* DASHBOARD ACTIONS */}
       <main className="flex-1 max-w-7xl w-full mx-auto p-6 md:p-8 space-y-6">
-        
+
         {/* UPPER ROW: SEARCH AND FILTERS */}
         <div className="flex flex-col md:flex-row gap-4 items-center justify-between">
           {/* TAB FILTERS */}
@@ -1134,18 +1134,17 @@ export const App: React.FC = () => {
                 trap: 'Fallen',
                 hazard: 'Umweltgefahren'
               }[tab];
-              
+
               const isActive = activeTab === tab;
-              
+
               return (
                 <button
                   key={tab}
                   onClick={() => setActiveTab(tab)}
-                  className={`px-4 py-2 text-xs font-bold uppercase tracking-wider rounded-xl transition-all ${
-                    isActive
+                  className={`px-4 py-2 text-xs font-bold uppercase tracking-wider rounded-xl transition-all ${isActive
                       ? 'bg-amber-500 text-slate-950 shadow-lg shadow-amber-900/20'
                       : 'text-slate-400 hover:text-slate-200 hover:bg-slate-800/40'
-                  }`}
+                    }`}
                 >
                   {label}
                 </button>
@@ -1169,7 +1168,7 @@ export const App: React.FC = () => {
                 className="w-full pl-9 pr-4 py-2.5 rounded-xl bg-slate-900/60 border border-slate-800 text-slate-100 placeholder-slate-500 focus:outline-none focus:border-amber-500 transition-all text-xs"
               />
             </div>
-            
+
             <button
               onClick={() => setShowAddForm(!showAddForm)}
               className="px-5 py-2.5 rounded-xl bg-gradient-to-r from-amber-600 to-amber-700 hover:from-amber-500 hover:to-amber-600 text-white font-bold text-xs uppercase tracking-widest flex items-center gap-2 shadow-lg shadow-amber-900/20 transition-all"
@@ -1178,7 +1177,7 @@ export const App: React.FC = () => {
             </button>
           </div>
         </div>
-             {/* QUICK ADD DRAWER / COMPONENT */}
+        {/* QUICK ADD DRAWER / COMPONENT */}
         {showAddForm && (() => {
           return (
             <div className="bg-[#131b2e]/85 backdrop-blur-md border border-amber-500/20 rounded-2xl p-6 shadow-xl animate-fade-in space-y-6">
@@ -1207,11 +1206,10 @@ export const App: React.FC = () => {
                       setCreatorTab(tab.id as any);
                       setParserError('');
                     }}
-                    className={`px-4 py-2 rounded-xl font-bold text-xs uppercase tracking-wider transition-all cursor-pointer ${
-                      creatorTab === tab.id
+                    className={`px-4 py-2 rounded-xl font-bold text-xs uppercase tracking-wider transition-all cursor-pointer ${creatorTab === tab.id
                         ? 'bg-amber-500 text-slate-950 shadow-md shadow-amber-900/10'
                         : 'text-slate-400 hover:text-slate-200 hover:bg-slate-800/40'
-                    }`}
+                      }`}
                   >
                     {tab.label}
                   </button>
@@ -1225,7 +1223,7 @@ export const App: React.FC = () => {
                     <h4 className="text-xs font-bold text-amber-400 uppercase tracking-wider flex items-center gap-1.5">
                       <span>✨</span> Wähle ein Monster oder Element
                     </h4>
-                    
+
                     <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 items-end">
                       <div>
                         <label className="block text-[9px] font-extrabold uppercase tracking-wider text-slate-400 mb-1">Vorlage wählen</label>
@@ -1402,7 +1400,7 @@ export const App: React.FC = () => {
                           setNewEnemyImmunities('');
                           setNewEnemySenses('Dunkelsicht 36 m');
                           setNewEnemyLanguages('Gemeinsprache');
-                          
+
                           setNewAttrSTA(0);
                           setNewAttrGES(0);
                           setNewAttrKON(0);
@@ -1459,7 +1457,7 @@ export const App: React.FC = () => {
                             setNewEnemyImmunities('');
                             setNewEnemySenses('Dunkelsicht 36 m');
                             setNewEnemyLanguages('Gemeinsprache');
-                            
+
                             setNewAttrSTA(0);
                             setNewAttrGES(0);
                             setNewAttrKON(0);
@@ -1483,7 +1481,7 @@ export const App: React.FC = () => {
                             setNewTrapDamage('');
                             setNewHazardType('');
                             setNewHazardEffects('');
-                            
+
                             setParsedMultiVariantData(null);
                             setEditingTemplateVariant(null);
                           }}
@@ -1770,11 +1768,10 @@ export const App: React.FC = () => {
                             key={sub.id}
                             type="button"
                             onClick={() => setManualSubTab(sub.id as any)}
-                            className={`flex-1 py-1.5 rounded-lg font-bold text-[10px] uppercase tracking-wider transition-all cursor-pointer ${
-                              manualSubTab === sub.id
+                            className={`flex-1 py-1.5 rounded-lg font-bold text-[10px] uppercase tracking-wider transition-all cursor-pointer ${manualSubTab === sub.id
                                 ? 'bg-[#1e293b] text-amber-400 border border-slate-700/50'
                                 : 'text-slate-400 hover:text-slate-200'
-                            }`}
+                              }`}
                           >
                             {sub.label}
                           </button>
@@ -2054,12 +2051,12 @@ export const App: React.FC = () => {
                             </div>
                             <div className="flex gap-2">
                               <input
-                                  type="text"
-                                  placeholder="Zusätzliche Angriffs-Beschreibung..."
-                                  value={tempActionDesc}
-                                  onChange={e => setTempActionDesc(e.target.value)}
-                                  className="flex-1 px-3 py-1.5 rounded bg-slate-900 border border-slate-800 text-xs text-slate-200"
-                                />
+                                type="text"
+                                placeholder="Zusätzliche Angriffs-Beschreibung..."
+                                value={tempActionDesc}
+                                onChange={e => setTempActionDesc(e.target.value)}
+                                className="flex-1 px-3 py-1.5 rounded bg-slate-900 border border-slate-800 text-xs text-slate-200"
+                              />
                               <button
                                 type="button"
                                 onClick={addTempAction}
@@ -2270,7 +2267,7 @@ export const App: React.FC = () => {
                           setNewEnemyImmunities('');
                           setNewEnemySenses('Dunkelsicht 36 m');
                           setNewEnemyLanguages('Gemeinsprache');
-                          
+
                           setNewAttrSTA(0);
                           setNewAttrGES(0);
                           setNewAttrKON(0);
@@ -2294,12 +2291,12 @@ export const App: React.FC = () => {
                           setNewTrapDamage('');
                           setNewHazardType('');
                           setNewHazardEffects('');
-                          
+
                           setRawBestiaryText('');
                           setParserSuccess('');
                           setParserError('');
                           setSaveToTemplates(false);
-                          
+
                           setShowAddForm(false);
                         }}
                         className="px-6 py-3 rounded-xl border border-slate-700 hover:bg-slate-800 text-slate-350 font-bold text-xs uppercase tracking-widest transition-all cursor-pointer"
@@ -2332,7 +2329,7 @@ export const App: React.FC = () => {
           /* ELEMENTS GRID */
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {filteredElements.map((el: EncounterElement) => {
-              
+
               // Define Type Tag styling
               const tagColors = {
                 enemy: 'bg-red-500/10 border-red-500/30 text-red-400',
@@ -2655,7 +2652,7 @@ export const App: React.FC = () => {
                             <span>🔒 DM GEHEIMNIS</span>
                             <span>{revealedSecrets[el.id] ? 'Verbergen' : 'Enthüllen'}</span>
                           </button>
-                          
+
                           {revealedSecrets[el.id] && (
                             <p className="mt-2 text-xs text-amber-200/90 leading-relaxed border-t border-slate-800/50 pt-2 animate-fade-in">
                               {el.secrets}
@@ -2699,11 +2696,10 @@ export const App: React.FC = () => {
                           </div>
                           <div>
                             <span className="text-slate-500 font-bold uppercase block">Bedrohung</span>
-                            <span className={`font-extrabold px-2 py-0.5 rounded border ${
-                              el.severity === 'Tödlich' 
-                                ? 'bg-red-500/10 border-red-500/20 text-red-400' 
+                            <span className={`font-extrabold px-2 py-0.5 rounded border ${el.severity === 'Tödlich'
+                                ? 'bg-red-500/10 border-red-500/20 text-red-400'
                                 : 'bg-amber-500/10 border-amber-500/20 text-amber-400'
-                            }`}>
+                              }`}>
                               {el.severity}
                             </span>
                           </div>

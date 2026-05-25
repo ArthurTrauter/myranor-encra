@@ -1,73 +1,124 @@
-# React + TypeScript + Vite
+# Myranor Encra (ENCRA: ENcounter + CReature Assistant)
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Welcome to **Myranor Encra**, a premium RPG encounter and creature assistant tool designed for Game Masters (Spielleiter) to orchestrate sessions, customize monsters, and build a persistent bestiary database.
 
-Currently, two official plugins are available:
+---
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+## 🌟 Key Features
 
-## React Compiler
+### 1. Dynamic Encounter Deck
+- Track monsters, social NPCs, traps, and environmental hazards in the active session.
+- Hide or reveal secrets (e.g., hidden DM notes or NPC motivations) with one click.
+- Instantly delete elements once defeated or resolved.
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+### 2. NLP Bestiary Text Parser
+- Copy-paste raw text descriptions straight from RPG bestiaries.
+- The built-in parser automatically extracts:
+  - Level/Challenge Rating (HG)
+  - Hit Points (TP) formula and values
+  - Defenses/Armor Class (RK)
+  - Speed (BW), Übungsbonus (UB), Saves, Immunities, and Senses
+  - Attributes (STÄ, GES, KON, INT, WEI, CHA)
+  - Actions, traits, reactions, legendary actions, lair actions, and regional effects.
+- Detects and parses slash-separated multi-variant stats automatically.
 
-## Expanding the ESLint configuration
+### 3. Advanced Variant Management
+- Supports multi-variant templates (e.g., *Nestling / Jung / Ausgewachsen / Uralt* or *Leicht / Mittel / Schwer / Boss*).
+- Switch card levels on the fly inside the active encounter deck.
+- In the manual creator, manage variants dynamically: add new variant tiers, delete existing ones, or switch active editing variant with auto-save capabilities.
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+### 4. Custom Template Builder & Editor
+- Manage custom templates via the `"Eigene Vorlagen verwalten"` panel.
+- **Bearbeiten (Edit)**: Load any custom template back into the manual form to modify its stats, traits, actions, and variant definitions.
+- **Vorlage kopieren (Copy Template)**: Load any official or custom template variant as a baseline copy to speed up new creature creation.
+- **Formular leeren**: Reset all form fields to start fresh with a clean slate.
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+### 5. Offline-First Synchronization
+- **Supabase Integration**: Synchronizes your encounter deck and custom templates with a secure Supabase backend when authenticated.
+- **Robust Local Storage Fallback**: Seamlessly degrades to local browser storage (`myranor_encounters` and `myranor_custom_templates`) if Supabase is offline or credentials are not configured, maintaining 100% functionality.
 
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
+---
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+## 🛠️ Technology Stack
+
+- **Framework**: React (Vite, TypeScript)
+- **Styling**: Vanilla CSS with modern grid layout, glassmorphism, responsive styles, and custom ambient glowing themes
+- **Database / Backend**: Supabase (RLS enabled for private CRUD operations)
+- **State Management**: React Context API
+- **Data Parser**: Custom Regex-based NLP Parser engine
+
+---
+
+## 🚀 Getting Started
+
+### Prerequisites
+
+Make sure you have [Node.js](https://nodejs.org/) installed.
+
+### Installation
+
+1. Clone the repository:
+   ```bash
+   git clone <repository-url>
+   cd myranor-encra
+   ```
+
+2. Install dependencies:
+   ```bash
+   npm install
+   ```
+
+3. Set up environment variables by copying `.env.example` to `.env`:
+   ```bash
+   cp .env.example .env
+   ```
+   Provide your `VITE_SUPABASE_URL` and `VITE_SUPABASE_ANON_KEY` credentials.
+
+### Seeding the Template Database
+
+To seed the Supabase database with the official bestiary templates:
+```bash
+node scripts/seed-db.js
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+### Run Locally
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
-
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+Start the Vite development server:
+```bash
+npm run dev
 ```
+
+### Build for Production
+
+Compile TypeScript and build the production bundle:
+```bash
+npm run build
+```
+
+---
+
+## 📁 Repository Structure
+
+```
+├── scripts/
+│   └── seed-db.js                # Database seeder script
+├── src/
+│   ├── context/
+│   │   ├── AuthContext.tsx       # Auth provider (Supabase session)
+│   │   └── EncounterContext.tsx  # Encounter & Template CRUD context
+│   ├── data/
+│   │   ├── encounterTemplates.json  # Backup official templates
+│   │   └── chrattac_koenigin.json   # Seed/Validation bestiary extracts
+│   ├── lib/
+│   │   ├── supabase.ts           # Supabase client initialization
+│   │   └── bestiaryParser.ts     # NLP Regex Parser engine
+│   ├── types/
+│   │   └── index.ts              # TypeScript interface definitions
+│   ├── App.tsx                   # Main React Application
+│   ├── index.css                 # CSS Theme & styling rules
+│   └── main.tsx                  # Application entry point
+```
+
+---
+
+*Pair programmed with Antigravity.*
