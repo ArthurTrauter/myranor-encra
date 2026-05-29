@@ -66,6 +66,25 @@ async function seed() {
       legendary_actions: template.legendary_actions || [],
       lair_actions: template.lair_actions || [],
       regional_effects: template.regional_effects || null,
+      // Social properties
+      role: template.role || null,
+      faction: template.faction || null,
+      motivation: template.motivation || null,
+      secrets: template.secrets || null,
+      key_skills: template.key_skills || [],
+      relationships: template.relationships || [],
+      // Trap properties
+      trigger: template.trigger || null,
+      detection_dc: template.detection_dc || null,
+      disarm_dc: template.disarm_dc || null,
+      damage: template.damage || null,
+      cooldown: template.cooldown || null,
+      // Hazard properties
+      hazard_type: template.hazard_type || null,
+      severity: template.severity || null,
+      effects: template.effects || null,
+      avoidance: template.avoidance || null,
+      duration: template.duration || null,
       user_id: null // Explicitly official
     };
     

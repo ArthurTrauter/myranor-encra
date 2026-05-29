@@ -109,9 +109,21 @@ export const EncounterProvider: React.FC<EncounterProviderProps> = ({ children }
     loadTemplates();
   }, [session]);
 
+  // Helper to generate a valid UUID v4 (needed because the encounters table expects a uuid id)
+  const generateUUID = (): string => {
+    if (typeof crypto !== 'undefined' && crypto.randomUUID) {
+      return crypto.randomUUID();
+    }
+    return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, (c) => {
+      const r = (Math.random() * 16) | 0;
+      const v = c === 'x' ? r : (r & 0x3) | 0x8;
+      return v.toString(16);
+    });
+  };
+
   // CRUD for Active Session Elements
   const addElement = async (newEl: Omit<EncounterElement, 'id' | 'created_at' | 'updated_at'>) => {
-    const id = `${newEl.type}-${Math.random().toString(36).substr(2, 9)}`;
+    const id = generateUUID();
     const now = new Date().toISOString();
     const createdElement: EncounterElement = {
       ...newEl,
