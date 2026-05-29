@@ -37,6 +37,12 @@ export interface ParsedCreature {
   legendary_actions?: ActionItem[];
   lair_actions?: ActionItem[];
   regional_effects?: string;
+
+  // Fluff fields
+  groesse?: string;
+  gewicht?: string;
+  menge?: string;
+  verbreitung?: string;
 }
 
 export function parseBestiaryText(text: string): ParsedCreature | null {
@@ -121,37 +127,83 @@ export function parseBestiaryText(text: string): ParsedCreature | null {
   let perceptionLine = '';
   let stealthLine = '';
 
+  let groesseLine = '';
+  let gewichtLine = '';
+  let mengeLine = '';
+  const verbreitungLines: string[] = [];
+  let lastFluffField: 'groesse' | 'gewicht' | 'menge' | 'verbreitung' | null = null;
+  const fluffLines = new Set<string>();
+
   const attributeRows: { variant: string; values: number[] }[] = [];
   let isAttributeHeaderFound = false;
 
   headerLines.forEach(line => {
     const lower = line.toLowerCase();
+    
+    if (lower.startsWith('größe:') || lower.startsWith('groeße:') || lower.startsWith('groesse:')) {
+      groesseLine = line;
+      fluffLines.add(line);
+      lastFluffField = 'groesse';
+      return;
+    }
+    if (lower.startsWith('gewicht:')) {
+      gewichtLine = line;
+      fluffLines.add(line);
+      lastFluffField = 'gewicht';
+      return;
+    }
+    if (lower.startsWith('menge:')) {
+      mengeLine = line;
+      fluffLines.add(line);
+      lastFluffField = 'menge';
+      return;
+    }
+    if (lower.startsWith('verbreitung:')) {
+      verbreitungLines.push(line);
+      fluffLines.add(line);
+      lastFluffField = 'verbreitung';
+      return;
+    }
+
     if (lower.includes('monstrosität') || lower.includes('drache') || lower.includes('humanoid') || lower.includes('bestie') || lower.includes('elementar')) {
       sizeTypeLine = line;
+      lastFluffField = null;
     } else if (lower.includes('herausforderungsgrad') || lower.includes('hg ')) {
       hgLine = line;
+      lastFluffField = null;
     } else if (lower.includes('rüstungsklasse') || lower.includes('rk ')) {
       rkLine = line;
+      lastFluffField = null;
     } else if (lower.includes('trefferpunkte') || lower.includes('tp ')) {
       tpLine = line;
+      lastFluffField = null;
     } else if (lower.includes('bewegungsrate') || lower.includes('bw ')) {
       bwLine = line;
+      lastFluffField = null;
     } else if (lower.includes('rettungswürfe') || lower.includes('rw ')) {
       savesLine = line;
+      lastFluffField = null;
     } else if (lower.includes('sinne')) {
       sensesLine = line;
+      lastFluffField = null;
     } else if (lower.includes('sprachen')) {
       languagesLine = line;
+      lastFluffField = null;
     } else if (lower.includes('übungsbonus') || lower.includes('ub ')) {
       ubLine = line;
+      lastFluffField = null;
     } else if (lower.includes('immunitäten')) {
       immunitiesLine = line;
+      lastFluffField = null;
     } else if (lower.includes('wahrnehmung')) {
       perceptionLine = line;
+      lastFluffField = null;
     } else if (lower.includes('heimlichkeit')) {
       stealthLine = line;
+      lastFluffField = null;
     } else if (lower.includes('alter') && (lower.includes('stä') || lower.includes('ges') || lower.includes('ge '))) {
       isAttributeHeaderFound = true;
+      lastFluffField = null;
     } else if (isAttributeHeaderFound || lower.match(/^(stä|ges|kon|int|wei|cha)/)) {
       // Look for attribute modifier line like "Nestling +3 +3 +4 +1 +2 +4" or "Königin +7 +3 +12"
       // Match words and numbers
@@ -163,8 +215,34 @@ export function parseBestiaryText(text: string): ParsedCreature | null {
           attributeRows.push({ variant: variantName, values });
         }
       }
+      lastFluffField = null;
+    } else {
+      if (lastFluffField) {
+        fluffLines.add(line);
+        if (lastFluffField === 'verbreitung') {
+          verbreitungLines.push(line);
+        } else if (lastFluffField === 'groesse') {
+          groesseLine += ' ' + line;
+        } else if (lastFluffField === 'gewicht') {
+          gewichtLine += ' ' + line;
+        } else if (lastFluffField === 'menge') {
+          mengeLine += ' ' + line;
+        }
+      }
     }
   });
+
+  const extractVal = (fullLine: string): string => {
+    if (!fullLine) return '';
+    const colonIdx = fullLine.indexOf(':');
+    if (colonIdx === -1) return fullLine.trim();
+    return fullLine.substring(colonIdx + 1).trim();
+  };
+
+  const groesseVal = extractVal(groesseLine);
+  const gewichtVal = extractVal(gewichtLine);
+  const mengeVal = extractVal(mengeLine);
+  const verbreitungVal = verbreitungLines.map((l, i) => i === 0 ? extractVal(l) : l).join(' ').trim();
 
   // Extract Traits (Eigenschaften) - everything in header that isn't a known stats line or attribute grid
   const traitsList: ActionItem[] = [];
@@ -175,6 +253,7 @@ export function parseBestiaryText(text: string): ParsedCreature | null {
       line === sizeTypeLine || line === hgLine || line === rkLine || line === tpLine || 
       line === bwLine || line === savesLine || line === sensesLine || line === languagesLine || 
       line === ubLine || line === immunitiesLine || line === perceptionLine || line === stealthLine ||
+      fluffLines.has(line) ||
       line.toLowerCase().includes('alter stä ges kon') || 
       attributeRows.some(r => line.startsWith(r.variant));
 
@@ -465,7 +544,11 @@ export function parseBestiaryText(text: string): ParsedCreature | null {
     is_multi_variant: isMultiVariant,
     default_variant: defaultVariant,
     variants_keys: isMultiVariant ? variantsKeys : undefined,
-    variants: isMultiVariant ? variants : undefined
+    variants: isMultiVariant ? variants : undefined,
+    groesse: groesseVal || undefined,
+    gewicht: gewichtVal || undefined,
+    menge: mengeVal || undefined,
+    verbreitung: verbreitungVal || undefined
   };
 
   // If single variant, copy the standard variant stats to top level

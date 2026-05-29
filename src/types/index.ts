@@ -63,6 +63,12 @@ export interface EnemyNPC extends BaseElement {
   active_variant?: string;
   variants_keys?: string[];
   is_multi_variant?: boolean;
+
+  // Fluff fields
+  groesse?: string;
+  gewicht?: string;
+  menge?: string;
+  verbreitung?: string;
 }
 
 

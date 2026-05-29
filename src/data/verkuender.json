@@ -5,6 +5,10 @@
   "description": "Ein zweiköpfiger Drache, der in der Lage ist, Stimmen und Geräusche täuschend echt nachzuahmen. Im Kampf setzt er mächtige Schallwellen frei.",
   "is_multi_variant": true,
   "default_variant": "Ausgewachsen",
+  "groesse": "5 m Körperlänge",
+  "gewicht": "300 kg",
+  "menge": "Einzelgänger",
+  "verbreitung": "nahezu alle myranischen Laub- und Mischwälder, außer Amaunath",
   "variants": {
     "Nestling": {
       "level": "HG 1 (200 EP)",

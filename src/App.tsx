@@ -93,6 +93,12 @@ export const App: React.FC = () => {
   const [newLegendaryActions, setNewLegendaryActions] = useState<{ name: string; description: string }[]>([]);
   const [newLairActions, setNewLairActions] = useState<{ name: string; description: string }[]>([]);
   const [newRegionalEffects, setNewRegionalEffects] = useState('');
+  
+  // Fluff states
+  const [newEnemyGroesse, setNewEnemyGroesse] = useState('');
+  const [newEnemyGewicht, setNewEnemyGewicht] = useState('');
+  const [newEnemyMenge, setNewEnemyMenge] = useState('');
+  const [newEnemyVerbreitung, setNewEnemyVerbreitung] = useState('');
 
   // Fields to add single items dynamically in UI
   const [tempTraitName, setTempTraitName] = useState('');
@@ -148,6 +154,10 @@ export const App: React.FC = () => {
         type: template.type,
         description: template.description,
         notes: template.notes || '',
+        groesse: template.groesse,
+        gewicht: template.gewicht,
+        menge: template.menge,
+        verbreitung: template.verbreitung,
         level: variantData.level,
         hp_max: variantData.tp_max,
         hp_current: variantData.tp_max,
@@ -184,6 +194,10 @@ export const App: React.FC = () => {
         type: template.type,
         description: template.description,
         notes: template.notes || '',
+        groesse: template.groesse,
+        gewicht: template.gewicht,
+        menge: template.menge,
+        verbreitung: template.verbreitung,
         level: template.level || 'Mittel',
         hp_max: template.hp_max || 30,
         hp_current: template.hp_max || 30,
@@ -272,6 +286,11 @@ export const App: React.FC = () => {
       setNewName(parsed.name);
       setNewDesc(parsed.description || '');
       setNewType('enemy'); // Bestiary copy parses enemies
+      
+      setNewEnemyGroesse(parsed.groesse || '');
+      setNewEnemyGewicht(parsed.gewicht || '');
+      setNewEnemyMenge(parsed.menge || '');
+      setNewEnemyVerbreitung(parsed.verbreitung || '');
 
       if (parsed.is_multi_variant && parsed.variants && parsed.variants_keys) {
         setParsedMultiVariantData(parsed);
@@ -350,6 +369,10 @@ export const App: React.FC = () => {
     setNewDesc(tpl.description || '');
     setNewNotes(tpl.notes || '');
     setNewType(tpl.type || 'enemy');
+    setNewEnemyGroesse(tpl.groesse || '');
+    setNewEnemyGewicht(tpl.gewicht || '');
+    setNewEnemyMenge(tpl.menge || '');
+    setNewEnemyVerbreitung(tpl.verbreitung || '');
     setCreatorTab('manual');
     setParserSuccess('');
     setParserError('');
@@ -427,6 +450,10 @@ export const App: React.FC = () => {
     setNewDesc(tpl.description || '');
     setNewNotes(tpl.notes || '');
     setNewType(tpl.type || 'enemy');
+    setNewEnemyGroesse(tpl.groesse || '');
+    setNewEnemyGewicht(tpl.gewicht || '');
+    setNewEnemyMenge(tpl.menge || '');
+    setNewEnemyVerbreitung(tpl.verbreitung || '');
     setParserSuccess(`Werte aus Vorlage "${tpl.name}" erfolgreich kopiert!`);
     setParserError('');
 
@@ -743,6 +770,10 @@ export const App: React.FC = () => {
             type: 'enemy',
             description: newDesc,
             notes: newNotes,
+            groesse: newEnemyGroesse || undefined,
+            gewicht: newEnemyGewicht || undefined,
+            menge: newEnemyMenge || undefined,
+            verbreitung: newEnemyVerbreitung || undefined,
             is_multi_variant: true,
             default_variant: defaultVar,
             variants: finalVariants,
@@ -758,6 +789,10 @@ export const App: React.FC = () => {
             type: 'enemy',
             description: newDesc,
             notes: newNotes,
+            groesse: newEnemyGroesse || undefined,
+            gewicht: newEnemyGewicht || undefined,
+            menge: newEnemyMenge || undefined,
+            verbreitung: newEnemyVerbreitung || undefined,
             level: newEnemyLevel,
             hp_max: newEnemyHP,
             vp: newEnemyVP,
@@ -849,6 +884,10 @@ export const App: React.FC = () => {
             type: 'enemy',
             description: parsedMultiVariantData.description,
             notes: newNotes,
+            groesse: parsedMultiVariantData.groesse || undefined,
+            gewicht: parsedMultiVariantData.gewicht || undefined,
+            menge: parsedMultiVariantData.menge || undefined,
+            verbreitung: parsedMultiVariantData.verbreitung || undefined,
             level: activeVariantData.level,
             hp_max: activeVariantData.hp_max,
             hp_current: activeVariantData.hp_max,
@@ -886,6 +925,10 @@ export const App: React.FC = () => {
               type: 'enemy',
               description: parsedMultiVariantData.description,
               notes: newNotes,
+              groesse: parsedMultiVariantData.groesse || undefined,
+              gewicht: parsedMultiVariantData.gewicht || undefined,
+              menge: parsedMultiVariantData.menge || undefined,
+              verbreitung: parsedMultiVariantData.verbreitung || undefined,
               is_multi_variant: true,
               default_variant: defaultVar,
               variants: parsedMultiVariantData.variants,
@@ -903,6 +946,10 @@ export const App: React.FC = () => {
             type: 'enemy',
             description: newDesc,
             notes: newNotes,
+            groesse: newEnemyGroesse || undefined,
+            gewicht: newEnemyGewicht || undefined,
+            menge: newEnemyMenge || undefined,
+            verbreitung: newEnemyVerbreitung || undefined,
             level: newEnemyLevel,
             hp_max: newEnemyHP,
             hp_current: newEnemyHP,
@@ -937,6 +984,10 @@ export const App: React.FC = () => {
               type: 'enemy',
               description: newDesc,
               notes: newNotes,
+              groesse: newEnemyGroesse || undefined,
+              gewicht: newEnemyGewicht || undefined,
+              menge: newEnemyMenge || undefined,
+              verbreitung: newEnemyVerbreitung || undefined,
               level: newEnemyLevel,
               hp_max: newEnemyHP,
               vp: newEnemyVP,
@@ -1028,6 +1079,11 @@ export const App: React.FC = () => {
     setNewEnemyImmunities('');
     setNewEnemySenses('Dunkelsicht 36 m');
     setNewEnemyLanguages('Gemeinsprache');
+    
+    setNewEnemyGroesse('');
+    setNewEnemyGewicht('');
+    setNewEnemyMenge('');
+    setNewEnemyVerbreitung('');
 
     setNewAttrSTA(0);
     setNewAttrGES(0);
@@ -1428,6 +1484,11 @@ export const App: React.FC = () => {
                           setNewEnemySenses('Dunkelsicht 36 m');
                           setNewEnemyLanguages('Gemeinsprache');
 
+                          setNewEnemyGroesse('');
+                          setNewEnemyGewicht('');
+                          setNewEnemyMenge('');
+                          setNewEnemyVerbreitung('');
+
                           setNewAttrSTA(0);
                           setNewAttrGES(0);
                           setNewAttrKON(0);
@@ -1484,6 +1545,11 @@ export const App: React.FC = () => {
                             setNewEnemyImmunities('');
                             setNewEnemySenses('Dunkelsicht 36 m');
                             setNewEnemyLanguages('Gemeinsprache');
+                            
+                            setNewEnemyGroesse('');
+                            setNewEnemyGewicht('');
+                            setNewEnemyMenge('');
+                            setNewEnemyVerbreitung('');
 
                             setNewAttrSTA(0);
                             setNewAttrGES(0);
@@ -1912,6 +1978,53 @@ export const App: React.FC = () => {
                               />
                             </div>
                           </div>
+
+                          {/* Fluff-Attribute (Größe, Gewicht, Menge, Verbreitung) */}
+                          <div className="border-t border-slate-800/60 pt-4 mt-4 space-y-4">
+                            <h5 className="text-[0.6875rem] font-bold text-amber-500 uppercase tracking-widest">Fluff-Beschreibung (Optional)</h5>
+                            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                              <div>
+                                <label className="block text-[0.6875rem] font-bold uppercase tracking-wider text-slate-400 mb-1">Größe</label>
+                                <input
+                                  type="text"
+                                  value={newEnemyGroesse}
+                                  onChange={e => setNewEnemyGroesse(e.target.value)}
+                                  placeholder="z.B. 5 m Körperlänge"
+                                  className="w-full px-3 py-2 rounded-lg bg-slate-900 border border-slate-800 text-slate-100 text-xs focus:outline-none focus:border-amber-500"
+                                />
+                              </div>
+                              <div>
+                                <label className="block text-[0.6875rem] font-bold uppercase tracking-wider text-slate-400 mb-1">Gewicht</label>
+                                <input
+                                  type="text"
+                                  value={newEnemyGewicht}
+                                  onChange={e => setNewEnemyGewicht(e.target.value)}
+                                  placeholder="z.B. 300 kg"
+                                  className="w-full px-3 py-2 rounded-lg bg-slate-900 border border-slate-800 text-slate-100 text-xs focus:outline-none focus:border-amber-500"
+                                />
+                              </div>
+                              <div>
+                                <label className="block text-[0.6875rem] font-bold uppercase tracking-wider text-slate-400 mb-1">Menge</label>
+                                <input
+                                  type="text"
+                                  value={newEnemyMenge}
+                                  onChange={e => setNewEnemyMenge(e.target.value)}
+                                  placeholder="z.B. Einzelgänger"
+                                  className="w-full px-3 py-2 rounded-lg bg-slate-900 border border-slate-800 text-slate-100 text-xs focus:outline-none focus:border-amber-500"
+                                />
+                              </div>
+                              <div className="sm:col-span-3">
+                                <label className="block text-[0.6875rem] font-bold uppercase tracking-wider text-slate-400 mb-1">Verbreitung</label>
+                                <input
+                                  type="text"
+                                  value={newEnemyVerbreitung}
+                                  onChange={e => setNewEnemyVerbreitung(e.target.value)}
+                                  placeholder="z.B. nahezu alle myranischen Laub- und Mischwälder, außer Amaunath"
+                                  className="w-full px-3 py-2 rounded-lg bg-slate-900 border border-slate-800 text-slate-100 text-xs focus:outline-none focus:border-amber-500"
+                                />
+                              </div>
+                            </div>
+                          </div>
                         </div>
                       )}
 
@@ -2295,6 +2408,11 @@ export const App: React.FC = () => {
                           setNewEnemySenses('Dunkelsicht 36 m');
                           setNewEnemyLanguages('Gemeinsprache');
 
+                           setNewEnemyGroesse('');
+                           setNewEnemyGewicht('');
+                           setNewEnemyMenge('');
+                           setNewEnemyVerbreitung('');
+
                           setNewAttrSTA(0);
                           setNewAttrGES(0);
                           setNewAttrKON(0);
@@ -2419,6 +2537,36 @@ export const App: React.FC = () => {
                     {/* TYPE-SPECIFIC DETAIL PANELS */}
                     {el.type === 'enemy' && (
                       <div className="space-y-4 border-t border-slate-800/60 pt-4 text-xs">
+                        {/* Fluff Attributes Grid */}
+                        {(el.groesse || el.gewicht || el.menge || el.verbreitung) && (
+                          <div className="grid grid-cols-2 gap-2 mb-2 p-2.5 rounded-xl bg-slate-900/40 border border-slate-800/40 text-[0.6875rem] text-slate-350">
+                            {el.groesse && (
+                              <div>
+                                <span className="text-amber-500/80 font-extrabold block uppercase text-[0.55rem] tracking-wider">Größe</span>
+                                <span className="font-medium text-slate-200">{el.groesse}</span>
+                              </div>
+                            )}
+                            {el.gewicht && (
+                              <div>
+                                <span className="text-amber-500/80 font-extrabold block uppercase text-[0.55rem] tracking-wider">Gewicht</span>
+                                <span className="font-medium text-slate-200">{el.gewicht}</span>
+                              </div>
+                            )}
+                            {el.menge && (
+                              <div>
+                                <span className="text-amber-500/80 font-extrabold block uppercase text-[0.55rem] tracking-wider">Menge</span>
+                                <span className="font-medium text-slate-200">{el.menge}</span>
+                              </div>
+                            )}
+                            {el.verbreitung && (
+                              <div className="col-span-2 border-t border-slate-800/30 pt-1.5 mt-0.5">
+                                <span className="text-amber-500/80 font-extrabold block uppercase text-[0.55rem] tracking-wider">Verbreitung</span>
+                                <span className="font-medium text-slate-200">{el.verbreitung}</span>
+                              </div>
+                            )}
+                          </div>
+                        )}
+
                         <div className="flex items-center justify-between flex-wrap gap-2">
                           <div className="flex items-center gap-1.5">
                             <span className="text-[0.6875rem] text-slate-500 font-bold uppercase">Stufe / HG</span>
