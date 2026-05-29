@@ -1103,27 +1103,27 @@ export const App: React.FC = () => {
     <div className="min-h-screen bg-[#090d16] text-slate-100 flex flex-col font-sans">
 
       {/* HEADER */}
-      <header className="border-b border-slate-800 bg-[#131b2e]/60 backdrop-blur-md sticky top-0 z-40 px-6 py-4 flex items-center justify-between">
-        <div className="flex items-center gap-3">
-          <div className="w-10 h-10 rounded-xl bg-amber-500/10 border border-amber-500/30 flex items-center justify-center text-amber-500 font-bold shadow-md shadow-amber-900/10">
+      <header className="border-b border-slate-800 bg-[#131b2e]/60 backdrop-blur-md sticky top-0 z-40 px-4 sm:px-6 py-3 sm:py-4 flex items-center justify-between">
+        <div className="flex items-center gap-2 sm:gap-3">
+          <div className="w-9 h-9 sm:w-10 sm:h-10 rounded-xl bg-amber-500/10 border border-amber-500/30 flex items-center justify-center text-amber-500 font-bold shadow-md shadow-amber-900/10 shrink-0">
             M
           </div>
           <div>
-            <h1 className="text-xl font-black tracking-wider text-transparent bg-clip-text bg-gradient-to-r from-amber-200 via-amber-400 to-yellow-500 font-display uppercase">
+            <h1 className="text-lg sm:text-xl font-black tracking-wider text-transparent bg-clip-text bg-gradient-to-r from-amber-200 via-amber-400 to-yellow-500 font-display uppercase leading-tight">
               Myranor Encra
             </h1>
-            <p className="text-[0.6875rem] text-slate-400 uppercase tracking-widest font-semibold">ENCRA ENcounter + CReature Assistant</p>
+            <p className="text-[0.6875rem] text-slate-400 uppercase tracking-widest font-semibold hidden sm:block">ENCRA ENcounter + CReature Assistant</p>
           </div>
         </div>
 
-        <div className="flex items-center gap-4">
-          <div className="text-right hidden sm:block">
+        <div className="flex items-center gap-2 sm:gap-4 shrink-0">
+          <div className="text-right hidden md:block">
             <p className="text-xs text-slate-400 font-medium">Spielleiter</p>
             <p className="text-sm font-semibold text-slate-200">{user?.email}</p>
           </div>
           <button
             onClick={() => setShowSettingsModal(true)}
-            className="p-2.5 text-slate-400 hover:text-white border border-slate-800 hover:border-slate-600 rounded-xl bg-slate-900/50 hover:bg-slate-800/50 transition-all cursor-pointer flex items-center justify-center"
+            className="p-2 sm:p-2.5 text-slate-400 hover:text-white border border-slate-800 hover:border-slate-600 rounded-xl bg-slate-900/50 hover:bg-slate-800/50 transition-all cursor-pointer flex items-center justify-center shrink-0"
             title="Einstellungen"
             id="btn-settings"
           >
@@ -1134,10 +1134,14 @@ export const App: React.FC = () => {
           </button>
           <button
             onClick={() => signOut()}
-            className="px-4 py-2 text-xs font-semibold uppercase tracking-wider text-slate-400 hover:text-white border border-slate-800 hover:border-slate-600 rounded-xl bg-slate-900/50 hover:bg-slate-800/50 transition-all cursor-pointer"
+            className="p-2 sm:px-4 sm:py-2 text-xs font-semibold uppercase tracking-wider text-slate-400 hover:text-white border border-slate-800 hover:border-slate-600 rounded-xl bg-slate-900/50 hover:bg-slate-800/50 transition-all cursor-pointer flex items-center justify-center gap-2 shrink-0"
             id="btn-sign-out"
+            title="Ausloggen"
           >
-            Ausloggen
+            <svg className="w-4 h-4 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
+              <path strokeLinecap="round" strokeLinejoin="round" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
+            </svg>
+            <span className="hidden sm:inline">Ausloggen</span>
           </button>
         </div>
       </header>
@@ -2769,22 +2773,22 @@ export const App: React.FC = () => {
       {/* SETTINGS MODAL */}
       {showSettingsModal && (
         <div className="fixed inset-0 bg-slate-950/75 backdrop-blur-xs z-50 flex items-center justify-center p-4 animate-fade-in">
-          <div className="relative w-full max-w-sm bg-[#131b2e]/95 border border-slate-800 rounded-2xl p-6 shadow-2xl space-y-5 animate-scale-in">
+          <div className="relative w-full max-w-sm bg-[#131b2e]/95 border border-slate-800 rounded-2xl p-4 sm:p-6 shadow-2xl space-y-4 sm:space-y-5 animate-scale-in">
             {/* Top gold highlight bar */}
             <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-amber-500 via-yellow-500 to-amber-700 rounded-t-2xl" />
 
-            <div className="flex items-center justify-between">
-              <h3 className="text-base font-bold text-transparent bg-clip-text bg-gradient-to-r from-amber-200 to-amber-400 font-display uppercase tracking-wider flex items-center gap-2">
-                <svg className="w-4 h-4 text-amber-400 animate-spin-slow" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
+            <div className="flex items-start justify-between gap-2">
+              <h3 className="text-sm sm:text-base font-bold text-transparent bg-clip-text bg-gradient-to-r from-amber-200 to-amber-400 font-display uppercase tracking-wider flex items-center gap-2 flex-wrap">
+                <svg className="w-4 h-4 text-amber-400 animate-spin-slow shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
                   <path strokeLinecap="round" strokeLinejoin="round" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" />
                   <path strokeLinecap="round" strokeLinejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
                 </svg>
-                Visuelle Einstellungen
+                <span>Visuelle Einstellungen</span>
               </h3>
               <button
                 type="button"
                 onClick={() => setShowSettingsModal(false)}
-                className="text-slate-400 hover:text-slate-200 text-sm font-semibold transition-colors cursor-pointer"
+                className="text-slate-400 hover:text-slate-200 text-sm font-semibold transition-colors cursor-pointer shrink-0 pt-0.5"
                 title="Schließen"
               >
                 ✕
@@ -2817,18 +2821,18 @@ export const App: React.FC = () => {
               </div>
 
               {/* Action Buttons */}
-              <div className="flex gap-2 pt-2">
+              <div className="flex flex-col sm:flex-row gap-2 pt-2">
                 <button
                   type="button"
                   onClick={() => handleFontSizeChange(100)}
-                  className="flex-1 px-4 py-2 text-[0.6875rem] font-extrabold uppercase tracking-wider text-slate-400 hover:text-white border border-slate-805 hover:border-slate-600 rounded-xl bg-slate-900/50 hover:bg-slate-800/50 transition-all cursor-pointer"
+                  className="flex-1 px-4 py-2.5 text-[0.6875rem] font-extrabold uppercase tracking-wider text-slate-400 hover:text-white border border-slate-800 hover:border-slate-600 rounded-xl bg-slate-900/50 hover:bg-slate-800/50 transition-all cursor-pointer text-center"
                 >
                   Standard (100%)
                 </button>
                 <button
                   type="button"
                   onClick={() => setShowSettingsModal(false)}
-                  className="px-5 py-2 text-[0.6875rem] font-extrabold uppercase tracking-wider text-slate-950 bg-amber-500 hover:bg-amber-400 rounded-xl transition-all cursor-pointer shadow-lg shadow-amber-900/10"
+                  className="flex-1 px-5 py-2.5 text-[0.6875rem] font-extrabold uppercase tracking-wider text-slate-950 bg-amber-500 hover:bg-amber-400 rounded-xl transition-all cursor-pointer shadow-lg shadow-amber-900/10 text-center"
                 >
                   Fertig
                 </button>
