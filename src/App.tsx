@@ -62,6 +62,8 @@ export const App: React.FC = () => {
   const [newName, setNewName] = useState('');
   const [newDesc, setNewDesc] = useState('');
   const [newNotes, setNewNotes] = useState('');
+  const [newImageUrl, setNewImageUrl] = useState('');
+  const [activeLightboxImage, setActiveLightboxImage] = useState<string | null>(null);
 
   // Core enemy fields
   const [newEnemyLevel, setNewEnemyLevel] = useState('HG 1');
@@ -154,6 +156,7 @@ export const App: React.FC = () => {
         type: template.type,
         description: template.description,
         notes: template.notes || '',
+        image_url: template.image_url || undefined,
         groesse: template.groesse,
         gewicht: template.gewicht,
         menge: template.menge,
@@ -194,6 +197,7 @@ export const App: React.FC = () => {
         type: template.type,
         description: template.description,
         notes: template.notes || '',
+        image_url: template.image_url || undefined,
         groesse: template.groesse,
         gewicht: template.gewicht,
         menge: template.menge,
@@ -368,6 +372,7 @@ export const App: React.FC = () => {
     setNewName(tpl.name);
     setNewDesc(tpl.description || '');
     setNewNotes(tpl.notes || '');
+    setNewImageUrl(tpl.image_url || '');
     setNewType(tpl.type || 'enemy');
     setNewEnemyGroesse(tpl.groesse || '');
     setNewEnemyGewicht(tpl.gewicht || '');
@@ -449,6 +454,7 @@ export const App: React.FC = () => {
     setNewName(tpl.name + " (Kopie)");
     setNewDesc(tpl.description || '');
     setNewNotes(tpl.notes || '');
+    setNewImageUrl(tpl.image_url || '');
     setNewType(tpl.type || 'enemy');
     setNewEnemyGroesse(tpl.groesse || '');
     setNewEnemyGewicht(tpl.gewicht || '');
@@ -770,6 +776,7 @@ export const App: React.FC = () => {
             type: 'enemy',
             description: newDesc,
             notes: newNotes,
+            image_url: newImageUrl || undefined,
             groesse: newEnemyGroesse || undefined,
             gewicht: newEnemyGewicht || undefined,
             menge: newEnemyMenge || undefined,
@@ -789,6 +796,7 @@ export const App: React.FC = () => {
             type: 'enemy',
             description: newDesc,
             notes: newNotes,
+            image_url: newImageUrl || undefined,
             groesse: newEnemyGroesse || undefined,
             gewicht: newEnemyGewicht || undefined,
             menge: newEnemyMenge || undefined,
@@ -856,6 +864,7 @@ export const App: React.FC = () => {
           type: newType,
           description: newDesc,
           notes: newNotes,
+          image_url: newImageUrl || undefined,
           ...specificData,
           is_multi_variant: false
         };
@@ -884,6 +893,7 @@ export const App: React.FC = () => {
             type: 'enemy',
             description: parsedMultiVariantData.description,
             notes: newNotes,
+            image_url: parsedMultiVariantData.image_url || newImageUrl || undefined,
             groesse: parsedMultiVariantData.groesse || undefined,
             gewicht: parsedMultiVariantData.gewicht || undefined,
             menge: parsedMultiVariantData.menge || undefined,
@@ -925,6 +935,7 @@ export const App: React.FC = () => {
               type: 'enemy',
               description: parsedMultiVariantData.description,
               notes: newNotes,
+              image_url: parsedMultiVariantData.image_url || newImageUrl || undefined,
               groesse: parsedMultiVariantData.groesse || undefined,
               gewicht: parsedMultiVariantData.gewicht || undefined,
               menge: parsedMultiVariantData.menge || undefined,
@@ -946,6 +957,7 @@ export const App: React.FC = () => {
             type: 'enemy',
             description: newDesc,
             notes: newNotes,
+            image_url: newImageUrl || undefined,
             groesse: newEnemyGroesse || undefined,
             gewicht: newEnemyGewicht || undefined,
             menge: newEnemyMenge || undefined,
@@ -984,6 +996,7 @@ export const App: React.FC = () => {
               type: 'enemy',
               description: newDesc,
               notes: newNotes,
+              image_url: newImageUrl || undefined,
               groesse: newEnemyGroesse || undefined,
               gewicht: newEnemyGewicht || undefined,
               menge: newEnemyMenge || undefined,
@@ -1050,6 +1063,7 @@ export const App: React.FC = () => {
           type: newType,
           description: newDesc,
           notes: newNotes,
+          image_url: newImageUrl || undefined,
           ...specificData
         };
 
@@ -1069,6 +1083,7 @@ export const App: React.FC = () => {
     setNewName('');
     setNewDesc('');
     setNewNotes('');
+    setNewImageUrl('');
     setNewEnemyHP(30);
     setNewEnemyVP(10);
     setNewEnemyIni(10);
@@ -1473,6 +1488,7 @@ export const App: React.FC = () => {
                           setNewName('');
                           setNewDesc('');
                           setNewNotes('');
+                          setNewImageUrl('');
                           setNewEnemyHP(30);
                           setNewEnemyVP(10);
                           setNewEnemyIni(10);
@@ -1535,6 +1551,7 @@ export const App: React.FC = () => {
                             setNewName('');
                             setNewDesc('');
                             setNewNotes('');
+                            setNewImageUrl('');
                             setNewEnemyHP(30);
                             setNewEnemyVP(10);
                             setNewEnemyIni(10);
@@ -1711,6 +1728,17 @@ export const App: React.FC = () => {
                       placeholder="Hintergrund, Aussehen, Verhalten..."
                       rows={2}
                       className="w-full px-3 py-2 rounded-xl bg-slate-900 border border-slate-800 text-slate-100 placeholder-slate-650 focus:outline-none focus:border-amber-500 text-xs leading-relaxed"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block text-[0.6875rem] font-extrabold uppercase tracking-wider text-slate-400 mb-1.5">Bild-URL (Optional)</label>
+                    <input
+                      type="text"
+                      value={newImageUrl}
+                      onChange={e => setNewImageUrl(e.target.value)}
+                      placeholder="z.B. /images/verkuender.png oder eine HTTPS Bild-URL..."
+                      className="w-full px-3 py-2 rounded-xl bg-slate-900 border border-slate-800 text-slate-100 placeholder-slate-650 focus:outline-none focus:border-amber-500 text-xs font-semibold"
                     />
                   </div>
 
@@ -2496,6 +2524,16 @@ export const App: React.FC = () => {
                   className="bg-[#131b2e]/60 border border-slate-800 hover:border-slate-700/85 rounded-2xl p-6 shadow-xl flex flex-col justify-between transition-all hover:translate-y-[-2px] group"
                 >
                   <div>
+                    {el.image_url && (
+                      <div className="w-full h-32 mb-4 overflow-hidden rounded-xl border border-slate-800/80">
+                        <img
+                          src={el.image_url}
+                          alt={el.name}
+                          onClick={() => setActiveLightboxImage(el.image_url || null)}
+                          className="object-cover w-full h-full cursor-pointer hover:opacity-90 transition-all duration-200"
+                        />
+                      </div>
+                    )}
                     {/* Header: Name and Type Tag */}
                     <div className="flex items-start justify-between gap-3 mb-4">
                       <div className="space-y-1.5">
@@ -2986,6 +3024,36 @@ export const App: React.FC = () => {
                 </button>
               </div>
             </div>
+          </div>
+        </div>
+      )}
+
+      {/* LIGHTBOX MODAL */}
+      {activeLightboxImage && (
+        <div
+          className="fixed inset-0 bg-slate-950/85 backdrop-blur-md z-50 flex items-center justify-center p-4 animate-fade-in"
+          onClick={() => setActiveLightboxImage(null)}
+        >
+          <div
+            className="relative bg-[#131b2e]/95 border border-slate-800 rounded-2xl p-2.5 shadow-2xl animate-scale-in max-w-full max-h-full flex items-center justify-center overflow-hidden"
+            onClick={(e) => e.stopPropagation()}
+          >
+            {/* Top gold highlight bar */}
+            <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-amber-500 via-yellow-500 to-amber-700 rounded-t-2xl" />
+            
+            <button
+              type="button"
+              onClick={() => setActiveLightboxImage(null)}
+              className="absolute top-3 right-3 text-slate-400 hover:text-white bg-slate-950/60 hover:bg-slate-950/90 rounded-full w-8 h-8 flex items-center justify-center font-bold transition-all cursor-pointer z-10 text-xs border border-slate-800"
+              title="Schließen"
+            >
+              ✕
+            </button>
+            <img
+              src={activeLightboxImage}
+              alt="Encounter Background Expanded"
+              className="rounded-xl lightbox-image"
+            />
           </div>
         </div>
       )}

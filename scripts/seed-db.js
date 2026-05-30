@@ -40,6 +40,7 @@ async function seed() {
       type: template.type,
       description: template.description || null,
       notes: template.notes || null,
+      image_url: template.image_url || null,
       is_multi_variant: template.is_multi_variant || false,
       default_variant: template.default_variant || null,
       variants: template.variants || null,

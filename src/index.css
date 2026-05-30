@@ -61,3 +61,17 @@
   animation: scaleIn 0.15s ease-out forwards;
 }
 
+/* Lightbox responsive image styles */
+.lightbox-image {
+  max-height: 80vh;
+  max-width: 80vw;
+  object-fit: contain;
+}
+
+@media (max-width: 768px) {
+  .lightbox-image {
+    max-height: 50vh !important;
+    max-width: 50vw !important;
+  }
+}
+
