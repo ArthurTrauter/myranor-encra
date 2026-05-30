@@ -3,6 +3,8 @@ import { useAuth } from './context/AuthContext';
 import { useEncounters } from './context/EncounterContext';
 import type { EncounterElement, EncounterElementType } from './types';
 import { parseBestiaryText } from './lib/bestiaryParser';
+import { supabase } from './lib/supabase';
+import { compressToWebP } from './lib/imageCompressor';
 
 export const App: React.FC = () => {
   const { user, signOut } = useAuth();
@@ -10,6 +12,7 @@ export const App: React.FC = () => {
     elements,
     templates,
     loadingElements,
+    signedUrls,
     addElement,
     updateElement,
     deleteElement,
@@ -64,6 +67,8 @@ export const App: React.FC = () => {
   const [newNotes, setNewNotes] = useState('');
   const [newImageUrl, setNewImageUrl] = useState('');
   const [activeLightboxImage, setActiveLightboxImage] = useState<string | null>(null);
+  const [uploading, setUploading] = useState(false);
+  const [localPreviewUrls, setLocalPreviewUrls] = useState<Record<string, string>>({});
 
   // Core enemy fields
   const [newEnemyLevel, setNewEnemyLevel] = useState('HG 1');
@@ -127,6 +132,61 @@ export const App: React.FC = () => {
   const [newHazardType, setNewHazardType] = useState('');
   const [newHazardSeverity, setNewHazardSeverity] = useState('Moderat');
   const [newHazardEffects, setNewHazardEffects] = useState('');
+
+  const getImageUrl = (url?: string): string | undefined => {
+    if (!url) return undefined;
+    if (url.startsWith('user-uploads/')) {
+      return localPreviewUrls[url] || signedUrls[url];
+    }
+    return url;
+  };
+
+  const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    if (!user) {
+      alert('Bitte logge dich ein, um eigene Bilder hochzuladen.');
+      return;
+    }
+
+    try {
+      setUploading(true);
+
+      // 1. Client-side compress WebP
+      const compressedBlob = await compressToWebP(file);
+
+      // 2. Upload to private Supabase bucket
+      const fileName = `${Math.random().toString(36).substring(2)}_${Date.now()}.webp`;
+      const filePath = `user-uploads/${fileName}`;
+
+      const { error: uploadError } = await supabase.storage
+        .from('encounter-images')
+        .upload(filePath, compressedBlob, {
+          contentType: 'image/webp'
+        });
+
+      if (uploadError) throw uploadError;
+
+      // 3. Request signed URL for immediate preview
+      const { data: signedData, error: signedError } = await supabase.storage
+        .from('encounter-images')
+        .createSignedUrl(filePath, 86400);
+
+      if (signedError) throw signedError;
+
+      if (signedData?.signedUrl) {
+        setLocalPreviewUrls(prev => ({ ...prev, [filePath]: signedData.signedUrl }));
+      }
+
+      setNewImageUrl(filePath);
+    } catch (err: any) {
+      console.error('Upload error:', err);
+      alert('Fehler beim Hochladen des Bildes: ' + err.message);
+    } finally {
+      setUploading(false);
+    }
+  };
 
   const toggleSecret = (id: string) => {
     setRevealedSecrets(prev => ({ ...prev, [id]: !prev[id] }));
@@ -1732,14 +1792,78 @@ export const App: React.FC = () => {
                   </div>
 
                   <div>
-                    <label className="block text-[0.6875rem] font-extrabold uppercase tracking-wider text-slate-400 mb-1.5">Bild-URL (Optional)</label>
-                    <input
-                      type="text"
-                      value={newImageUrl}
-                      onChange={e => setNewImageUrl(e.target.value)}
-                      placeholder="z.B. /images/verkuender.png oder eine HTTPS Bild-URL..."
-                      className="w-full px-3 py-2 rounded-xl bg-slate-900 border border-slate-800 text-slate-100 placeholder-slate-650 focus:outline-none focus:border-amber-500 text-xs font-semibold"
-                    />
+                    <label className="block text-[0.6875rem] font-extrabold uppercase tracking-wider text-slate-400 mb-1.5">Bild (Optional)</label>
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                      <div>
+                        <span className="block text-[0.625rem] text-slate-550 font-bold uppercase tracking-wider mb-1">Bild-URL</span>
+                        <input
+                          type="text"
+                          value={newImageUrl}
+                          onChange={e => setNewImageUrl(e.target.value)}
+                          placeholder="z.B. /images/verkuender.png oder HTTPS Link..."
+                          className="w-full px-3 py-2 rounded-xl bg-slate-900 border border-slate-800 text-slate-100 placeholder-slate-650 focus:outline-none focus:border-amber-500 text-xs font-semibold"
+                        />
+                      </div>
+                      <div>
+                        <span className="block text-[0.625rem] text-slate-550 font-bold uppercase tracking-wider mb-1">Datei hochladen (Sicher & Privat)</span>
+                        {user ? (
+                          <div className="flex items-center gap-2">
+                            <label className="flex-1 flex items-center justify-center px-4 py-2 bg-slate-900 hover:bg-slate-850 border border-slate-800 hover:border-slate-700 text-slate-300 hover:text-white rounded-xl cursor-pointer text-xs font-semibold transition-all relative">
+                              {uploading ? (
+                                <span className="flex items-center gap-2">
+                                  <span className="w-4 h-4 border-2 border-slate-650 border-t-amber-500 rounded-full animate-spin" />
+                                  Lädt hoch...
+                                </span>
+                              ) : (
+                                <span className="flex items-center gap-1.5">
+                                  <svg className="w-4 h-4 text-amber-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12" />
+                                  </svg>
+                                  Bild auswählen (WebP)
+                                </span>
+                              )}
+                              <input
+                                type="file"
+                                accept="image/*"
+                                disabled={uploading}
+                                onChange={handleImageUpload}
+                                className="hidden"
+                              />
+                            </label>
+                            {newImageUrl && newImageUrl.startsWith('user-uploads/') && (
+                              <button
+                                type="button"
+                                onClick={() => setNewImageUrl('')}
+                                className="p-2 border border-slate-800 bg-red-950/20 hover:bg-red-950/40 text-red-400 hover:text-red-300 rounded-xl transition-all"
+                                title="Bild entfernen"
+                              >
+                                <svg className="w-4.5 h-4.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                                </svg>
+                              </button>
+                            )}
+                          </div>
+                        ) : (
+                          <div className="px-4 py-2 border border-dashed border-slate-800 rounded-xl text-center text-slate-500 text-xs font-medium">
+                            Melde dich an, um Bilder sicher hochzuladen.
+                          </div>
+                        )}
+                      </div>
+                    </div>
+                    {/* Upload Preview */}
+                    {newImageUrl && (
+                      <div className="mt-3 flex items-center gap-3 p-2 bg-slate-900/35 border border-slate-800/60 rounded-xl w-fit">
+                        <img
+                          src={getImageUrl(newImageUrl)}
+                          alt="Vorschau"
+                          className="w-14 h-14 object-cover rounded-lg border border-slate-800/80"
+                        />
+                        <div className="text-[0.6875rem] space-y-0.5 pr-2">
+                          <span className="text-slate-500 font-extrabold block uppercase tracking-wider">Bild-Vorschau</span>
+                          <span className="text-slate-350 font-semibold truncate block max-w-xs">{newImageUrl}</span>
+                        </div>
+                      </div>
+                    )}
                   </div>
 
                   {/* ENEMY-SPECIFIC UPGRADED FORMS WITH SUB-TABS */}
@@ -2527,7 +2651,7 @@ export const App: React.FC = () => {
                     {el.image_url && (
                       <div className="w-full h-32 mb-4 overflow-hidden rounded-xl border border-slate-800/80">
                         <img
-                          src={el.image_url}
+                          src={getImageUrl(el.image_url)}
                           alt={el.name}
                           onClick={() => setActiveLightboxImage(el.image_url || null)}
                           className="object-cover w-full h-full cursor-pointer hover:opacity-90 transition-all duration-200"
@@ -3050,7 +3174,7 @@ export const App: React.FC = () => {
               ✕
             </button>
             <img
-              src={activeLightboxImage}
+              src={getImageUrl(activeLightboxImage) || ''}
               alt="Encounter Background Expanded"
               className="rounded-xl lightbox-image"
             />

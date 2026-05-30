@@ -111,6 +111,7 @@ export interface EncounterContextType {
   templates: EncounterElement[];
   loadingElements: boolean;
   loadingTemplates: boolean;
+  signedUrls: Record<string, string>;
   addElement: (element: Omit<EncounterElement, 'id' | 'created_at' | 'updated_at'>) => Promise<EncounterElement | null>;
   updateElement: (id: string, updates: Partial<EncounterElement>) => Promise<void>;
   deleteElement: (id: string) => Promise<void>;

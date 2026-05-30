@@ -23,6 +23,42 @@ export const EncounterProvider: React.FC<EncounterProviderProps> = ({ children }
   const [templates, setTemplates] = useState<EncounterElement[]>([]);
   const [loadingElements, setLoadingElements] = useState(true);
   const [loadingTemplates, setLoadingTemplates] = useState(true);
+  const [signedUrls, setSignedUrls] = useState<Record<string, string>>({});
+
+  const fetchSignedUrls = async (items: EncounterElement[]) => {
+    const paths = items
+      .map(item => item.image_url)
+      .filter((url): url is string => !!url && url.startsWith('user-uploads/'));
+    
+    if (paths.length === 0) return;
+
+    try {
+      const uniquePaths = Array.from(new Set(paths)).filter(p => !signedUrls[p]);
+      if (uniquePaths.length === 0) return;
+
+      const { data, error } = await supabase.storage
+        .from('encounter-images')
+        .createSignedUrls(uniquePaths, 86400); // 24 hours
+      
+      if (!error && data) {
+        const newMap: Record<string, string> = {};
+        data.forEach(item => {
+          if (item.path && item.signedUrl) {
+            newMap[item.path] = item.signedUrl;
+          }
+        });
+        setSignedUrls(prev => ({ ...prev, ...newMap }));
+      }
+    } catch (err) {
+      console.warn('Failed to fetch signed URLs:', err);
+    }
+  };
+
+  useEffect(() => {
+    if (elements.length > 0 || templates.length > 0) {
+      fetchSignedUrls([...elements, ...templates]);
+    }
+  }, [elements, templates]);
 
   // 1. Load active encounters
   useEffect(() => {
@@ -309,6 +345,7 @@ export const EncounterProvider: React.FC<EncounterProviderProps> = ({ children }
         templates,
         loadingElements,
         loadingTemplates,
+        signedUrls,
         addElement,
         updateElement,
         deleteElement,
