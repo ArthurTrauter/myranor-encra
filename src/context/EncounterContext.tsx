@@ -25,10 +25,26 @@ export const EncounterProvider: React.FC<EncounterProviderProps> = ({ children }
   const [loadingTemplates, setLoadingTemplates] = useState(true);
   const [signedUrls, setSignedUrls] = useState<Record<string, string>>({});
 
+  const canUserViewOfficialImages = (user: any): boolean => {
+    if (!user) return false;
+    const allowedEmails = ['arthur.trauter@googlemail.com'];
+    return (
+      allowedEmails.includes(user?.email || '') ||
+      user?.app_metadata?.role === 'admin' ||
+      user?.user_metadata?.role === 'admin'
+    );
+  };
+
   const fetchSignedUrls = async (items: EncounterElement[]) => {
     const paths = items
       .map(item => item.image_url)
-      .filter((url): url is string => !!url && url.startsWith('user-uploads/'));
+      .filter((url): url is string => {
+        if (!url || !url.startsWith('user-uploads/')) return false;
+        if (url.startsWith('user-uploads/official/') && !canUserViewOfficialImages(session?.user)) {
+          return false;
+        }
+        return true;
+      });
     
     if (paths.length === 0) return;
 

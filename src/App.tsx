@@ -133,9 +133,22 @@ export const App: React.FC = () => {
   const [newHazardSeverity, setNewHazardSeverity] = useState('Moderat');
   const [newHazardEffects, setNewHazardEffects] = useState('');
 
+  const canUserViewOfficialImages = (user: any): boolean => {
+    if (!user) return false;
+    const allowedEmails = ['arthur.trauter@googlemail.com'];
+    return (
+      allowedEmails.includes(user?.email || '') ||
+      user?.app_metadata?.role === 'admin' ||
+      user?.user_metadata?.role === 'admin'
+    );
+  };
+
   const getImageUrl = (url?: string): string | undefined => {
     if (!url) return undefined;
     if (url.startsWith('user-uploads/')) {
+      if (url.startsWith('user-uploads/official/') && !canUserViewOfficialImages(user)) {
+        return undefined;
+      }
       return localPreviewUrls[url] || signedUrls[url];
     }
     return url;
@@ -2648,7 +2661,7 @@ export const App: React.FC = () => {
                   className="bg-[#131b2e]/60 border border-slate-800 hover:border-slate-700/85 rounded-2xl p-6 shadow-xl flex flex-col justify-between transition-all hover:translate-y-[-2px] group"
                 >
                   <div>
-                    {el.image_url && (
+                    {getImageUrl(el.image_url) && (
                       <div className="w-full h-32 mb-4 overflow-hidden rounded-xl border border-slate-800/80">
                         <img
                           src={getImageUrl(el.image_url)}

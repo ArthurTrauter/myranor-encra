@@ -550,7 +550,7 @@
     "id": "verkuender",
     "name": "Verkünder",
     "type": "enemy",
-    "image_url": "user-uploads/verkuender.png",
+    "image_url": "user-uploads/official/verkuender.png",
     "description": "Ein zweiköpfiger Drache, der in der Lage ist, Stimmen und Geräusche täuschend echt nachzuahmen. Im Kampf setzt er mächtige Schallwellen frei.",
     "is_multi_variant": true,
     "default_variant": "Ausgewachsen",
