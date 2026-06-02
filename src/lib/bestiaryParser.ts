@@ -45,6 +45,14 @@ export interface ParsedCreature {
   verbreitung?: string;
 }
 
+export function cleanText(text: string): string {
+  if (!text) return '';
+  const junkRe = /\s*(?:\b(?:Abenteuerideen|Verbreitung|Michael\s+Jaecks|Eric\s+Lofgren|Iris\s+Aleit|Florian\s+Stitz|Colin\s+Ashcroft)\b.*?)?(?:Christian\s+Voshage\s*-\s*Lonwyrm@gmail\.com\s*-\s*\d+\/\d+\/\d+\/\d+)\s*/gi;
+  let cleaned = text.replace(junkRe, '');
+  cleaned = cleaned.replace(/\s*\b(?:Verbreitung|Abenteuerideen)\b\s*$/i, '');
+  return cleaned.trim();
+}
+
 export function parseBestiaryText(text: string): ParsedCreature | null {
   if (!text || !text.trim()) return null;
 
@@ -53,6 +61,16 @@ export function parseBestiaryText(text: string): ParsedCreature | null {
 
   // 1. Name & Variants
   const name = lines[0];
+  const normalizeForCheck = (s: string) => s.toLowerCase().replace(/[^a-z0-9äöüß]/g, '');
+  const normName = normalizeForCheck(name);
+  let skipIdx = 1;
+  while (skipIdx < lines.length) {
+    if (normalizeForCheck(lines[skipIdx]) === normName) {
+      lines.splice(skipIdx, 1);
+    } else {
+      break;
+    }
+  }
   const secondLine = lines[1];
   
   const isMultiVariant = secondLine.includes('/');
@@ -135,9 +153,102 @@ export function parseBestiaryText(text: string): ParsedCreature | null {
   const fluffLines = new Set<string>();
 
   const attributeRows: { variant: string; values: number[] }[] = [];
-  let isAttributeHeaderFound = false;
+  const attributeLines = new Set<string>();
+
+  // 1. Search for headers to parse attributes (vertical or horizontal)
+  let staIdx = -1;
+  let hasVerticalAttributes = false;
+
+  for (let i = 0; i < headerLines.length; i++) {
+    const l = headerLines[i].toLowerCase();
+    
+    // Check for single-line horizontal header
+    if ((l === 'stä' || l === 'stae' || l.startsWith('stä ') || l.startsWith('stae ')) && l.includes('ges') && l.includes('kon')) {
+      let j = i + 1;
+      while (j < headerLines.length) {
+        const valLine = headerLines[j];
+        const parts = valLine.split(/\s+/);
+        if (parts.length >= 7) {
+          const variantName = parts[0];
+          const values = parts.slice(1, 7).map(v => parseInt(v.replace('+', ''), 10)).filter(v => !isNaN(v));
+          if (values.length === 6) {
+            attributeRows.push({ variant: variantName, values });
+            attributeLines.add(valLine);
+          }
+        } else if (parts.length === 6) {
+          const values = parts.map(v => parseInt(v.replace('+', ''), 10)).filter(v => !isNaN(v));
+          if (values.length === 6) {
+            attributeRows.push({ variant: 'Standard', values });
+            attributeLines.add(valLine);
+          }
+        } else {
+          break;
+        }
+        j++;
+      }
+      attributeLines.add(headerLines[i]);
+      break;
+    }
+    
+    // Check for vertical headers
+    if (l === 'stä' || l === 'stae' || l.startsWith('stä ') || l.startsWith('stae ')) {
+      if (i + 5 < headerLines.length &&
+          (headerLines[i+1].toLowerCase() === 'ges' || headerLines[i+1].toLowerCase().includes('ges')) &&
+          (headerLines[i+2].toLowerCase() === 'kon' || headerLines[i+2].toLowerCase().includes('kon')) &&
+          (headerLines[i+3].toLowerCase() === 'int' || headerLines[i+3].toLowerCase().includes('int')) &&
+          (headerLines[i+4].toLowerCase() === 'wei' || headerLines[i+4].toLowerCase().includes('wei')) &&
+          (headerLines[i+5].toLowerCase() === 'cha' || headerLines[i+5].toLowerCase().includes('cha'))) {
+        staIdx = i;
+        hasVerticalAttributes = true;
+        break;
+      }
+    }
+  }
+
+  if (hasVerticalAttributes && staIdx !== -1) {
+    // Add header lines to attributeLines
+    for (let offset = 0; offset < 6; offset++) {
+      attributeLines.add(headerLines[staIdx + offset]);
+    }
+    if (headerLines[staIdx - 1]?.toLowerCase() === 'alter') {
+      attributeLines.add(headerLines[staIdx - 1]);
+    }
+    
+    let currentIdx = staIdx + 6;
+    if (isMultiVariant) {
+      // Group of 7 lines: VariantName, STÄ, GES, KON, INT, WEI, CHA
+      while (currentIdx + 6 <= headerLines.length) {
+        const variantName = headerLines[currentIdx].trim();
+        const rawVals = headerLines.slice(currentIdx + 1, currentIdx + 7);
+        const values = rawVals.map(v => parseInt(v.replace('+', '').replace('–', '-').replace('-', '-').trim(), 10));
+        const allValid = values.every(v => !isNaN(v));
+        if (allValid) {
+          attributeRows.push({ variant: variantName, values });
+          attributeLines.add(headerLines[currentIdx]);
+          rawVals.forEach(v => attributeLines.add(v));
+          currentIdx += 7;
+        } else {
+          break;
+        }
+      }
+    } else {
+      // Single variant: next 6 lines are integers
+      if (currentIdx + 5 < headerLines.length) {
+        const rawVals = headerLines.slice(currentIdx, currentIdx + 6);
+        const values = rawVals.map(v => parseInt(v.replace('+', '').replace('–', '-').replace('-', '-').trim(), 10));
+        const allValid = values.every(v => !isNaN(v));
+        if (allValid) {
+          attributeRows.push({ variant: 'Standard', values });
+          rawVals.forEach(v => attributeLines.add(v));
+        }
+      }
+    }
+  }
 
   headerLines.forEach(line => {
+    if (attributeLines.has(line)) {
+      return;
+    }
     const lower = line.toLowerCase();
     
     if (lower.startsWith('größe:') || lower.startsWith('groeße:') || lower.startsWith('groesse:')) {
@@ -201,21 +312,6 @@ export function parseBestiaryText(text: string): ParsedCreature | null {
     } else if (lower.includes('heimlichkeit')) {
       stealthLine = line;
       lastFluffField = null;
-    } else if (lower.includes('alter') && (lower.includes('stä') || lower.includes('ges') || lower.includes('ge '))) {
-      isAttributeHeaderFound = true;
-      lastFluffField = null;
-    } else if (isAttributeHeaderFound || lower.match(/^(stä|ges|kon|int|wei|cha)/)) {
-      // Look for attribute modifier line like "Nestling +3 +3 +4 +1 +2 +4" or "Königin +7 +3 +12"
-      // Match words and numbers
-      const parts = line.split(/\s+/);
-      if (parts.length >= 7) {
-        const variantName = parts[0];
-        const values = parts.slice(1, 7).map(v => parseInt(v.replace('+', ''), 10)).filter(v => !isNaN(v));
-        if (values.length === 6) {
-          attributeRows.push({ variant: variantName, values });
-        }
-      }
-      lastFluffField = null;
     } else {
       if (lastFluffField) {
         fluffLines.add(line);
@@ -254,6 +350,7 @@ export function parseBestiaryText(text: string): ParsedCreature | null {
       line === bwLine || line === savesLine || line === sensesLine || line === languagesLine || 
       line === ubLine || line === immunitiesLine || line === perceptionLine || line === stealthLine ||
       fluffLines.has(line) ||
+      attributeLines.has(line) ||
       line.toLowerCase().includes('alter stä ges kon') || 
       attributeRows.some(r => line.startsWith(r.variant));
 
@@ -289,6 +386,7 @@ export function parseBestiaryText(text: string): ParsedCreature | null {
     
     const items: ActionItem[] = [];
     let currentItem: ActionItem | null = null;
+    const fluffKeys = ["größe", "groeße", "groesse", "gewicht", "menge", "verbreitung"];
 
     linesList.forEach(line => {
       // Check if this line starts with a new action: "Name:"
@@ -325,7 +423,13 @@ export function parseBestiaryText(text: string): ParsedCreature | null {
     if (currentItem) {
       items.push(currentItem);
     }
-    return items;
+    
+    return items
+      .filter(item => !fluffKeys.some(fk => item.name.toLowerCase().includes(fk)))
+      .map(item => ({
+        name: item.name,
+        description: cleanText(item.description)
+      }));
   };
 
   const parsedActions = parseActionBlock(blocks['actions']);
@@ -333,7 +437,7 @@ export function parseBestiaryText(text: string): ParsedCreature | null {
   const parsedReactions = parseActionBlock(blocks['reactions']);
   const parsedLegendaryActions = parseActionBlock(blocks['legendary_actions']);
   const parsedLairActions = parseActionBlock(blocks['lair_actions']);
-  const parsedRegionalEffects = blocks['regional_effects']?.join(' ') || '';
+  const parsedRegionalEffects = cleanText(blocks['regional_effects']?.join(' ') || '');
 
   // Helper to split slash-separated stats for variants
   const getVariantValue = (line: string, index: number, total: number, prefix: string): string => {
@@ -451,7 +555,7 @@ export function parseBestiaryText(text: string): ParsedCreature | null {
     // 8. Filter Actions & Traits for this variant
     const traits = traitsList
       .filter(t => appliesToVariant(t.name, varName))
-      .map(t => ({ name: t.name, description: t.description }));
+      .map(t => ({ name: t.name, description: cleanText(t.description) }));
 
     // Helper: Map actions to proper formats (Nahkampf / Fernkampf check)
     const mapAction = (act: ActionItem) => {
