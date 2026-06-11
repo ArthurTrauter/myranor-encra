@@ -1,10 +1,17 @@
 import React, { useState } from 'react';
 import { useAuth } from './context/AuthContext';
 import { useEncounters } from './context/EncounterContext';
+import { useBattle } from './context/BattleContext';
 import type { EncounterElement, EncounterElementType } from './types';
 import { parseBestiaryText } from './lib/bestiaryParser';
 import { supabase } from './lib/supabase';
 import { compressToWebP } from './lib/imageCompressor';
+
+const AVAILABLE_STATES = [
+  'Betäubt', 'Festgesetzt', 'Taub', 'Bewusstlos', 'Gelähmt',
+  'Unsichtbar', 'Bezaubert', 'Gepackt', 'Verängstigt', 'Blind',
+  'Kampfunfähig', 'Vergiftet', 'Erschöpft', 'Liegend', 'Versteinert'
+];
 
 export const App: React.FC = () => {
   const { user, signOut } = useAuth();
@@ -21,9 +28,43 @@ export const App: React.FC = () => {
     updateTemplate
   } = useEncounters();
 
+  const {
+    battleParticipants,
+    loadingBattle,
+    addBattleParticipant,
+    updateBattleParticipant,
+    deleteBattleParticipant,
+    clearBattle
+  } = useBattle();
+
   const [searchTerm, setSearchTerm] = useState('');
-  const [activeTab, setActiveTab] = useState<EncounterElementType | 'all'>('all');
+  const [activeTab, setActiveTab] = useState<EncounterElementType | 'all' | 'battle'>('all');
   const [revealedSecrets, setRevealedSecrets] = useState<Record<string, boolean>>({});
+  
+  // Battle Mode States
+  const [activeBattleIndex, setActiveBattleIndex] = useState(0);
+  const [showAddToBattleModal, setShowAddToBattleModal] = useState(false);
+  const [addToBattleSource, setAddToBattleSource] = useState<any>(null);
+  const [addToBattleCount, setAddToBattleCount] = useState(1);
+  const [addToBattleCustomName, setAddToBattleCustomName] = useState('');
+  const [addToBattleHP, setAddToBattleHP] = useState(30);
+  const [lpAdjustmentValue, setLpAdjustmentValue] = useState<string>('');
+
+  const handleAddMultipleToBattle = async () => {
+    if (!addToBattleSource) return;
+    const baseName = addToBattleCustomName.trim() || addToBattleSource.name;
+    
+    for (let i = 0; i < addToBattleCount; i++) {
+      const suffix = addToBattleCount > 1 ? ` ${i + 1}` : '';
+      const customName = `${baseName}${suffix}`;
+      await addBattleParticipant(addToBattleSource, customName, addToBattleHP);
+    }
+    
+    setShowAddToBattleModal(false);
+    setAddToBattleSource(null);
+    setActiveTab('battle'); // Switch to battle tab automatically
+  };
+
   
   // Settings & Font-Size States
   const [showSettingsModal, setShowSettingsModal] = useState(false);
@@ -1296,57 +1337,63 @@ export const App: React.FC = () => {
         {/* UPPER ROW: SEARCH AND FILTERS */}
         <div className="flex flex-col md:flex-row gap-4 items-center justify-between">
           {/* TAB FILTERS */}
-          <div className="flex flex-wrap gap-1.5 p-1 bg-slate-900/80 border border-slate-800 rounded-2xl w-full md:w-auto">
-            {(['all', 'enemy', 'social', 'trap', 'hazard'] as const).map(tab => {
-              const label = {
-                all: 'Alle',
-                enemy: 'Gegner',
-                social: 'Soziale NPCs',
-                trap: 'Fallen',
-                hazard: 'Umweltgefahren'
-              }[tab];
+          <div className="flex flex-col sm:flex-row gap-4 items-center justify-between w-full">
+            <div className="flex flex-wrap gap-1.5 p-1 bg-slate-900/80 border border-slate-800 rounded-2xl w-full md:w-auto">
+              {(['all', 'enemy', 'social', 'trap', 'hazard', 'battle'] as const).map(tab => {
+                const label = {
+                  all: 'Alle',
+                  enemy: 'Gegner',
+                  social: 'Soziale NPCs',
+                  trap: 'Fallen',
+                  hazard: 'Umweltgefahren',
+                  battle: '⚔️ Kampf-Modus'
+                }[tab];
 
-              const isActive = activeTab === tab;
+                const isActive = activeTab === tab;
 
-              return (
-                <button
-                  key={tab}
-                  onClick={() => setActiveTab(tab)}
-                  className={`px-4 py-2 text-xs font-bold uppercase tracking-wider rounded-xl transition-all ${isActive
-                      ? 'bg-amber-500 text-slate-950 shadow-lg shadow-amber-900/20'
-                      : 'text-slate-400 hover:text-slate-200 hover:bg-slate-800/40'
-                    }`}
-                >
-                  {label}
-                </button>
-              );
-            })}
-          </div>
-
-          {/* SEARCH & ADD ACTION */}
-          <div className="flex items-center gap-3 w-full md:w-auto shrink-0">
-            <div className="relative flex-1 md:w-64">
-              <span className="absolute inset-y-0 left-0 flex items-center pl-3 text-slate-500">
-                <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-                </svg>
-              </span>
-              <input
-                type="text"
-                placeholder="Suchen..."
-                value={searchTerm}
-                onChange={e => setSearchTerm(e.target.value)}
-                className="w-full pl-9 pr-4 py-2.5 rounded-xl bg-slate-900/60 border border-slate-800 text-slate-100 placeholder-slate-500 focus:outline-none focus:border-amber-500 transition-all text-xs"
-              />
+                return (
+                  <button
+                    key={tab}
+                    onClick={() => setActiveTab(tab)}
+                    className={`px-4 py-2 text-xs font-bold uppercase tracking-wider rounded-xl transition-all cursor-pointer ${isActive
+                        ? 'bg-amber-500 text-slate-950 shadow-lg shadow-amber-900/20'
+                        : 'text-slate-400 hover:text-slate-200 hover:bg-slate-800/40'
+                      }`}
+                  >
+                    {label}
+                  </button>
+                );
+              })}
             </div>
 
-            <button
-              onClick={() => setShowAddForm(!showAddForm)}
-              className="px-5 py-2.5 rounded-xl bg-gradient-to-r from-amber-600 to-amber-700 hover:from-amber-500 hover:to-amber-600 text-white font-bold text-xs uppercase tracking-widest flex items-center gap-2 shadow-lg shadow-amber-900/20 transition-all"
-            >
-              <span>+ Element</span>
-            </button>
+            {/* SEARCH & ADD ACTION (only shown outside battle mode) */}
+            {activeTab !== 'battle' && (
+              <div className="flex items-center gap-3 w-full md:w-auto shrink-0">
+                <div className="relative flex-1 md:w-64">
+                  <span className="absolute inset-y-0 left-0 flex items-center pl-3 text-slate-500">
+                    <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                    </svg>
+                  </span>
+                  <input
+                    type="text"
+                    placeholder="Suchen..."
+                    value={searchTerm}
+                    onChange={e => setSearchTerm(e.target.value)}
+                    className="w-full pl-9 pr-4 py-2.5 rounded-xl bg-slate-900/60 border border-slate-800 text-slate-100 placeholder-slate-500 focus:outline-none focus:border-amber-500 transition-all text-xs"
+                  />
+                </div>
+
+                <button
+                  onClick={() => setShowAddForm(!showAddForm)}
+                  className="px-5 py-2.5 rounded-xl bg-gradient-to-r from-amber-600 to-amber-700 hover:from-amber-500 hover:to-amber-600 text-white font-bold text-xs uppercase tracking-widest flex items-center gap-2 shadow-lg shadow-amber-900/20 transition-all cursor-pointer"
+                >
+                  <span>+ Element</span>
+                </button>
+              </div>
+            )}
           </div>
+
         </div>
         {/* QUICK ADD DRAWER / COMPONENT */}
         {showAddForm && (() => {
@@ -1454,15 +1501,52 @@ export const App: React.FC = () => {
                           return t && t.is_multi_variant ? "col-span-1" : "col-span-1 sm:col-span-2";
                         })()
                       }>
-                        <button
-                          type="button"
-                          disabled={!selectedTemplateId}
-                          onClick={handleAddFromTemplate}
-                          className="w-full px-4 py-2.5 rounded-lg bg-amber-500 hover:bg-amber-400 disabled:bg-slate-900 disabled:text-slate-600 disabled:border-slate-800 disabled:border text-slate-950 font-bold text-xs uppercase tracking-widest transition-all cursor-pointer disabled:cursor-not-allowed"
-                        >
-                          Beschwörung ausführen
-                        </button>
+                        <div className="flex gap-2 w-full">
+                          <button
+                            type="button"
+                            disabled={!selectedTemplateId}
+                            onClick={handleAddFromTemplate}
+                            className="flex-1 px-4 py-2.5 rounded-lg bg-amber-500 hover:bg-amber-400 disabled:bg-slate-900 disabled:text-slate-600 disabled:border-slate-800 disabled:border text-slate-950 font-bold text-xs uppercase tracking-widest transition-all cursor-pointer disabled:cursor-not-allowed text-center"
+                          >
+                            Beschwören
+                          </button>
+                          <button
+                            type="button"
+                            disabled={!selectedTemplateId}
+                            onClick={() => {
+                              const t = templates.find((tmp: any) => tmp.id === selectedTemplateId) as any;
+                              if (!t) return;
+                              let source = t;
+                              if (t.is_multi_variant && selectedVariant) {
+                                const variantData = t.variants[selectedVariant];
+                                source = {
+                                  ...t,
+                                  name: `${t.name} (${selectedVariant})`,
+                                  hp_max: variantData.tp_max || variantData.hp_max || 30,
+                                  rk: variantData.rk,
+                                  ini: variantData.ini || 10,
+                                  bw: variantData.bw,
+                                  saves: variantData.saves,
+                                  attributes: variantData.attributes,
+                                  actions: variantData.actions,
+                                  bonus_actions: variantData.bonus_actions,
+                                  active_variant: selectedVariant
+                                };
+                              }
+                              setAddToBattleSource(source);
+                              setAddToBattleCustomName(source.name);
+                              setAddToBattleHP(source.hp_max || 30);
+                              setAddToBattleCount(1);
+                              setShowAddToBattleModal(true);
+                              setShowAddForm(false);
+                            }}
+                            className="flex-1 px-4 py-2.5 rounded-lg border border-amber-500/30 bg-amber-500/10 hover:bg-amber-500/20 text-amber-400 font-bold text-xs uppercase tracking-widest transition-all cursor-pointer disabled:cursor-not-allowed disabled:border-slate-800 disabled:text-slate-600 text-center"
+                          >
+                            ⚔️ Zum Kampf
+                          </button>
+                        </div>
                       </div>
+
                     </div>
                   </div>
 
@@ -2621,472 +2705,1006 @@ export const App: React.FC = () => {
           );
         })()}
 
-        {/* LOADING INDICATOR */}
-        {loadingElements ? (
-          <div className="py-20 text-center text-slate-400 space-y-4">
-            <div className="w-12 h-12 border-3 border-slate-800 border-t-amber-500 rounded-full animate-spin mx-auto" />
-            <p className="text-xs font-semibold tracking-widest uppercase">Rufe Datenbank ab...</p>
-          </div>
-        ) : filteredElements.length === 0 ? (
-          <div className="py-20 text-center border border-dashed border-slate-800 rounded-2xl bg-slate-900/20">
-            <svg className="w-12 h-12 text-slate-600 mx-auto mb-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" d="M9.172 16.172a4 4 0 015.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-            </svg>
-            <h4 className="text-base font-bold text-slate-300">Keine Elemente gefunden</h4>
-            <p className="text-xs text-slate-500 mt-1">Ändere deine Filter oder erstelle ein neues Element.</p>
-          </div>
-        ) : (
-          /* ELEMENTS GRID */
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {filteredElements.map((el: EncounterElement) => {
-
-              // Define Type Tag styling
-              const tagColors = {
-                enemy: 'bg-red-500/10 border-red-500/30 text-red-400',
-                social: 'bg-emerald-500/10 border-emerald-500/30 text-emerald-400',
-                trap: 'bg-orange-500/10 border-orange-500/30 text-orange-400',
-                hazard: 'bg-cyan-500/10 border-cyan-500/30 text-cyan-400'
-              }[el.type];
-
-              const tagLabel = {
-                enemy: 'Gegner',
-                social: 'Sozialer NPC',
-                trap: 'Falle',
-                hazard: 'Gefahr'
-              }[el.type];
-
-              return (
-                <div
-                  key={el.id}
-                  className="bg-[#131b2e]/60 border border-slate-800 hover:border-slate-700/85 rounded-2xl p-6 shadow-xl flex flex-col justify-between transition-all hover:translate-y-[-2px] group"
+        {activeTab === 'battle' ? (
+          loadingBattle ? (
+            <div className="py-20 text-center text-slate-400 space-y-4">
+              <div className="w-12 h-12 border-3 border-slate-800 border-t-amber-500 rounded-full animate-spin mx-auto" />
+              <p className="text-xs font-semibold tracking-widest uppercase">Lade Kampfteilnehmer...</p>
+            </div>
+          ) : (
+            <div className="space-y-6 animate-fade-in">
+            {/* Battle Header Controls */}
+            <div className="flex flex-col sm:flex-row items-center justify-between gap-4 p-4 bg-slate-900/40 border border-slate-800 rounded-2xl">
+              <div>
+                <h3 className="text-lg font-bold text-amber-400 flex items-center gap-2">
+                  <span>⚔️</span> Aktiver Kampf ({battleParticipants.length} Teilnehmer)
+                </h3>
+                <p className="text-xs text-slate-400">Verwalte Lebenspunkte, Zustände und Aktionen deiner Kampf-Teilnehmer.</p>
+              </div>
+              <div className="flex items-center gap-3 w-full sm:w-auto">
+                <button
+                  onClick={clearBattle}
+                  disabled={battleParticipants.length === 0}
+                  className="w-full sm:w-auto px-4 py-2 text-xs font-bold uppercase tracking-wider text-red-400 hover:text-red-300 border border-red-500/20 hover:bg-red-500/10 disabled:bg-slate-900 disabled:text-slate-600 disabled:border-slate-800 rounded-xl transition-all cursor-pointer disabled:cursor-not-allowed text-center"
                 >
-                  <div>
-                    {getImageUrl(el.image_url) && (
-                      <div className="w-full h-32 mb-4 overflow-hidden rounded-xl border border-slate-800/80">
-                        <img
-                          src={getImageUrl(el.image_url)}
-                          alt={el.name}
-                          onClick={() => setActiveLightboxImage(el.image_url || null)}
-                          className="object-cover w-full h-full cursor-pointer hover:opacity-90 transition-all duration-200"
-                        />
-                      </div>
-                    )}
-                    {/* Header: Name and Type Tag */}
-                    <div className="flex items-start justify-between gap-3 mb-4">
-                      <div className="space-y-1.5">
-                        <div className="flex items-center gap-1.5 flex-wrap">
-                          <span className={`text-[0.625rem] font-extrabold uppercase px-2.5 py-1 rounded-full border ${tagColors}`}>
-                            {tagLabel}
-                          </span>
-                          {el.type === 'enemy' && el.is_multi_variant && el.active_variant && (
-                            <select
-                              value={el.active_variant}
-                              onChange={(e) => handleCardVariantChange(el.id, e.target.value)}
-                              className="text-[0.625rem] font-extrabold uppercase px-2.5 py-1 rounded-full border border-amber-500/30 bg-amber-500/10 text-amber-400 focus:outline-none cursor-pointer hover:bg-amber-500/20 transition-all"
+                  Kampf beenden / Leeren
+                </button>
+              </div>
+            </div>
+
+            {battleParticipants.length === 0 ? (
+              <div className="py-20 text-center border border-dashed border-slate-800 rounded-2xl bg-slate-900/20">
+                <svg className="w-12 h-12 text-slate-600 mx-auto mb-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" d="M12 9v3m0 0v3m0-3h3m-3 0H9m12 0a9 9 0 11-18 0 9 9 0 0118 0z" />
+                </svg>
+                <h4 className="text-base font-bold text-slate-350">Keine Teilnehmer im Kampf</h4>
+                <p className="text-xs text-slate-500 mt-1 max-w-md mx-auto leading-relaxed">
+                  Füge Gegner oder NPCs über die Schaltfläche ⚔️ bei den Karten oder Vorlagen hinzu, um den Kampf zu starten.
+                </p>
+              </div>
+            ) : (
+              <div>
+                {/* CAROUSEL SWITCHER BAR */}
+                <div className="flex items-center justify-between gap-4 mb-6">
+                  <button
+                    onClick={() => setActiveBattleIndex(prev => (prev > 0 ? prev - 1 : battleParticipants.length - 1))}
+                    className="p-3 text-slate-400 hover:text-white border border-slate-800 rounded-xl bg-slate-900/50 hover:bg-slate-800/50 transition-all cursor-pointer"
+                    title="Vorheriger Teilnehmer"
+                  >
+                    <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2.5">
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M15 19l-7-7 7-7" />
+                    </svg>
+                  </button>
+
+                  {/* Quick list / indicator bubbles */}
+                  <div className="flex items-center gap-1.5 overflow-x-auto py-1 max-w-[60%] scrollbar-thin scrollbar-thumb-slate-800">
+                    {battleParticipants.map((part, idx) => {
+                      const isActive = idx === activeBattleIndex;
+                      const isDead = part.hp_current <= 0 || part.states.includes('Kampfunfähig');
+                      return (
+                        <button
+                          key={part.id}
+                          onClick={() => setActiveBattleIndex(idx)}
+                          className={`px-3.5 py-1.5 rounded-lg text-xs font-bold tracking-wide transition-all shrink-0 cursor-pointer ${
+                            isActive
+                              ? 'bg-amber-500 text-slate-950 shadow-md'
+                              : isDead
+                              ? 'bg-red-950/20 text-red-400/70 border border-red-900/20 animate-pulse'
+                              : 'bg-slate-900 border border-slate-800 text-slate-400 hover:text-slate-200'
+                          }`}
+                        >
+                          {part.name} ({part.hp_current}/{part.hp_max})
+                        </button>
+                      );
+                    })}
+                  </div>
+
+                  <button
+                    onClick={() => setActiveBattleIndex(prev => (prev < battleParticipants.length - 1 ? prev + 1 : 0))}
+                    className="p-3 text-slate-400 hover:text-white border border-slate-800 rounded-xl bg-slate-900/50 hover:bg-slate-800/50 transition-all cursor-pointer"
+                    title="Nächster Teilnehmer"
+                  >
+                    <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2.5">
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" />
+                    </svg>
+                  </button>
+                </div>
+
+                {/* ACTIVE PARTICIPANT DETAIL VIEW */}
+                {(() => {
+                  const currentIndex = activeBattleIndex >= battleParticipants.length ? battleParticipants.length - 1 : activeBattleIndex;
+                  const part = battleParticipants[currentIndex];
+                  if (!part) return null;
+
+                  const hpPercent = Math.max(0, Math.min(100, (part.hp_current / part.hp_max) * 100));
+                  const isLPLow = part.hp_current <= part.hp_max * 0.25;
+
+                  const handleHPChange = async (newVal: number) => {
+                    const hp = Math.max(0, Math.min(part.hp_max, newVal));
+                    const updatedStates = [...part.states];
+                    if (hp === 0 && !updatedStates.includes('Kampfunfähig')) {
+                      updatedStates.push('Kampfunfähig');
+                    } else if (hp > 0 && updatedStates.includes('Kampfunfähig')) {
+                      const uidx = updatedStates.indexOf('Kampfunfähig');
+                      if (uidx !== -1) updatedStates.splice(uidx, 1);
+                    }
+                    await updateBattleParticipant(part.id, { hp_current: hp, states: updatedStates });
+                  };
+
+                  const handleApplyAdjustment = async (isDamage: boolean) => {
+                    const rawVal = parseInt(lpAdjustmentValue);
+                    if (isNaN(rawVal) || rawVal <= 0) return;
+                    const diff = isDamage ? -rawVal : rawVal;
+                    await handleHPChange(part.hp_current + diff);
+                    setLpAdjustmentValue('');
+                  };
+
+                  const handleToggleState = async (stateName: string) => {
+                    let updatedStates = [...part.states];
+                    if (updatedStates.includes(stateName)) {
+                      updatedStates = updatedStates.filter(s => s !== stateName);
+                    } else {
+                      updatedStates.push(stateName);
+                    }
+                    await updateBattleParticipant(part.id, { states: updatedStates });
+                  };
+
+                  return (
+                    <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 items-start">
+                      
+                      {/* LEFT COLUMN: IDENTIFICATION & MAIN STATS */}
+                      <div className="lg:col-span-1 bg-[#131b2e]/60 border border-slate-800 rounded-2xl p-6 space-y-6 shadow-xl">
+                        
+                        {/* Image & Header */}
+                        <div className="space-y-4">
+                          {getImageUrl(part.image_url) && (
+                            <div className="w-full h-40 overflow-hidden rounded-xl border border-slate-800/80 hidden md:block">
+                              <img
+                                src={getImageUrl(part.image_url)}
+                                alt={part.name}
+                                className="object-cover w-full h-full"
+                              />
+                            </div>
+                          )}
+                          <div>
+                            <div className="flex items-center gap-1.5 justify-between">
+                              <span className="text-[0.625rem] font-extrabold uppercase px-2.5 py-1 rounded-full border bg-red-500/10 border-red-500/30 text-red-400">
+                                Kampf-Teilnehmer
+                              </span>
+                              <button
+                                onClick={() => {
+                                  if (confirm(`Möchtest du ${part.name} wirklich aus dem Kampf entfernen?`)) {
+                                    deleteBattleParticipant(part.id);
+                                    setActiveBattleIndex(prev => (prev > 0 ? prev - 1 : 0));
+                                  }
+                                }}
+                                className="text-slate-500 hover:text-red-400 p-1.5 rounded-lg hover:bg-slate-800/40 transition-colors cursor-pointer shrink-0"
+                                title="Teilnehmer löschen"
+                              >
+                                <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                                </svg>
+                              </button>
+                            </div>
+                            {/* Rename Input */}
+                            <input
+                              type="text"
+                              value={part.name}
+                              onChange={e => updateBattleParticipant(part.id, { name: e.target.value })}
+                              className="mt-2 w-full bg-slate-900/60 border border-slate-800 hover:border-slate-750 focus:border-amber-500 rounded-lg px-2.5 py-1.5 text-lg font-bold text-slate-100 font-display focus:outline-none transition-all"
+                              title="Name des Teilnehmers bearbeiten"
+                            />
+                            <p className="text-[0.6875rem] text-slate-400 font-semibold uppercase tracking-wider mt-1">
+                              Kreatur: {part.original_name} {part.active_variant && `(${part.active_variant})`}
+                            </p>
+                          </div>
+                        </div>
+
+                        {/* Health Editor */}
+                        <div className="border-t border-slate-800/80 pt-4 space-y-3.5">
+                          <div className="flex justify-between items-center text-xs font-bold">
+                            <span className="text-slate-400 uppercase tracking-wider">Lebenspunkte (LP)</span>
+                            <span className={isLPLow ? 'text-red-400 animate-pulse' : 'text-emerald-400'}>
+                              {part.hp_current} / {part.hp_max} LP
+                            </span>
+                          </div>
+
+                          {/* Health bar */}
+                          <div className="w-full h-3 bg-slate-900 border border-slate-800/50 rounded-full overflow-hidden">
+                            <div
+                              className={`h-full transition-all duration-300 ${
+                                isLPLow ? 'bg-gradient-to-r from-red-600 to-red-500' : 'bg-gradient-to-r from-emerald-600 to-emerald-500'
+                              }`}
+                              style={{ width: `${hpPercent}%` }}
+                            />
+                          </div>
+
+                          {/* Health Modifiers */}
+                          <div className="grid grid-cols-3 gap-2 items-center">
+                            <button
+                              onClick={() => handleHPChange(part.hp_current - 1)}
+                              className="py-2 bg-slate-900 border border-slate-800 hover:border-slate-700 hover:bg-slate-850 rounded-lg text-slate-300 font-bold transition-all text-sm cursor-pointer"
+                              title="-1 LP"
                             >
-                              {el.variants_keys?.map(v => (
-                                <option key={v} value={v} className="bg-slate-900 text-slate-200">{v}</option>
-                              ))}
-                            </select>
+                              -1
+                            </button>
+                            {/* Direct Current HP Input */}
+                            <input
+                              type="number"
+                              value={part.hp_current}
+                              onChange={e => handleHPChange(parseInt(e.target.value) || 0)}
+                              className="w-full bg-slate-900 text-center border border-slate-800 focus:border-amber-500 rounded-lg py-2 font-bold text-slate-100 focus:outline-none transition-all text-sm"
+                              title="Genaue LP eingeben"
+                            />
+                            <button
+                              onClick={() => handleHPChange(part.hp_current + 1)}
+                              className="py-2 bg-slate-900 border border-slate-800 hover:border-slate-700 hover:bg-slate-850 rounded-lg text-slate-300 font-bold transition-all text-sm cursor-pointer"
+                              title="+1 LP"
+                            >
+                              +1
+                            </button>
+                          </div>
+
+                          {/* Quick Heal / Damage Calculator */}
+                          <div className="flex gap-2 pt-1">
+                            <input
+                              type="number"
+                              placeholder="Wert..."
+                              value={lpAdjustmentValue}
+                              onChange={e => setLpAdjustmentValue(e.target.value)}
+                              className="w-1/2 bg-slate-900 border border-slate-800 focus:border-amber-500 rounded-lg px-2 text-center text-xs font-semibold focus:outline-none transition-all"
+                            />
+                            <button
+                              onClick={() => handleApplyAdjustment(true)}
+                              className="w-1/4 py-1.5 bg-red-950/40 hover:bg-red-900/30 text-red-400 border border-red-900/30 font-bold text-[0.625rem] uppercase tracking-wider rounded-lg transition-all cursor-pointer"
+                            >
+                              Schaden
+                            </button>
+                            <button
+                              onClick={() => handleApplyAdjustment(false)}
+                              className="w-1/4 py-1.5 bg-emerald-950/40 hover:bg-emerald-900/30 text-emerald-400 border border-emerald-900/30 font-bold text-[0.625rem] uppercase tracking-wider rounded-lg transition-all cursor-pointer"
+                            >
+                              Heilung
+                            </button>
+                          </div>
+                        </div>
+
+                        {/* Primary Combat Parameters */}
+                        <div className="border-t border-slate-800/80 pt-4 grid grid-cols-2 gap-3 text-center">
+                          <div className="p-2.5 bg-slate-900/40 border border-slate-850 rounded-xl">
+                            <span className="text-slate-500 font-bold block uppercase text-[0.55rem] tracking-wider mb-0.5">Rüstung (RK)</span>
+                            <span className="text-base font-extrabold text-slate-200">{part.rk !== undefined ? part.rk : 10}</span>
+                          </div>
+                          <div className="p-2.5 bg-slate-900/40 border border-slate-850 rounded-xl">
+                            <span className="text-slate-500 font-bold block uppercase text-[0.55rem] tracking-wider mb-0.5">Initiative (INI)</span>
+                            <span className="text-base font-extrabold text-slate-200">{part.ini !== undefined ? part.ini : 10}</span>
+                          </div>
+                          {part.bw && (
+                            <div className="p-2.5 bg-slate-900/40 border border-slate-850 rounded-xl col-span-2">
+                              <span className="text-slate-500 font-bold block uppercase text-[0.55rem] tracking-wider mb-0.5">Bewegung (BW)</span>
+                              <span className="text-xs font-bold text-slate-350">{part.bw}</span>
+                            </div>
+                          )}
+                          {part.ub !== undefined && (
+                            <div className="p-2.5 bg-slate-900/40 border border-slate-850 rounded-xl col-span-2">
+                              <span className="text-slate-500 font-bold block uppercase text-[0.55rem] tracking-wider mb-0.5">Übungsbonus (UB)</span>
+                              <span className="text-xs font-bold text-amber-500">+{part.ub}</span>
+                            </div>
                           )}
                         </div>
-                        <h3 className="text-lg font-bold text-slate-100 font-display tracking-tight group-hover:text-amber-400 transition-colors">
-                          {el.name}
-                        </h3>
+
                       </div>
-                      <button
-                        onClick={() => deleteElement(el.id)}
-                        className="text-slate-500 hover:text-red-400 p-1.5 rounded-lg hover:bg-slate-800/40 transition-colors shrink-0"
-                        title="Element löschen"
-                      >
-                        <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
-                        </svg>
-                      </button>
-                    </div>
 
-                    <p className="text-xs text-slate-350 leading-relaxed mb-4">
-                      {el.description}
-                    </p>
-
-                    {/* TYPE-SPECIFIC DETAIL PANELS */}
-                    {el.type === 'enemy' && (
-                      <div className="space-y-4 border-t border-slate-800/60 pt-4 text-xs">
-                        {/* Fluff Attributes Grid */}
-                        {(el.groesse || el.gewicht || el.menge || el.verbreitung) && (
-                          <div className="grid grid-cols-2 gap-2 mb-2 p-2.5 rounded-xl bg-slate-900/40 border border-slate-800/40 text-[0.6875rem] text-slate-350">
-                            {el.groesse && (
-                              <div>
-                                <span className="text-amber-500/80 font-extrabold block uppercase text-[0.55rem] tracking-wider">Größe</span>
-                                <span className="font-medium text-slate-200">{el.groesse}</span>
-                              </div>
-                            )}
-                            {el.gewicht && (
-                              <div>
-                                <span className="text-amber-500/80 font-extrabold block uppercase text-[0.55rem] tracking-wider">Gewicht</span>
-                                <span className="font-medium text-slate-200">{el.gewicht}</span>
-                              </div>
-                            )}
-                            {el.menge && (
-                              <div>
-                                <span className="text-amber-500/80 font-extrabold block uppercase text-[0.55rem] tracking-wider">Menge</span>
-                                <span className="font-medium text-slate-200">{el.menge}</span>
-                              </div>
-                            )}
-                            {el.verbreitung && (
-                              <div className="col-span-2 border-t border-slate-800/30 pt-1.5 mt-0.5">
-                                <span className="text-amber-500/80 font-extrabold block uppercase text-[0.55rem] tracking-wider">Verbreitung</span>
-                                <span className="font-medium text-slate-200">{el.verbreitung}</span>
-                              </div>
-                            )}
+                      {/* CENTER COLUMN: STATS, SAVES AND STATES */}
+                      <div className="lg:col-span-1 space-y-6">
+                        
+                        {/* Rettungswürfe (RW) */}
+                        {part.saves && (
+                          <div className="bg-[#131b2e]/60 border border-slate-800 rounded-2xl p-6 shadow-xl space-y-3">
+                            <h4 className="text-xs font-bold text-amber-400 uppercase tracking-widest border-b border-slate-800/60 pb-1.5">
+                              Rettungswürfe (RW)
+                            </h4>
+                            <p className="text-sm font-semibold text-slate-200 bg-slate-900/50 border border-slate-850 px-3.5 py-2.5 rounded-xl leading-relaxed">
+                              {part.saves}
+                            </p>
                           </div>
                         )}
 
-                        <div className="flex items-center justify-between flex-wrap gap-2">
-                          <div className="flex items-center gap-1.5">
-                            <span className="text-[0.6875rem] text-slate-500 font-bold uppercase">Stufe / HG</span>
-                            <span className="font-semibold text-slate-200 px-2 py-0.5 bg-slate-850 rounded border border-slate-800">{el.level}</span>
-                          </div>
-                          <div className="flex items-center gap-4">
-                            <div className="flex items-center gap-1">
-                              <span className="text-[0.6875rem] text-slate-500 font-bold uppercase">TP</span>
-                              <span className="font-extrabold text-red-400 bg-red-950/20 px-2 py-0.5 border border-red-900/30 rounded" title={el.tp_formula}>
-                                {el.hp_current}/{el.hp_max} {el.tp_formula && `(${el.tp_formula})`}
-                              </span>
-                            </div>
-                            <div className="flex items-center gap-1">
-                              <span className="text-[0.6875rem] text-slate-500 font-bold uppercase">RK</span>
-                              <span className="font-bold text-slate-200 bg-slate-850 px-2 py-0.5 border border-slate-800 rounded">
-                                {el.rk !== undefined ? el.rk : el.vp}
-                              </span>
-                            </div>
-                          </div>
-                        </div>
-
-                        {/* Extra general stats for rich entries */}
-                        {(el.bw || el.ub !== undefined || el.senses || el.languages || el.saves || el.immunities) && (
-                          <div className="grid grid-cols-2 gap-2 p-2.5 rounded-xl bg-slate-900/35 border border-slate-800/50 text-[0.6875rem] text-slate-350">
-                            {el.bw && (
-                              <div>
-                                <span className="text-slate-500 font-extrabold block uppercase text-[0.625rem]">BW (Bewegung)</span>
-                                <span className="font-semibold">{el.bw}</span>
-                              </div>
-                            )}
-                            {el.ub !== undefined && (
-                              <div>
-                                <span className="text-slate-500 font-extrabold block uppercase text-[0.625rem]">ÜB (Übungsbonus)</span>
-                                <span className="font-semibold text-amber-500 font-bold">+{el.ub}</span>
-                              </div>
-                            )}
-                            {el.saves && (
-                              <div className="col-span-2 border-t border-slate-800/30 pt-1.5 mt-0.5">
-                                <span className="text-slate-500 font-extrabold block uppercase text-[0.625rem]">Rettungswürfe (RW)</span>
-                                <span className="font-semibold text-slate-200">{el.saves}</span>
-                              </div>
-                            )}
-                            {el.immunities && (
-                              <div className="col-span-2 border-t border-slate-800/30 pt-1.5 mt-0.5">
-                                <span className="text-slate-500 font-extrabold block uppercase text-[0.625rem]">Immunitäten</span>
-                                <span className="font-semibold text-orange-400">{el.immunities}</span>
-                              </div>
-                            )}
-                            {el.senses && (
-                              <div className="col-span-2 border-t border-slate-800/30 pt-1.5 mt-0.5">
-                                <span className="text-slate-500 font-extrabold block uppercase text-[0.625rem]">Sinne</span>
-                                <span className="font-semibold">{el.senses}</span>
-                              </div>
-                            )}
-                            {el.languages && (
-                              <div className="col-span-2 border-t border-slate-800/30 pt-1.5 mt-0.5">
-                                <span className="text-slate-500 font-extrabold block uppercase text-[0.625rem]">Sprachen</span>
-                                <span className="font-semibold">{el.languages}</span>
-                              </div>
-                            )}
-                          </div>
-                        )}
-
-                        {/* Attribute Grid */}
-                        <div className="grid grid-cols-4 gap-1 text-[0.6875rem] text-center font-bold">
-                          {el.attributes?.map(attr => (
-                            <div key={attr.name} className="bg-slate-900/50 rounded p-1 border border-slate-800/40">
-                              <span className="text-slate-500 block">{attr.name}</span>
-                              <span className="text-slate-300 font-extrabold">{attr.value > 0 ? `+${attr.value}` : attr.value}</span>
-                            </div>
-                          ))}
-                        </div>
-
-                        {/* Skills and passive values */}
-                        {el.skills && el.skills.length > 0 && (
-                          <div className="pt-1.5 space-y-1">
-                            <span className="text-[0.6875rem] text-slate-500 font-extrabold uppercase block">Fertigkeiten (Skills)</span>
-                            <div className="flex flex-wrap gap-1">
-                              {el.skills.map((sk: any, idx) => (
-                                <span key={idx} className="bg-slate-900 border border-slate-800 text-[0.6875rem] px-2.5 py-0.5 rounded font-medium text-slate-300">
-                                  {sk.name}: +{sk.value} {sk.passive !== undefined && <span className="text-slate-500">(pRW: {sk.passive})</span>}
-                                </span>
-                              ))}
-                            </div>
-                          </div>
-                        )}
-
-                        {/* Traits / Eigenschaften */}
-                        {el.traits && el.traits.length > 0 && (
-                          <div className="pt-1.5 space-y-1">
-                            <span className="text-[0.6875rem] text-slate-500 font-extrabold uppercase block">Eigenschaften (Traits)</span>
-                            <div className="space-y-1">
-                              {el.traits.map((t: any, idx) => (
-                                <div key={idx} className="bg-slate-900/30 border border-slate-850 p-2 rounded text-xs">
-                                  <strong className="text-amber-500">{t.name}:</strong> <span className="text-slate-300">{t.description}</span>
+                        {/* Attributes Grid */}
+                        {part.attributes && part.attributes.length > 0 && (
+                          <div className="bg-[#131b2e]/60 border border-slate-800 rounded-2xl p-6 shadow-xl space-y-3">
+                            <h4 className="text-xs font-bold text-amber-400 uppercase tracking-widest border-b border-slate-800/60 pb-1.5">
+                              Attribute
+                            </h4>
+                            <div className="grid grid-cols-3 gap-2 text-center text-xs font-bold">
+                              {part.attributes.map(attr => (
+                                <div key={attr.name} className="bg-slate-900/60 rounded-xl p-2 border border-slate-800/80">
+                                  <span className="text-slate-500 block uppercase text-[0.625rem] mb-0.5">{attr.name}</span>
+                                  <span className="text-slate-200 font-extrabold text-sm">{attr.value > 0 ? `+${attr.value}` : attr.value}</span>
                                 </div>
                               ))}
                             </div>
                           </div>
                         )}
 
-                        {/* Actions (Bestiary actions, e.g. multiattack, bite, ram etc) */}
-                        {el.actions && el.actions.length > 0 && (
-                          <div className="pt-2 space-y-1.5">
-                            <span className="text-[0.6875rem] text-slate-500 font-extrabold uppercase block border-b border-slate-800/40 pb-0.5">Aktionen</span>
-                            <div className="space-y-1.5">
-                              {el.actions.map((act: any, idx) => (
-                                <div key={idx} className="bg-slate-900/30 border border-slate-850 p-2 rounded text-xs space-y-1.5">
+                        {/* Status Effects / Zustände */}
+                        <div className="bg-[#131b2e]/60 border border-slate-800 rounded-2xl p-6 shadow-xl space-y-4">
+                          <div className="flex justify-between items-center border-b border-slate-800/60 pb-2">
+                            <h4 className="text-xs font-bold text-amber-400 uppercase tracking-widest">
+                              Zustände
+                            </h4>
+                            {/* Add State Selector Dropdown */}
+                            <div className="relative group/state">
+                              <button className="px-3 py-1 bg-slate-900 border border-slate-800 rounded-lg text-[0.6875rem] font-bold text-amber-500 hover:text-amber-400 hover:border-slate-750 transition-all cursor-pointer">
+                                + Hinzufügen
+                              </button>
+                              <div className="absolute right-0 top-full mt-1 w-48 max-h-60 overflow-y-auto bg-slate-950 border border-slate-800 rounded-xl shadow-2xl z-20 py-1 hidden group-hover/state:block scrollbar-thin scrollbar-thumb-slate-800">
+                                {AVAILABLE_STATES.map(st => {
+                                  const isActive = part.states.includes(st);
+                                  return (
+                                    <button
+                                      key={st}
+                                      onClick={() => handleToggleState(st)}
+                                      className={`w-full text-left px-3.5 py-1.5 text-xs font-medium transition-colors cursor-pointer ${
+                                        isActive ? 'bg-amber-500/10 text-amber-400' : 'text-slate-350 hover:bg-slate-900 hover:text-white'
+                                      }`}
+                                    >
+                                      {st} {isActive && '✓'}
+                                    </button>
+                                  );
+                                })}
+                              </div>
+                            </div>
+                          </div>
+
+                          {/* Active States list */}
+                          {part.states.length === 0 ? (
+                            <p className="text-xs text-slate-500 italic py-2">Keine aktiven Zustände.</p>
+                          ) : (
+                            <div className="flex flex-wrap gap-2">
+                              {part.states.map(st => (
+                                <button
+                                  key={st}
+                                  onClick={() => handleToggleState(st)}
+                                  className="px-3 py-1.5 rounded-lg text-xs font-bold uppercase tracking-wider transition-all cursor-pointer bg-red-950/20 text-red-400 border border-red-900/30 hover:bg-red-900/20 flex items-center gap-1.5"
+                                  title="Zustand entfernen"
+                                >
+                                  <span>{st}</span>
+                                  <span className="text-[0.6875rem] text-red-500 font-extrabold font-mono">✕</span>
+                                </button>
+                              ))}
+                            </div>
+                          )}
+                        </div>
+
+                      </div>
+
+                      {/* RIGHT COLUMN: ACTIONS AND BONUS ACTIONS */}
+                      <div className="lg:col-span-1 space-y-6">
+                        
+                        {/* Actions */}
+                        <div className="bg-[#131b2e]/60 border border-slate-800 rounded-2xl p-6 shadow-xl space-y-4">
+                          <h4 className="text-xs font-bold text-amber-400 uppercase tracking-widest border-b border-slate-800/60 pb-2">
+                            Aktionen
+                          </h4>
+                          {part.actions && part.actions.length > 0 ? (
+                            <div className="space-y-3.5">
+                              {part.actions.map((act: any, idx) => (
+                                <div key={idx} className="bg-slate-900/40 border border-slate-850 p-3 rounded-xl space-y-2">
                                   <div className="flex justify-between items-center">
-                                    <strong className="text-red-400">{act.name}</strong>
+                                    <strong className="text-red-400 text-xs font-bold font-display">{act.name}</strong>
                                     {act.type && (
-                                      <span className="text-[0.625rem] font-extrabold uppercase px-1.5 py-0.5 bg-slate-800 border border-slate-700 rounded text-slate-300">
+                                      <span className="text-[0.55rem] font-extrabold uppercase px-1.5 py-0.5 bg-slate-800 border border-slate-700 rounded text-slate-300">
                                         {act.type}
                                       </span>
                                     )}
                                   </div>
-                                  {act.description && <p className="text-slate-350 text-xs leading-relaxed">{act.description}</p>}
-                                  {(act.at !== undefined || act.rw || act.damage) && (
-                                    <div className="text-[0.6875rem] text-slate-400 flex flex-wrap gap-x-3 gap-y-1 pt-1 border-t border-slate-850">
-                                      {act.at !== undefined && <span><strong>AT:</strong> +{act.at}</span>}
-                                      {act.rw && <span><strong>RW:</strong> {act.rw}</span>}
-                                      {act.damage && <span><strong>Treffer:</strong> {act.damage}</span>}
+                                  {act.description && <p className="text-slate-400 text-xs leading-relaxed">{act.description}</p>}
+                                  
+                                  {/* Attack details highlighted */}
+                                  {(act.at !== undefined || act.pa !== undefined || act.rw || act.range || act.damage || act.tp) && (
+                                    <div className="flex flex-wrap gap-2 pt-1.5 border-t border-slate-850/60 text-[0.6875rem]">
+                                      {act.at !== undefined && (
+                                        <span className="bg-amber-950/30 text-amber-400 px-2 py-0.5 rounded-md border border-amber-900/20 font-bold">
+                                          AT: +{act.at}
+                                        </span>
+                                      )}
+                                      {act.pa !== undefined && (
+                                        <span className="bg-emerald-950/30 text-emerald-400 px-2 py-0.5 rounded-md border border-emerald-900/20 font-bold">
+                                          PA: {act.pa}
+                                        </span>
+                                      )}
+                                      {(act.damage || act.tp) && (
+                                        <span className="bg-red-950/30 text-red-400 px-2 py-0.5 rounded-md border border-red-900/20 font-bold">
+                                          TP: {act.damage || act.tp}
+                                        </span>
+                                      )}
+                                      {(act.rw || act.range) && (
+                                        <span className="bg-blue-950/30 text-blue-400 px-2 py-0.5 rounded-md border border-blue-900/20 font-bold">
+                                          RW: {act.rw || act.range}
+                                        </span>
+                                      )}
                                     </div>
                                   )}
                                 </div>
                               ))}
                             </div>
-                          </div>
-                        )}
-
-                        {/* Bonusactions */}
-                        {el.bonus_actions && el.bonus_actions.length > 0 && (
-                          <div className="pt-2 space-y-1.5">
-                            <span className="text-[0.6875rem] text-slate-500 font-extrabold uppercase block border-b border-slate-800/40 pb-0.5">Bonusaktionen</span>
-                            <div className="space-y-1.5">
-                              {el.bonus_actions.map((act: any, idx) => (
-                                <div key={idx} className="bg-slate-900/30 border border-slate-850 p-2 rounded text-xs space-y-1">
-                                  <strong className="text-purple-400">{act.name}</strong>
-                                  {act.description && <p className="text-slate-350 text-xs leading-relaxed">{act.description}</p>}
-                                </div>
-                              ))}
-                            </div>
-                          </div>
-                        )}
-
-                        {/* Reaktionen */}
-                        {el.reactions && el.reactions.length > 0 && (
-                          <div className="pt-2 space-y-1.5">
-                            <span className="text-[0.6875rem] text-slate-500 font-extrabold uppercase block border-b border-slate-800/40 pb-0.5">Reaktionen</span>
-                            <div className="space-y-1.5">
-                              {el.reactions.map((act: any, idx) => (
-                                <div key={idx} className="bg-slate-900/30 border border-slate-850 p-2 rounded text-xs space-y-1">
-                                  <strong className="text-blue-400">{act.name}</strong>
-                                  {act.description && <p className="text-slate-350 text-xs leading-relaxed">{act.description}</p>}
-                                </div>
-                              ))}
-                            </div>
-                          </div>
-                        )}
-
-                        {/* Legendäre Aktionen */}
-                        {el.legendary_actions && el.legendary_actions.length > 0 && (
-                          <div className="pt-2 space-y-1.5">
-                            <span className="text-[0.6875rem] text-slate-500 font-extrabold uppercase block border-b border-slate-800/40 pb-0.5">Legendäre Aktionen</span>
-                            <div className="space-y-1.5">
-                              {el.legendary_actions.map((act: any, idx) => (
-                                <div key={idx} className="bg-slate-900/30 border border-slate-850 p-2 rounded text-xs space-y-1">
-                                  <strong className="text-teal-400">{act.name}</strong>
-                                  {act.description && <p className="text-slate-350 text-xs leading-relaxed">{act.description}</p>}
-                                </div>
-                              ))}
-                            </div>
-                          </div>
-                        )}
-
-                        {/* Hortaktionen */}
-                        {el.lair_actions && el.lair_actions.length > 0 && (
-                          <div className="pt-2 space-y-1.5">
-                            <span className="text-[0.6875rem] text-slate-500 font-extrabold uppercase block border-b border-slate-800/40 pb-0.5">Hortaktionen</span>
-                            <div className="space-y-1.5">
-                              {el.lair_actions.map((act: any, idx) => (
-                                <div key={idx} className="bg-slate-900/30 border border-slate-850 p-2 rounded text-xs space-y-1">
-                                  <strong className="text-yellow-500">{act.name}</strong>
-                                  {act.description && <p className="text-slate-350 text-xs leading-relaxed">{act.description}</p>}
-                                </div>
-                              ))}
-                            </div>
-                          </div>
-                        )}
-
-                        {/* Regionale Effekte */}
-                        {el.regional_effects && (
-                          <div className="pt-2 space-y-1.5">
-                            <span className="text-[0.6875rem] text-slate-500 font-extrabold uppercase block border-b border-slate-800/40 pb-0.5">Regionale Effekte</span>
-                            <div className="bg-slate-900/30 border border-slate-850 p-2.5 rounded text-xs text-slate-350 leading-relaxed">
-                              {el.regional_effects}
-                            </div>
-                          </div>
-                        )}
-
-                        {/* Legacy Special Abilities (Fallbacks for standard templates) */}
-                        {(!el.traits && el.abilities && el.abilities.length > 0) && (
-                          <div className="pt-1.5">
-                            <span className="text-[0.6875rem] text-slate-500 font-extrabold uppercase block mb-1">Besonderheiten</span>
-                            <div className="flex flex-wrap gap-1">
-                              {el.abilities.map((ab: any, idx) => (
-                                <span key={idx} className="bg-amber-950/20 text-amber-400/90 border border-amber-950 text-[0.6875rem] px-2 py-0.5 rounded font-medium">
-                                  {typeof ab === 'string' ? ab : ab.name}
-                                </span>
-                              ))}
-                            </div>
-                          </div>
-                        )}
-
-                        {/* Legacy Attacks (Fallbacks for standard templates) */}
-                        {(!el.actions && el.attacks && el.attacks.length > 0) && (
-                          <div className="pt-1.5 space-y-1">
-                            <span className="text-[0.6875rem] text-slate-500 font-extrabold uppercase block">Angriffe</span>
-                            <div className="space-y-1">
-                              {el.attacks.map((atk: any, idx) => (
-                                <div key={idx} className="bg-slate-900/30 border border-slate-850 p-2 rounded text-xs flex justify-between items-center">
-                                  <span className="font-semibold text-slate-200">{atk.name}</span>
-                                  <span className="text-slate-400 text-[0.6875rem]">
-                                    {atk.tp && `TP: ${atk.tp}`} {atk.at !== undefined && ` | AT: ${atk.at}`} {atk.pa !== undefined && ` | PA: ${atk.pa}`} {atk.range && ` | RW: ${atk.range}`}
-                                  </span>
-                                </div>
-                              ))}
-                            </div>
-                          </div>
-                        )}
-                      </div>
-                    )}
-
-                    {el.type === 'social' && (
-                      <div className="space-y-2.5 border-t border-slate-800/60 pt-4 text-xs">
-                        <div className="grid grid-cols-2 gap-2 text-[0.6875rem]">
-                          <div>
-                            <span className="text-slate-500 font-bold uppercase block">Rolle</span>
-                            <span className="font-semibold text-slate-200">{el.role}</span>
-                          </div>
-                          <div>
-                            <span className="text-slate-500 font-bold uppercase block">Fraktion</span>
-                            <span className="font-semibold text-slate-200 truncate block">{el.faction}</span>
-                          </div>
-                        </div>
-
-                        <div>
-                          <span className="text-[0.6875rem] text-slate-500 font-bold uppercase block">Motivation</span>
-                          <span className="text-slate-300 italic text-xs block mt-0.5">"{el.motivation}"</span>
-                        </div>
-
-                        {/* SECRET ACCORDION FOR DM */}
-                        <div className="pt-2 bg-slate-900/40 border border-slate-800/60 rounded-xl p-3">
-                          <button
-                            onClick={() => toggleSecret(el.id)}
-                            className="w-full flex items-center justify-between text-[0.6875rem] font-extrabold text-amber-500/90 uppercase tracking-wider hover:text-amber-400 transition-colors"
-                          >
-                            <span>🔒 DM GEHEIMNIS</span>
-                            <span>{revealedSecrets[el.id] ? 'Verbergen' : 'Enthüllen'}</span>
-                          </button>
-
-                          {revealedSecrets[el.id] && (
-                            <p className="mt-2 text-xs text-amber-200/90 leading-relaxed border-t border-slate-800/50 pt-2 animate-fade-in">
-                              {el.secrets}
-                            </p>
+                          ) : (
+                            <p className="text-xs text-slate-500 italic">Keine Aktionen definiert.</p>
                           )}
                         </div>
+
+                        {/* Bonus Actions */}
+                        {part.bonus_actions && part.bonus_actions.length > 0 && (
+                          <div className="bg-[#131b2e]/60 border border-slate-800 rounded-2xl p-6 shadow-xl space-y-4">
+                            <h4 className="text-xs font-bold text-purple-400 uppercase tracking-widest border-b border-slate-800/60 pb-2">
+                              Bonusaktionen
+                            </h4>
+                            <div className="space-y-2.5">
+                              {part.bonus_actions.map((act: any, idx) => (
+                                <div key={idx} className="bg-slate-900/40 border border-slate-850 p-3 rounded-xl space-y-1">
+                                  <strong className="text-purple-400 text-xs font-bold font-display">{act.name}</strong>
+                                  {act.description && <p className="text-slate-400 text-xs leading-relaxed">{act.description}</p>}
+                                </div>
+                              ))}
+                            </div>
+                          </div>
+                        )}
+
                       </div>
-                    )}
 
-                    {el.type === 'trap' && (
-                      <div className="space-y-3 border-t border-slate-800/60 pt-4 text-xs">
-                        <div>
-                          <span className="text-[0.6875rem] text-slate-500 font-bold uppercase block">Auslöser</span>
-                          <span className="font-semibold text-slate-250">{el.trigger}</span>
-                        </div>
-
-                        <div className="flex items-center justify-between text-xs">
-                          <div className="flex items-center gap-1.5">
-                            <span className="text-slate-500 font-bold uppercase text-[0.625rem]">Entdecken</span>
-                            <span className="font-bold text-amber-400 px-2 py-0.5 bg-amber-950/20 border border-amber-900/30 rounded">DC {el.detection_dc}</span>
-                          </div>
-                          <div className="flex items-center gap-1.5">
-                            <span className="text-slate-500 font-bold uppercase text-[0.625rem]">Entschärfen</span>
-                            <span className="font-bold text-orange-400 px-2 py-0.5 bg-orange-950/20 border border-orange-900/30 rounded">DC {el.disarm_dc}</span>
-                          </div>
-                        </div>
-
-                        <div className="bg-orange-500/5 border border-orange-500/10 rounded-xl p-3">
-                          <span className="text-[0.625rem] text-orange-400 font-bold uppercase block mb-1">Schaden / Effekt</span>
-                          <p className="font-bold text-slate-200 text-xs">{el.damage}</p>
-                        </div>
-                      </div>
-                    )}
-
-                    {el.type === 'hazard' && (
-                      <div className="space-y-3 border-t border-slate-800/60 pt-4 text-xs">
-                        <div className="flex justify-between items-center text-[0.6875rem]">
-                          <div>
-                            <span className="text-slate-500 font-bold uppercase block">Art</span>
-                            <span className="font-semibold text-slate-200">{el.hazard_type}</span>
-                          </div>
-                          <div>
-                            <span className="text-slate-500 font-bold uppercase block">Bedrohung</span>
-                            <span className={`font-extrabold px-2 py-0.5 rounded border ${el.severity === 'Tödlich'
-                                ? 'bg-red-500/10 border-red-500/20 text-red-400'
-                                : 'bg-amber-500/10 border-amber-500/20 text-amber-400'
-                              }`}>
-                              {el.severity}
-                            </span>
-                          </div>
-                        </div>
-
-                        <div>
-                          <span className="text-[0.6875rem] text-slate-500 font-bold uppercase block">Auswirkungen</span>
-                          <p className="text-slate-300 mt-1 bg-slate-900/30 border border-slate-850 p-2.5 rounded-lg leading-relaxed text-xs">
-                            {el.effects}
-                          </p>
-                        </div>
-
-                        <div className="grid grid-cols-2 gap-2 text-[0.6875rem] text-slate-400">
-                          <div>
-                            <span className="text-slate-500 font-bold block uppercase text-[0.625rem]">Gegenprobe</span>
-                            <span className="font-semibold text-slate-350">{el.avoidance}</span>
-                          </div>
-                          <div>
-                            <span className="text-slate-500 font-bold block uppercase text-[0.625rem]">Dauer</span>
-                            <span className="font-semibold text-slate-350">{el.duration}</span>
-                          </div>
-                        </div>
-                      </div>
-                    )}
-                  </div>
-
-                  {/* Footer: timestamp / meta */}
-                  <div className="border-t border-slate-800/50 mt-6 pt-4 flex items-center justify-between text-[0.6875rem] text-slate-500 font-medium">
-                    <span>ID: {el.id}</span>
-                    <span>Erstellt: {new Date(el.created_at).toLocaleDateString('de-DE')}</span>
-                  </div>
-                </div>
-              );
-            })}
+                    </div>
+                  );
+                })()}
+              </div>
+            )}
           </div>
+        )) : (
+          /* BESTIARY & DECK VIEW */
+          loadingElements ? (
+            <div className="py-20 text-center text-slate-400 space-y-4">
+              <div className="w-12 h-12 border-3 border-slate-800 border-t-amber-500 rounded-full animate-spin mx-auto" />
+              <p className="text-xs font-semibold tracking-widest uppercase">Rufe Datenbank ab...</p>
+            </div>
+          ) : filteredElements.length === 0 ? (
+            <div className="py-20 text-center border border-dashed border-slate-800 rounded-2xl bg-slate-900/20">
+              <svg className="w-12 h-12 text-slate-600 mx-auto mb-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" d="M9.172 16.172a4 4 0 015.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+              </svg>
+              <h4 className="text-base font-bold text-slate-350">Keine Elemente gefunden</h4>
+              <p className="text-xs text-slate-500 mt-1">Ändere deine Filter oder erstelle ein neues Element.</p>
+            </div>
+          ) : (
+            /* ELEMENTS GRID */
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              {filteredElements.map((el: EncounterElement) => {
+
+                // Define Type Tag styling
+                const tagColors = {
+                  enemy: 'bg-red-500/10 border-red-500/30 text-red-400',
+                  social: 'bg-emerald-500/10 border-emerald-500/30 text-emerald-400',
+                  trap: 'bg-orange-500/10 border-orange-500/30 text-orange-400',
+                  hazard: 'bg-cyan-500/10 border-cyan-500/30 text-cyan-400'
+                }[el.type];
+
+                const tagLabel = {
+                  enemy: 'Gegner',
+                  social: 'Sozialer NPC',
+                  trap: 'Falle',
+                  hazard: 'Gefahr'
+                }[el.type];
+
+                return (
+                  <div
+                    key={el.id}
+                    className="bg-[#131b2e]/60 border border-slate-800 hover:border-slate-700/85 rounded-2xl p-6 shadow-xl flex flex-col justify-between transition-all hover:translate-y-[-2px] group"
+                  >
+                    <div>
+                      {getImageUrl(el.image_url) && (
+                        <div className="w-full h-32 mb-4 overflow-hidden rounded-xl border border-slate-800/80">
+                          <img
+                            src={getImageUrl(el.image_url)}
+                            alt={el.name}
+                            onClick={() => setActiveLightboxImage(el.image_url || null)}
+                            className="object-cover w-full h-full cursor-pointer hover:opacity-90 transition-all duration-200"
+                          />
+                        </div>
+                      )}
+                      {/* Header: Name and Type Tag */}
+                      <div className="flex items-start justify-between gap-3 mb-4">
+                        <div className="space-y-1.5">
+                          <div className="flex items-center gap-1.5 flex-wrap">
+                            <span className={`text-[0.625rem] font-extrabold uppercase px-2.5 py-1 rounded-full border ${tagColors}`}>
+                              {tagLabel}
+                            </span>
+                            {el.type === 'enemy' && el.is_multi_variant && el.active_variant && (
+                              <select
+                                value={el.active_variant}
+                                onChange={(e) => handleCardVariantChange(el.id, e.target.value)}
+                                className="text-[0.625rem] font-extrabold uppercase px-2.5 py-1 rounded-full border border-amber-500/30 bg-amber-500/10 text-amber-400 focus:outline-none cursor-pointer hover:bg-amber-500/20 transition-all"
+                              >
+                                {el.variants_keys?.map(v => (
+                                  <option key={v} value={v} className="bg-slate-900 text-slate-200">{v}</option>
+                                ))}
+                              </select>
+                            )}
+                          </div>
+                          <h3 className="text-lg font-bold text-slate-100 font-display tracking-tight group-hover:text-amber-400 transition-colors">
+                            {el.name}
+                          </h3>
+                        </div>
+                        <div className="flex items-center gap-1 shrink-0">
+                          <button
+                            onClick={() => {
+                              setAddToBattleSource(el);
+                              setAddToBattleCustomName(el.name);
+                              setAddToBattleHP((el as any).hp_max || 30);
+                              setAddToBattleCount(1);
+                              setShowAddToBattleModal(true);
+                            }}
+                            className="text-slate-500 hover:text-amber-400 p-1.5 rounded-lg hover:bg-slate-800/40 transition-colors cursor-pointer"
+                            title="Zum Kampf hinzufügen"
+                          >
+                            ⚔️
+                          </button>
+                          <button
+                            onClick={() => deleteElement(el.id)}
+                            className="text-slate-500 hover:text-red-400 p-1.5 rounded-lg hover:bg-slate-800/40 transition-colors shrink-0 cursor-pointer"
+                            title="Element löschen"
+                          >
+                            <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                            </svg>
+                          </button>
+                        </div>
+                      </div>
+
+                      <p className="text-xs text-slate-350 leading-relaxed mb-4">
+                        {el.description}
+                      </p>
+
+                      {/* TYPE-SPECIFIC DETAIL PANELS */}
+                      {el.type === 'enemy' && (
+                        <div className="space-y-4 border-t border-slate-800/60 pt-4 text-xs">
+                          {/* Fluff Attributes Grid */}
+                          {(el.groesse || el.gewicht || el.menge || el.verbreitung) && (
+                            <div className="grid grid-cols-2 gap-2 mb-2 p-2.5 rounded-xl bg-slate-900/40 border border-slate-800/40 text-[0.6875rem] text-slate-350">
+                              {el.groesse && (
+                                <div>
+                                  <span className="text-amber-500/80 font-extrabold block uppercase text-[0.55rem] tracking-wider">Größe</span>
+                                  <span className="font-medium text-slate-200">{el.groesse}</span>
+                                </div>
+                              )}
+                              {el.gewicht && (
+                                <div>
+                                  <span className="text-amber-500/80 font-extrabold block uppercase text-[0.55rem] tracking-wider">Gewicht</span>
+                                  <span className="font-medium text-slate-200">{el.gewicht}</span>
+                                </div>
+                              )}
+                              {el.menge && (
+                                <div>
+                                  <span className="text-amber-500/80 font-extrabold block uppercase text-[0.55rem] tracking-wider">Menge</span>
+                                  <span className="font-medium text-slate-200">{el.menge}</span>
+                                </div>
+                              )}
+                              {el.verbreitung && (
+                                <div className="col-span-2 border-t border-slate-800/30 pt-1.5 mt-0.5">
+                                  <span className="text-amber-500/80 font-extrabold block uppercase text-[0.55rem] tracking-wider">Verbreitung</span>
+                                  <span className="font-medium text-slate-200">{el.verbreitung}</span>
+                                </div>
+                              )}
+                            </div>
+                          )}
+
+                          <div className="flex items-center justify-between flex-wrap gap-2">
+                            <div className="flex items-center gap-1.5">
+                              <span className="text-[0.6875rem] text-slate-500 font-bold uppercase">Stufe / HG</span>
+                              <span className="font-semibold text-slate-200 px-2 py-0.5 bg-slate-850 rounded border border-slate-800">{el.level}</span>
+                            </div>
+                            <div className="flex items-center gap-4">
+                              <div className="flex items-center gap-1">
+                                <span className="text-[0.6875rem] text-slate-500 font-bold uppercase">TP</span>
+                                <span className="font-extrabold text-red-400 bg-red-950/20 px-2 py-0.5 border border-red-900/30 rounded" title={el.tp_formula}>
+                                  {el.hp_current}/{el.hp_max} {el.tp_formula && `(${el.tp_formula})`}
+                                </span>
+                              </div>
+                              <div className="flex items-center gap-1">
+                                <span className="text-[0.6875rem] text-slate-500 font-bold uppercase">RK</span>
+                                <span className="font-bold text-slate-200 bg-slate-850 px-2 py-0.5 border border-slate-800 rounded">
+                                  {el.rk !== undefined ? el.rk : el.vp}
+                                </span>
+                              </div>
+                            </div>
+                          </div>
+
+                          {/* Extra general stats for rich entries */}
+                          {(el.bw || el.ub !== undefined || el.senses || el.languages || el.saves || el.immunities) && (
+                            <div className="grid grid-cols-2 gap-2 p-2.5 rounded-xl bg-slate-900/35 border border-slate-800/50 text-[0.6875rem] text-slate-350">
+                              {el.bw && (
+                                <div>
+                                  <span className="text-slate-500 font-extrabold block uppercase text-[0.625rem]">BW (Bewegung)</span>
+                                  <span className="font-semibold">{el.bw}</span>
+                                </div>
+                              )}
+                              {el.ub !== undefined && (
+                                <div>
+                                  <span className="text-slate-500 font-extrabold block uppercase text-[0.625rem]">ÜB (Übungsbonus)</span>
+                                  <span className="font-semibold text-amber-500 font-bold">+{el.ub}</span>
+                                </div>
+                              )}
+                              {el.saves && (
+                                <div className="col-span-2 border-t border-slate-800/30 pt-1.5 mt-0.5">
+                                  <span className="text-slate-500 font-extrabold block uppercase text-[0.625rem]">Rettungswürfe (RW)</span>
+                                  <span className="font-semibold text-slate-200">{el.saves}</span>
+                                </div>
+                              )}
+                              {el.immunities && (
+                                <div className="col-span-2 border-t border-slate-800/30 pt-1.5 mt-0.5">
+                                  <span className="text-slate-500 font-extrabold block uppercase text-[0.625rem]">Immunitäten</span>
+                                  <span className="font-semibold text-orange-400">{el.immunities}</span>
+                                </div>
+                              )}
+                              {el.senses && (
+                                <div className="col-span-2 border-t border-slate-800/30 pt-1.5 mt-0.5">
+                                  <span className="text-slate-500 font-extrabold block uppercase text-[0.625rem]">Sinne</span>
+                                  <span className="font-semibold">{el.senses}</span>
+                                </div>
+                              )}
+                              {el.languages && (
+                                <div className="col-span-2 border-t border-slate-800/30 pt-1.5 mt-0.5">
+                                  <span className="text-slate-500 font-extrabold block uppercase text-[0.625rem]">Sprachen</span>
+                                  <span className="font-semibold">{el.languages}</span>
+                                </div>
+                              )}
+                            </div>
+                          )}
+
+                          {/* Attribute Grid */}
+                          <div className="grid grid-cols-4 gap-1 text-[0.6875rem] text-center font-bold">
+                            {el.attributes?.map(attr => (
+                              <div key={attr.name} className="bg-slate-900/50 rounded p-1 border border-slate-800/40">
+                                <span className="text-slate-500 block">{attr.name}</span>
+                                <span className="text-slate-300 font-extrabold">{attr.value > 0 ? `+${attr.value}` : attr.value}</span>
+                              </div>
+                            ))}
+                          </div>
+
+                          {/* Skills and passive values */}
+                          {el.skills && el.skills.length > 0 && (
+                            <div className="pt-1.5 space-y-1">
+                              <span className="text-[0.6875rem] text-slate-500 font-extrabold uppercase block">Fertigkeiten (Skills)</span>
+                              <div className="flex flex-wrap gap-1">
+                                {el.skills.map((sk: any, idx) => (
+                                  <span key={idx} className="bg-slate-900 border border-slate-800 text-[0.6875rem] px-2.5 py-0.5 rounded font-medium text-slate-300">
+                                    {sk.name}: +{sk.value} {sk.passive !== undefined && <span className="text-slate-500">(pRW: {sk.passive})</span>}
+                                  </span>
+                                ))}
+                              </div>
+                            </div>
+                          )}
+
+                          {/* Traits / Eigenschaften */}
+                          {el.traits && el.traits.length > 0 && (
+                            <div className="pt-1.5 space-y-1">
+                              <span className="text-[0.6875rem] text-slate-500 font-extrabold uppercase block">Eigenschaften (Traits)</span>
+                              <div className="space-y-1">
+                                {el.traits.map((t: any, idx) => (
+                                  <div key={idx} className="bg-slate-900/30 border border-slate-855 p-2 rounded text-xs">
+                                    <strong className="text-amber-500">{t.name}:</strong> <span className="text-slate-300">{t.description}</span>
+                                  </div>
+                                ))}
+                              </div>
+                            </div>
+                          )}
+
+                          {/* Actions (Bestiary actions, e.g. multiattack, bite, ram etc) */}
+                          {el.actions && el.actions.length > 0 && (
+                            <div className="pt-2 space-y-1.5">
+                              <span className="text-[0.6875rem] text-slate-500 font-extrabold uppercase block border-b border-slate-800/40 pb-0.5">Aktionen</span>
+                              <div className="space-y-1.5">
+                                {el.actions.map((act: any, idx) => (
+                                  <div key={idx} className="bg-slate-900/30 border border-slate-855 p-2 rounded text-xs space-y-1.5">
+                                    <div className="flex justify-between items-center">
+                                      <strong className="text-red-400">{act.name}</strong>
+                                      {act.type && (
+                                        <span className="text-[0.625rem] font-extrabold uppercase px-1.5 py-0.5 bg-slate-800 border border-slate-700 rounded text-slate-300">
+                                          {act.type}
+                                        </span>
+                                      )}
+                                    </div>
+                                    {act.description && <p className="text-slate-350 text-xs leading-relaxed">{act.description}</p>}
+                                    {(act.at !== undefined || act.rw || act.damage) && (
+                                      <div className="text-[0.6875rem] text-slate-400 flex flex-wrap gap-x-3 gap-y-1 pt-1 border-t border-slate-850">
+                                        {act.at !== undefined && <span><strong>AT:</strong> +{act.at}</span>}
+                                        {act.rw && <span><strong>RW:</strong> {act.rw}</span>}
+                                        {act.damage && <span><strong>Treffer:</strong> {act.damage}</span>}
+                                      </div>
+                                    )}
+                                  </div>
+                                ))}
+                              </div>
+                            </div>
+                          )}
+
+                          {/* Bonusactions */}
+                          {el.bonus_actions && el.bonus_actions.length > 0 && (
+                            <div className="pt-2 space-y-1.5">
+                              <span className="text-[0.6875rem] text-slate-500 font-extrabold uppercase block border-b border-slate-800/40 pb-0.5">Bonusaktionen</span>
+                              <div className="space-y-1.5">
+                                {el.bonus_actions.map((act: any, idx) => (
+                                  <div key={idx} className="bg-slate-900/30 border border-slate-855 p-2 rounded text-xs space-y-1">
+                                    <strong className="text-purple-400">{act.name}</strong>
+                                    {act.description && <p className="text-slate-350 text-xs leading-relaxed">{act.description}</p>}
+                                  </div>
+                                ))}
+                              </div>
+                            </div>
+                          )}
+
+                          {/* Reaktionen */}
+                          {el.reactions && el.reactions.length > 0 && (
+                            <div className="pt-2 space-y-1.5">
+                              <span className="text-[0.6875rem] text-slate-500 font-extrabold uppercase block border-b border-slate-800/40 pb-0.5">Reaktionen</span>
+                              <div className="space-y-1.5">
+                                {el.reactions.map((act: any, idx) => (
+                                  <div key={idx} className="bg-slate-900/30 border border-slate-855 p-2 rounded text-xs space-y-1">
+                                    <strong className="text-blue-400">{act.name}</strong>
+                                    {act.description && <p className="text-slate-350 text-xs leading-relaxed">{act.description}</p>}
+                                  </div>
+                                ))}
+                              </div>
+                            </div>
+                          )}
+
+                          {/* Legendäre Aktionen */}
+                          {el.legendary_actions && el.legendary_actions.length > 0 && (
+                            <div className="pt-2 space-y-1.5">
+                              <span className="text-[0.6875rem] text-slate-500 font-extrabold uppercase block border-b border-slate-800/40 pb-0.5">Legendäre Aktionen</span>
+                              <div className="space-y-1.5">
+                                {el.legendary_actions.map((act: any, idx) => (
+                                  <div key={idx} className="bg-slate-900/30 border border-slate-855 p-2 rounded text-xs space-y-1">
+                                    <strong className="text-teal-400">{act.name}</strong>
+                                    {act.description && <p className="text-slate-355 text-xs leading-relaxed">{act.description}</p>}
+                                  </div>
+                                ))}
+                              </div>
+                            </div>
+                          )}
+
+                          {/* Hortaktionen */}
+                          {el.lair_actions && el.lair_actions.length > 0 && (
+                            <div className="pt-2 space-y-1.5">
+                              <span className="text-[0.6875rem] text-slate-500 font-extrabold uppercase block border-b border-slate-800/40 pb-0.5">Hortaktionen</span>
+                              <div className="space-y-1.5">
+                                {el.lair_actions.map((act: any, idx) => (
+                                  <div key={idx} className="bg-slate-900/30 border border-slate-855 p-2 rounded text-xs space-y-1">
+                                    <strong className="text-yellow-500">{act.name}</strong>
+                                    {act.description && <p className="text-slate-355 text-xs leading-relaxed">{act.description}</p>}
+                                  </div>
+                                ))}
+                              </div>
+                            </div>
+                          )}
+
+                          {/* Regionale Effekte */}
+                          {el.regional_effects && (
+                            <div className="pt-2 space-y-1.5">
+                              <span className="text-[0.6875rem] text-slate-500 font-extrabold uppercase block border-b border-slate-800/40 pb-0.5">Regionale Effekte</span>
+                              <div className="bg-slate-900/30 border border-slate-855 p-2.5 rounded text-xs text-slate-355 leading-relaxed">
+                                {el.regional_effects}
+                              </div>
+                            </div>
+                          )}
+
+                          {/* Legacy Special Abilities (Fallbacks for standard templates) */}
+                          {(!el.traits && el.abilities && el.abilities.length > 0) && (
+                            <div className="pt-1.5">
+                              <span className="text-[0.6875rem] text-slate-500 font-extrabold uppercase block mb-1">Besonderheiten</span>
+                              <div className="flex flex-wrap gap-1">
+                                {el.abilities.map((ab: any, idx) => (
+                                  <span key={idx} className="bg-amber-950/20 text-amber-400/90 border border-amber-950 text-[0.6875rem] px-2 py-0.5 rounded font-medium">
+                                    {typeof ab === 'string' ? ab : ab.name}
+                                  </span>
+                                ))}
+                              </div>
+                            </div>
+                          )}
+
+                          {/* Legacy Attacks (Fallbacks for standard templates) */}
+                          {(!el.actions && el.attacks && el.attacks.length > 0) && (
+                            <div className="pt-1.5 space-y-1">
+                              <span className="text-[0.6875rem] text-slate-500 font-extrabold uppercase block">Angriffe</span>
+                              <div className="space-y-1">
+                                {el.attacks.map((atk: any, idx) => (
+                                  <div key={idx} className="bg-slate-900/30 border border-slate-855 p-2 rounded text-xs flex justify-between items-center">
+                                    <span className="font-semibold text-slate-200">{atk.name}</span>
+                                    <span className="text-slate-400 text-[0.6875rem]">
+                                      {atk.tp && `TP: ${atk.tp}`} {atk.at !== undefined && ` | AT: ${atk.at}`} {atk.pa !== undefined && ` | PA: ${atk.pa}`} {atk.range && ` | RW: ${atk.range}`}
+                                    </span>
+                                  </div>
+                                ))}
+                              </div>
+                            </div>
+                          )}
+                        </div>
+                      )}
+
+                      {el.type === 'social' && (
+                        <div className="space-y-2.5 border-t border-slate-800/60 pt-4 text-xs">
+                          <div className="grid grid-cols-2 gap-2 text-[0.6875rem]">
+                            <div>
+                              <span className="text-slate-500 font-bold uppercase block">Rolle</span>
+                              <span className="font-semibold text-slate-200">{el.role}</span>
+                            </div>
+                            <div>
+                              <span className="text-slate-500 font-bold uppercase block">Fraktion</span>
+                              <span className="font-semibold text-slate-200 truncate block">{el.faction}</span>
+                            </div>
+                          </div>
+
+                          <div>
+                            <span className="text-[0.6875rem] text-slate-500 font-bold uppercase block">Motivation</span>
+                            <span className="text-slate-300 italic text-xs block mt-0.5">"{el.motivation}"</span>
+                          </div>
+
+                          {/* SECRET ACCORDION FOR DM */}
+                          <div className="pt-2 bg-slate-900/40 border border-slate-800/60 rounded-xl p-3">
+                            <button
+                              onClick={() => toggleSecret(el.id)}
+                              className="w-full flex items-center justify-between text-[0.6875rem] font-extrabold text-amber-500/90 uppercase tracking-wider hover:text-amber-400 transition-colors"
+                            >
+                              <span>🔒 DM GEHEIMNIS</span>
+                              <span>{revealedSecrets[el.id] ? 'Verbergen' : 'Enthüllen'}</span>
+                            </button>
+
+                            {revealedSecrets[el.id] && (
+                              <p className="mt-2 text-xs text-amber-200/90 leading-relaxed border-t border-slate-800/50 pt-2 animate-fade-in">
+                                {el.secrets}
+                              </p>
+                            )}
+                          </div>
+                        </div>
+                      )}
+
+                      {el.type === 'trap' && (
+                        <div className="space-y-3 border-t border-slate-800/60 pt-4 text-xs">
+                          <div>
+                            <span className="text-[0.6875rem] text-slate-500 font-bold uppercase block">Auslöser</span>
+                            <span className="font-semibold text-slate-250">{el.trigger}</span>
+                          </div>
+
+                          <div className="flex items-center justify-between text-xs">
+                            <div className="flex items-center gap-1.5">
+                              <span className="text-slate-500 font-bold uppercase text-[0.625rem]">Entdecken</span>
+                              <span className="font-bold text-amber-400 px-2 py-0.5 bg-amber-950/20 border border-amber-900/30 rounded">DC {el.detection_dc}</span>
+                            </div>
+                            <div className="flex items-center gap-1.5">
+                              <span className="text-slate-500 font-bold uppercase text-[0.625rem]">Entschärfen</span>
+                              <span className="font-bold text-orange-400 px-2 py-0.5 bg-orange-950/20 border border-orange-900/30 rounded">DC {el.disarm_dc}</span>
+                            </div>
+                          </div>
+
+                          <div className="bg-orange-500/5 border border-orange-500/10 rounded-xl p-3">
+                            <span className="text-[0.625rem] text-orange-400 font-bold uppercase block mb-1">Schaden / Effekt</span>
+                            <p className="font-bold text-slate-200 text-xs">{el.damage}</p>
+                          </div>
+                        </div>
+                      )}
+
+                      {el.type === 'hazard' && (
+                        <div className="space-y-3 border-t border-slate-800/60 pt-4 text-xs">
+                          <div className="flex justify-between items-center text-[0.6875rem]">
+                            <div>
+                              <span className="text-slate-500 font-bold uppercase block">Art</span>
+                              <span className="font-semibold text-slate-200">{el.hazard_type}</span>
+                            </div>
+                            <div>
+                              <span className="text-slate-500 font-bold uppercase block">Bedrohung</span>
+                              <span className={`font-extrabold px-2 py-0.5 rounded border ${el.severity === 'Tödlich'
+                                  ? 'bg-red-500/10 border-red-500/20 text-red-400'
+                                  : 'bg-amber-500/10 border-amber-500/20 text-amber-400'
+                                }`}>
+                                {el.severity}
+                              </span>
+                            </div>
+                          </div>
+
+                          <div>
+                            <span className="text-[0.6875rem] text-slate-500 font-bold uppercase block">Auswirkungen</span>
+                            <p className="text-slate-300 mt-1 bg-slate-900/30 border border-slate-855 p-2.5 rounded-lg leading-relaxed text-xs">
+                              {el.effects}
+                            </p>
+                          </div>
+
+                          <div className="grid grid-cols-2 gap-2 text-[0.6875rem] text-slate-400">
+                            <div>
+                              <span className="text-slate-500 font-bold block uppercase text-[0.625rem]">Gegenprobe</span>
+                              <span className="font-semibold text-slate-350">{el.avoidance}</span>
+                            </div>
+                            <div>
+                              <span className="text-slate-500 font-bold block uppercase text-[0.625rem]">Dauer</span>
+                              <span className="font-semibold text-slate-350">{el.duration}</span>
+                            </div>
+                          </div>
+                        </div>
+                      )}
+                    </div>
+
+                    {/* Footer: timestamp / meta */}
+                    <div className="border-t border-slate-800/50 mt-6 pt-4 flex items-center justify-between text-[0.6875rem] text-slate-500 font-medium">
+                      <span>ID: {el.id}</span>
+                      <span>Erstellt: {new Date(el.created_at).toLocaleDateString('de-DE')}</span>
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+          )
         )}
       </main>
+
+      {/* ADD TO BATTLE MODAL */}
+      {showAddToBattleModal && addToBattleSource && (
+        <div className="fixed inset-0 bg-slate-950/75 backdrop-blur-xs z-50 flex items-center justify-center p-4 animate-fade-in">
+          <div className="relative w-full max-w-sm bg-[#131b2e]/95 border border-slate-800 rounded-2xl p-6 shadow-2xl space-y-5 animate-scale-in">
+            <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-amber-500 via-yellow-500 to-amber-700 rounded-t-2xl" />
+
+            <div className="flex items-start justify-between gap-2">
+              <h3 className="text-base font-bold text-transparent bg-clip-text bg-gradient-to-r from-amber-200 to-amber-400 font-display uppercase tracking-wider flex items-center gap-2">
+                <span>⚔️</span> Zum Kampf hinzufügen
+              </h3>
+              <button
+                type="button"
+                onClick={() => {
+                  setShowAddToBattleModal(false);
+                  setAddToBattleSource(null);
+                }}
+                className="text-slate-400 hover:text-white text-sm font-semibold transition-colors cursor-pointer"
+              >
+                ✕
+              </button>
+            </div>
+
+            <div className="space-y-4">
+              <div>
+                <label className="block text-[0.625rem] font-extrabold uppercase tracking-wider text-slate-400 mb-1">Name / Präfix</label>
+                <input
+                  type="text"
+                  value={addToBattleCustomName}
+                  onChange={e => setAddToBattleCustomName(e.target.value)}
+                  className="w-full px-3 py-2 rounded-lg bg-slate-900 border border-slate-800 text-slate-100 focus:outline-none focus:border-amber-500 text-xs font-semibold"
+                />
+              </div>
+
+              <div className="grid grid-cols-2 gap-3">
+                <div>
+                  <label className="block text-[0.625rem] font-extrabold uppercase tracking-wider text-slate-400 mb-1">Anzahl</label>
+                  <input
+                    type="number"
+                    min="1"
+                    max="20"
+                    value={addToBattleCount}
+                    onChange={e => setAddToBattleCount(Math.max(1, parseInt(e.target.value) || 1))}
+                    className="w-full px-3 py-2 rounded-lg bg-slate-900 border border-slate-800 text-slate-100 focus:outline-none focus:border-amber-500 text-xs font-semibold text-center"
+                  />
+                </div>
+                <div>
+                  <label className="block text-[0.625rem] font-extrabold uppercase tracking-wider text-slate-400 mb-1">Start-LP</label>
+                  <input
+                    type="number"
+                    min="1"
+                    value={addToBattleHP}
+                    onChange={e => setAddToBattleHP(Math.max(1, parseInt(e.target.value) || 1))}
+                    className="w-full px-3 py-2 rounded-lg bg-slate-900 border border-slate-800 text-slate-100 focus:outline-none focus:border-amber-500 text-xs font-semibold text-center"
+                  />
+                </div>
+              </div>
+
+              {/* Action Buttons */}
+              <div className="flex gap-3 pt-2">
+                <button
+                  type="button"
+                  onClick={() => {
+                    setShowAddToBattleModal(false);
+                    setAddToBattleSource(null);
+                  }}
+                  className="flex-1 px-4 py-2.5 text-xs font-bold uppercase tracking-wider text-slate-400 hover:text-white border border-slate-800 hover:border-slate-600 rounded-xl bg-slate-900/50 hover:bg-slate-800/50 transition-all cursor-pointer text-center"
+                >
+                  Abbrechen
+                </button>
+                <button
+                  type="button"
+                  onClick={handleAddMultipleToBattle}
+                  className="flex-1 px-5 py-2.5 text-xs font-bold uppercase tracking-wider text-slate-955 bg-amber-500 hover:bg-amber-400 rounded-xl transition-all cursor-pointer shadow-lg shadow-amber-900/10 text-center"
+                >
+                  Hinzufügen
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
 
       {/* FOOTER */}
       <footer className="border-t border-slate-900 bg-slate-950 py-6 text-center text-xs text-slate-650 font-semibold tracking-wider uppercase mt-12">

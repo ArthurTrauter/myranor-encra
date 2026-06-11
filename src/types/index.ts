@@ -119,3 +119,40 @@ export interface EncounterContextType {
   deleteTemplate: (id: string) => Promise<void>;
   updateTemplate: (id: string, updates: Partial<EncounterElement>) => Promise<void>;
 }
+
+export interface BattleParticipant {
+  id: string;
+  created_at: string;
+  updated_at: string;
+  user_id?: string;
+  template_id?: string;
+  name: string;
+  original_name: string;
+  hp_max: number;
+  hp_current: number;
+  rk?: number;
+  ini?: number;
+  saves?: string;
+  bw?: string;
+  ub?: number;
+  attributes?: Attribute[];
+  actions?: any[];
+  bonus_actions?: any[];
+  states: string[];
+  active_variant?: string;
+  image_url?: string;
+}
+
+export interface BattleContextType {
+  battleParticipants: BattleParticipant[];
+  loadingBattle: boolean;
+  addBattleParticipant: (
+    elementOrTemplate: any,
+    customName: string,
+    hpMax: number
+  ) => Promise<BattleParticipant | null>;
+  updateBattleParticipant: (id: string, updates: Partial<BattleParticipant>) => Promise<void>;
+  deleteBattleParticipant: (id: string) => Promise<void>;
+  clearBattle: () => Promise<void>;
+}
+
